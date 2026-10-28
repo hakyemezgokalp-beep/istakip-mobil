@@ -143,7 +143,31 @@ main.dolu .gd{ flex:1; min-height:0; display:flex; flex-direction:column; }
 .kart-btns.dort{ display:grid; grid-template-columns:1fr 1fr; }
 .kv.uz{ align-items:flex-start; }
 .kv.uz b{ display:flex; flex-direction:column; align-items:flex-end; gap:2px; }
-.kv.uz em{ font-style:normal; color:#c2410c; font-weight:800; font-size:11.5px; margin-right:3px; }
+.kv.uz em{ font-style:normal; color:#c2410c; font-weight:800; font-size:11.5px; }
+.kv.uz.kln > span{ color:#9a3412; font-weight:700; }
+.kv.uz .uzs{ display:grid; grid-template-columns:62px 78px; align-items:baseline; }
+.kv.uz .uzs em{ text-align:left; }
+.kv.uz .uzs i{ font-style:normal; color:#111827; font-weight:700; text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap; }
+.kmb{ display:flex; justify-content:space-between; align-items:center; width:100%; background:none; border:none; padding:0; margin:0; text-align:left; font-family:inherit; }
+.kmb small{ display:inline-block; margin-left:6px; background:#fff7ed; color:#c2410c; border:1px solid #fed7aa; border-radius:10px; padding:0 7px; font-size:11.5px; font-weight:800; vertical-align:middle; }
+.kmb i{ font-style:normal; color:#94a3b8; font-size:15px; }
+.kmk .kml{ display:none; margin-top:6px; }
+.kmk.acik .kml{ display:block; }
+.durb{ display:flex; justify-content:space-between; align-items:center; width:100%; margin:6px 0 2px; padding:9px 12px; background:#fff7ed; border:1px solid #fed7aa; border-radius:10px; font-family:inherit; font-size:13px; font-weight:800; color:#9a3412; }
+.durb i{ font-style:normal; font-size:14px; }
+.durb.on{ background:#ea580c; border-color:#ea580c; color:#fff; }
+.dur{ display:none; }
+.dur.acik{ display:block; }
+.arb{ display:block; width:max-content; margin:5px 0 0; font-family:inherit; font-size:11.5px; font-weight:800; color:#c2410c; background:#fff7ed; border:1px solid #fdba74; border-radius:8px; padding:3px 8px; vertical-align:middle; }
+.arb.on{ background:#ea580c; color:#fff; border-color:#ea580c; }
+.kml{ display:none; margin:2px 0 6px; padding:4px 0 2px 10px; border-left:3px solid #fb923c; }
+.kml.acik{ display:block; }
+.rng2{ padding:6px 0; border-bottom:1px solid #f1f5f9; }
+.rng2:last-child{ border-bottom:none; }
+.rng2 .r1{ display:flex; justify-content:space-between; gap:8px; font-size:13px; }
+.rng2 .r1 b{ color:#111827; } .rng2 .r1 em{ font-style:normal; color:#c2410c; font-size:11.5px; font-weight:800; }
+.rng2 .r1 span{ color:#94a3b8; font-size:11.5px; white-space:nowrap; }
+.rng2 .r2{ font-size:12.5px; color:#475569; margin-top:3px; line-height:1.4; }
 .ekler{ margin-top:6px; border-top:2px solid #f1f5f9; }
 .ekler .kv b{ text-align:right; max-width:62%; }
 .btn.bos{ opacity:.4; }
@@ -238,6 +262,10 @@ tr.t td{ font-weight:800; background:#fff7ed; color:#7c2d12; }
 .itialt .iz button{ width:34px; height:30px; border-radius:8px; border:1px solid #e5e7eb; background:#fff; font-size:17px; font-weight:700; color:#374151; }
 .ljhost{ overflow:auto; margin-top:8px; }
 @media (max-height:500px){ .itiv .hatbar{ padding-top:max(6px, env(safe-area-inset-top)); padding-bottom:6px; } .itisek{ padding:5px 12px; } }
+/* açılış */
+.acil-y{ width:120px; height:3px; border-radius:2px; background:rgba(255,255,255,.18); margin-top:26px; overflow:hidden; }
+.acil-y i{ display:block; width:40%; height:100%; background:#fb923c; border-radius:2px; animation:acilY 1s ease-in-out infinite; }
+@keyframes acilY{ from{ transform:translateX(-100%); } to{ transform:translateX(250%); } }
 /* hoş geldin */
 .hos{ min-height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:40px 26px calc(30px + env(safe-area-inset-bottom)); background:linear-gradient(160deg,#1f2937,#7c2d12); color:#fff; }
 .hos-logo{ width:68px; height:68px; border-radius:18px; background:linear-gradient(135deg,#f97316,#c2410c); display:flex; align-items:center; justify-content:center; box-shadow:0 10px 24px rgba(0,0,0,.3); }
@@ -247,11 +275,219 @@ tr.t td{ font-weight:800; background:#fff7ed; color:#7c2d12; }
 .hos-hata{ margin-top:12px; background:#fef2f2; color:#991b1b; border-radius:10px; padding:9px 12px; font-size:13px; font-weight:600; }
 .hos-not{ margin-top:26px; font-size:12.5px; line-height:1.6; opacity:.85; text-align:left; max-width:340px; background:rgba(255,255,255,.08); border-radius:12px; padding:12px 14px; }
 .bildir{ position:fixed; left:50%; bottom:calc(86px + env(safe-area-inset-bottom)); transform:translateX(-50%); background:#111827; color:#fff; padding:10px 16px; border-radius:12px; font-size:13px; z-index:90; box-shadow:0 8px 20px rgba(0,0,0,.3); max-width:90%; text-align:center; }
+/* ===== v5 ===== */
+/* üst marka + düğmeler */
+.hdr{ align-items:center; }
+.marka{ border-left:3px solid #ea580c; padding-left:9px; }
+.marka .u{ font-size:14px !important; line-height:1.2 !important; }
+.marka .k{ font-size:11.5px !important; margin-top:2px !important; }
+.marka .k b{ letter-spacing:.08em !important; }
+.tm{ display:flex; background:#fff7ed; border:1px solid #fed7aa; border-radius:10px; padding:2px; height:33px; flex:none; }
+.tm button{ width:26px; border:none; background:none; border-radius:7px; font-size:13px; color:#c2410c; padding:0; }
+.tm button.on{ background:#ea580c; color:#fff; }
+/* genel durum (profesyonel) */
+.gdh3{ background:linear-gradient(160deg,#1e3a5f,#0f2440); color:#fff; padding:13px 15px 12px; border-bottom:2px solid #ea580c; flex:none; }
+.gdh3 .t{ display:flex; align-items:center; gap:8px; }
+.gdh3 .t b{ font-size:14.5px; letter-spacing:.04em; }
+.gdh3 .t span{ margin-left:auto; border:1px solid rgba(255,255,255,.3); border-radius:7px; padding:1px 8px; font-size:11.5px; font-weight:700; }
+.gdh3 .d{ font-size:10.5px; color:rgba(255,255,255,.6); margin-top:2px; }
+.gdh3 .n{ display:grid; grid-template-columns:1fr 1fr; margin-top:11px; border-top:1px solid rgba(255,255,255,.12); }
+.gdh3 .n > div{ padding-top:9px; display:flex; align-items:center; gap:9px; }
+.gdh3 .n > div + div{ border-left:1px solid rgba(255,255,255,.12); padding-left:12px; }
+.gdh3 .n svg{ width:26px; height:26px; flex:none; }
+.gdh3 .n b{ display:block; font-size:22px; line-height:1; font-variant-numeric:tabular-nums; }
+.gdh3 .n small{ display:block; font-size:10.5px; color:rgba(255,255,255,.72); letter-spacing:.04em; text-transform:uppercase; margin-top:3px; }
+.gsek{ display:flex; margin:8px 14px 2px; border-bottom:1px solid #e6e9ef; flex:none; }
+.gsek button{ flex:1; background:none; border:none; padding:8px 0 9px; font-size:13px; font-weight:700; color:#64748b; }
+.gsek button.on{ color:#111827; box-shadow:inset 0 -2px 0 #ea580c; }
+.tbh{ display:grid; grid-template-columns:1fr 60px 60px 38px; gap:4px; padding:7px 14px 4px; font-size:9.5px; letter-spacing:.06em; color:#64748b; font-weight:800; flex:none; }
+.tbh span:not(:first-child){ text-align:right; }
+.tr2{ display:block; width:100%; background:none; border:none; border-top:1px solid #eef1f5; padding:7px 0 8px; text-align:left; color:inherit; font-variant-numeric:tabular-nums; }
+.tr2 .l{ display:grid; grid-template-columns:1fr 60px 60px 38px; gap:4px; align-items:baseline; font-size:12.5px; }
+.tr2 .l b{ font-weight:800; color:#111827; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.tr2 .l b em{ font-style:normal; color:#94a3b8; margin-right:5px; font-size:11px; }
+.tr2 .l span{ text-align:right; color:#64748b; }
+.tr2 .l span.v{ color:#111827; font-weight:700; }
+.tr2 .l i{ font-style:normal; text-align:right; font-weight:800; color:#dc2626; }
+.tr2 .bar{ height:5px; margin-top:6px; }
+.tr2.acik{ background:#fff7ed; margin:0 -8px; padding-left:8px; padding-right:8px; width:calc(100% + 16px); border-radius:8px; }
+.tr2.top2{ background:#f8fafc; margin:0 -14px; padding:8px 14px 9px; width:calc(100% + 28px); border-top:1px solid #e2e8f0; }
+.tr2.top2 .l b{ letter-spacing:.04em; }
+.gdg .gac{ max-height:240px !important; overflow-y:auto !important; overscroll-behavior:contain; }
+.ilr2 .l{ grid-template-columns:1fr 46px 46px; }
+.ilr2 .l span{ display:flex; align-items:center; justify-content:flex-end; gap:3px; color:#374151; font-weight:800; }
+.ilr2 .l span svg{ width:13px; height:13px; }
+.tbh.il{ grid-template-columns:1fr 46px 46px; }
+.tbh.il span{ display:flex; align-items:center; justify-content:flex-end; gap:3px; }
+.tbh.il svg{ width:11px; height:11px; }
+/* bu hafta */
+main.dolu > .pad{ display:flex; flex-direction:column; }
+.bh{ background:#fff; border-radius:16px; border:1px solid #eef0f3; overflow:hidden; flex:none; display:flex; flex-direction:column; max-height:46vh; box-shadow:0 1px 3px rgba(15,23,42,.06); }
+.bh h5{ margin:0; font-size:13px; padding:10px 12px; border-bottom:1px solid #eef1f5; display:flex; justify-content:space-between; align-items:baseline; color:#111827; flex:none; }
+.bh h5 em{ font-style:normal; color:#94a3b8; font-weight:600; font-size:11.5px; }
+.bhl{ overflow-y:auto; -webkit-overflow-scrolling:touch; overscroll-behavior:contain; }
+.bi{ display:flex; gap:8px; width:100%; text-align:left; background:none; border:none; border-bottom:1px solid #f1f5f9; padding:8px 12px; color:inherit; }
+.bi:last-child{ border-bottom:none; }
+.bi .a{ flex:1; min-width:0; } .bi .a b{ display:block; font-size:12.5px; color:#111827; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.bi .a span{ font-size:11px; color:#94a3b8; }
+.bi .k{ text-align:right; font-size:12.5px; font-weight:800; color:#ea580c; white-space:nowrap; }
+.bi .k span{ display:block; font-weight:600; font-size:10.5px; color:#94a3b8; margin-top:2px; }
+.bh .bos{ padding:10px 12px; font-size:12.5px; color:#94a3b8; }
+/* favoriler */
+.jr{ position:relative; }
+.jr .t{ padding-right:30px; }
+.fav{ position:absolute; right:8px; top:6px; width:32px; height:32px; border:none; background:none; font-size:20px; color:#cbd5e1; padding:0; }
+.fav.on{ color:#f59e0b; }
+/* standart çubukları: Biten / Hedef */
+.sr .st .hy{ color:#94a3b8; font-weight:700; font-size:11.5px; }
+.sr .bh2{ font-size:11.5px; color:#64748b; margin-top:2px; }
+.sr .bh2 em{ font-style:normal; color:#94a3b8; margin-right:3px; }
+.sr .bh2 span + span{ margin-left:10px; }
+.bar.yok i, .pbar.yok i{ background:#dc2626; }
+@keyframes yesilKirmizi{ from{ background:#16a34a; } to{ background:#dc2626; } }
+.bar.yok.anim i, .pbar.yok.anim i{ animation:yesilKirmizi 1s ease .6s both; }
+.gr .bar.yok i{ background:#dc2626 !important; }
+/* alt sayfa (bottom sheet) */
+.bsov{ position:fixed; inset:0; background:rgba(15,23,42,.5); z-index:60; display:flex; align-items:flex-end; justify-content:center; touch-action:none; }
+.bs{ background:#fff; width:100%; max-width:640px; max-height:86vh; border-radius:22px 22px 0 0; display:flex; flex-direction:column; padding-bottom:env(safe-area-inset-bottom); box-shadow:0 -10px 40px rgba(0,0,0,.25); animation:bsUp .22s ease; }
+@keyframes bsUp{ from{ transform:translateY(40px); opacity:.6; } to{ transform:none; opacity:1; } }
+.bs .grab{ width:40px; height:5px; border-radius:3px; background:#cfd4dc; margin:8px auto 4px; flex:none; }
+.bs .bh3{ display:flex; align-items:flex-start; gap:10px; padding:4px 16px 12px; border-bottom:1px solid #eef1f5; flex:none; }
+.bs .bh3 .ic{ width:36px; height:36px; border-radius:10px; background:#eef4ff; display:flex; align-items:center; justify-content:center; flex:none; font-size:17px; }
+.bs .bh3 b{ display:block; font-size:16.5px; color:#111827; }
+.bs .bh3 b.tl{ color:#c2410c; }
+.bs .bh3 small{ display:block; font-size:12px; color:#64748b; margin-top:1px; }
+.bs .bh3 .x{ margin-left:auto; width:32px; height:32px; border-radius:50%; background:#eef1f5; border:none; color:#475569; font-size:14px; flex:none; }
+.bs .bb{ overflow-y:auto; overflow-x:hidden; -webkit-overflow-scrolling:touch; overscroll-behavior:contain; touch-action:pan-y; padding:14px 16px 18px; }
+.bedel2{ display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.bedel2 div{ background:#f0faf3; border:1px solid #cdebd7; border-radius:12px; padding:9px 10px; min-width:0; }
+.bedel2 span{ display:block; font-size:11.5px; color:#4b6b57; font-weight:700; }
+.bedel2 b{ display:block; color:#15803d; font-size:14.5px; margin-top:3px; font-variant-numeric:tabular-nums; overflow-wrap:anywhere; }
+.bgrp{ font-size:10.5px; letter-spacing:.06em; font-weight:800; color:#94a3b8; margin:14px 2px 4px; }
+.erow{ padding:8px 2px; border-bottom:1px solid #f1f5f9; }
+.erow:last-child{ border-bottom:none; }
+.erow span{ display:block; font-size:12px; color:#64748b; line-height:1.3; }
+.erow b{ display:block; font-size:15px; color:#111827; margin-top:2px; text-align:right; font-variant-numeric:tabular-nums; overflow-wrap:anywhere; }
+.ilblok{ margin-top:14px; border:1px solid #fed7aa; border-radius:14px; padding:10px 12px; }
+.ilblok .ilad{ font-weight:800; color:#c2410c; font-size:13.5px; margin-bottom:8px; }
+.ilblok .bedel2 b{ font-size:13.5px; }
+/* yol tarifi */
+.ytmini{ height:116px; border-radius:14px; border:1px solid #e2e8f0; background:#f8fafc; position:relative; overflow:hidden; }
+.ytmini svg{ position:absolute; inset:0; width:100%; height:100%; }
+.ytmini .lj{ position:absolute; left:8px; top:6px; font-size:10.5px; color:#64748b; background:rgba(255,255,255,.88); border-radius:6px; padding:1px 6px; }
+.ytmini .lj i{ font-style:normal; }
+.ytuy{ background:#fff8e6; border:1px solid #f2d48a; color:#6b4e00; border-radius:10px; padding:7px 10px; font-size:12px; margin-top:10px; }
+.ytlist{ border:1px solid #e2e8f0; border-radius:14px; overflow:hidden; }
+.yto{ display:flex; align-items:center; gap:11px; width:100%; padding:10px 12px; border:none; border-top:1px solid #eef1f5; background:#fff; text-align:left; color:inherit; }
+.yto:first-child{ border-top:none; }
+.yto.on{ background:#fff7f0; box-shadow:inset 3px 0 0 #ea580c; }
+.yto.off{ opacity:.45; }
+.yto svg{ width:22px; height:22px; flex:none; }
+.yto .t{ flex:1; min-width:0; } .yto .t b{ display:block; font-size:13.5px; color:#111827; } .yto .t span{ font-size:11.5px; color:#64748b; }
+.yto .r{ text-align:right; font-size:13px; font-weight:800; color:#111827; white-space:nowrap; } .yto .r span{ display:block; font-size:10px; font-weight:600; color:#94a3b8; }
+.yto .ck{ width:18px; height:18px; border-radius:50%; border:2px solid #cbd5e1; flex:none; }
+.yto.on .ck{ border:6px solid #ea580c; }
+.seg2{ display:grid; grid-template-columns:1fr 1fr; background:#f1f5f9; border-radius:12px; padding:3px; }
+.seg2.uc{ grid-template-columns:1fr 1fr 1fr; }
+.seg2 button{ border:none; background:none; padding:8px 4px; border-radius:9px; font-size:12.5px; font-weight:700; color:#64748b; }
+.seg2 button.on{ background:#fff; color:#111827; box-shadow:0 1px 3px rgba(0,0,0,.1); }
+.go{ display:flex; justify-content:center; align-items:center; gap:8px; width:100%; margin-top:12px; background:#ea580c; color:#fff; border:none; border-radius:13px; padding:13px; font-weight:800; font-size:14.5px; }
+.ytalt{ display:flex; justify-content:space-between; margin-top:9px; font-size:11.5px; color:#64748b; gap:8px; }
+.ytalt button{ border:none; background:none; color:#1d4ed8; font-weight:700; font-size:11.5px; padding:0; }
+.btn.yt{ background:#eef4ff; color:#1d4ed8; border:1.5px solid #c7d7fb; }
+.btn.yt.bos{ opacity:.45; }
+/* KMZ ekranı: sağ sütun, katmanlar, drone */
+.katman{ left:12px; right:auto !important; }
+.solk{ position:absolute; left:12px; right:72px; top:calc(108px + env(safe-area-inset-top)); z-index:999; display:flex; flex-direction:column; align-items:flex-start; gap:6px; pointer-events:none; }
+.solk .hatnot{ position:static !important; max-width:100% !important; }
+.sagk{ position:absolute; right:12px; top:calc(64px + env(safe-area-inset-top)); z-index:1000; display:flex; flex-direction:column; gap:8px; align-items:flex-end; }
+.sagk button{ height:42px; min-width:42px; border-radius:12px; border:none; background:#fff; box-shadow:0 2px 8px rgba(0,0,0,.3); font-size:18px; display:flex; align-items:center; justify-content:center; gap:6px; color:#374151; padding:0 10px; }
+.sagk button svg{ width:21px; height:21px; }
+.sagk button.on{ color:#2563eb; }
+.sagk .kat{ background:#0f2440; color:#fff; font-size:13px; font-weight:800; }
+.sagk .kat i{ font-style:normal; background:#ea580c; border-radius:9px; font-size:10.5px; padding:1px 6px; }
+.chips{ display:flex; flex-wrap:wrap; gap:6px; }
+.chips span{ background:rgba(255,255,255,.95); border-radius:14px; padding:4px 9px; font-size:11px; font-weight:700; display:flex; align-items:center; gap:5px; box-shadow:0 1px 4px rgba(0,0,0,.2); color:#111827; }
+.chips i{ width:10px; height:3px; border-radius:2px; display:inline-block; }
+.ktl{ border:1px solid #e2e8f0; border-radius:14px; overflow:hidden; margin-bottom:10px; }
+.kti{ display:flex; align-items:center; gap:11px; padding:10px 12px; border-top:1px solid #eef1f5; }
+.kti:first-child{ border-top:none; }
+.kti .sw{ width:26px; height:26px; border-radius:8px; display:flex; align-items:center; justify-content:center; flex:none; background:#f1f5f9; }
+.kti .sw i{ width:14px; height:3px; border-radius:2px; display:block; }
+.kti .t{ flex:1; min-width:0; } .kti .t b{ display:block; font-size:13px; color:#111827; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; } .kti .t span{ font-size:11px; color:#64748b; }
+.tg{ width:44px; height:26px; border-radius:13px; background:#e2e8f0; position:relative; flex:none; border:none; padding:0; }
+.tg:after{ content:""; position:absolute; left:3px; top:3px; width:20px; height:20px; border-radius:50%; background:#fff; box-shadow:0 1px 2px rgba(0,0,0,.2); transition:left .15s; }
+.tg.on{ background:#ea580c; } .tg.on:after{ left:21px; }
+.drk{ border:1.5px solid #e2e8f0; border-radius:14px; overflow:hidden; margin-bottom:10px; }
+.drk.on{ border-color:#ea580c; } .drk.on .kti{ background:#fff7f0; }
+.dro{ padding:10px 12px 12px; border-top:1px solid #f6d3b8; }
+.dro .lb{ font-size:10.5px; font-weight:800; color:#64748b; letter-spacing:.05em; margin:0 0 5px; }
+.dro .seg2{ margin-bottom:10px; }
+.dro .inf{ font-size:11.5px; color:#9a3412; }
+.ksec{ display:flex; justify-content:space-between; align-items:baseline; font-size:10.5px; letter-spacing:.06em; font-weight:800; color:#64748b; margin:4px 2px 6px; }
+.ksec button{ border:none; background:none; color:#1d4ed8; font-weight:700; font-size:11.5px; letter-spacing:0; padding:0; }
+.knot{ font-size:11px; color:#64748b; margin-top:4px; }
+.dserit{ position:absolute; left:12px; right:12px; bottom:calc(92px + env(safe-area-inset-bottom)); z-index:1000; background:rgba(255,255,255,.96); border-radius:12px; padding:8px 11px; box-shadow:0 2px 10px rgba(0,0,0,.3); font-size:12px; color:#111827; }
+.dserit .r1{ display:flex; justify-content:space-between; align-items:center; gap:8px; }
+.dserit b{ font-size:12.5px; }
+.dserit button{ border:none; background:none; color:#1d4ed8; font-weight:800; font-size:11.5px; padding:0; white-space:nowrap; }
+.dserit .lg{ display:flex; align-items:center; gap:6px; margin-top:6px; font-size:10.5px; color:#64748b; }
+.dserit .lg i{ flex:1; height:6px; border-radius:3px; background:linear-gradient(90deg,#1d4ed8,#60a5fa,#cbd5e1); }
+.dkume{ display:flex; align-items:center; justify-content:center; border-radius:50%; color:#fff; font-weight:800; font-size:12px; border:2px solid #fff; box-shadow:0 0 0 5px rgba(29,78,216,.25); }
+.dpop b{ display:block; font-size:12.5px; margin-bottom:4px; }
+.dpop div{ display:flex; justify-content:space-between; gap:14px; font-size:11.5px; color:#64748b; } .dpop div em{ font-style:normal; color:#111827; font-weight:700; }
+/* drone: yumuşak yanıp sönme */
+@keyframes dyan{ 0%,100%{ opacity:1; } 50%{ opacity:.12; } }
+.dyan{ animation:dyan 2.4s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce){ .dyan{ animation:none; opacity:.7; } }
+/* pdf gönder */
+.pdfs .seg2{ margin-bottom:12px; }
+.pdfis{ border:1px solid #e2e8f0; border-radius:12px; max-height:34vh; overflow-y:auto; overscroll-behavior:contain; }
+.pdfis label{ display:flex; gap:10px; align-items:center; padding:9px 12px; border-top:1px solid #eef1f5; font-size:13px; }
+.pdfis label:first-child{ border-top:none; }
+.pdfis input, .pdfbol input{ width:18px; height:18px; accent-color:#ea580c; flex:none; }
+.pdfbol{ display:grid; gap:8px; }
+.pdfbol label{ display:flex; gap:10px; align-items:center; border:1px solid #e2e8f0; border-radius:12px; padding:10px 12px; font-size:13.5px; font-weight:700; }
+.pdfbol label small{ display:block; font-weight:500; color:#64748b; font-size:11.5px; }
+.pdfbol label.yok{ opacity:.45; }
+.pdfara{ display:flex; gap:8px; margin-bottom:8px; }
+.pdfara input{ flex:1; border:1px solid #e5e7eb; border-radius:10px; padding:9px 11px; font-size:16px; background:#f8fafc; color:inherit; }
+.pdfara button{ border:1px solid #fed7aa; background:#fff7ed; color:#c2410c; font-weight:700; border-radius:10px; padding:0 10px; font-size:12px; }
+.pdfdur{ font-size:12px; color:#64748b; text-align:center; margin-top:8px; min-height:16px; }
+/* ===== karanlık mod ===== */
+html.dark{ color-scheme:dark; }
+html.dark body, html.dark #app{ background:#0b111c; color:#e6ebf3; }
+html.dark .hdr, html.dark .tabs, html.dark .top{ background:#121a29; border-color:#222d41; }
+html.dark .hdr .u, html.dark .card .ad, html.dark .stdk .ad{ color:#e6ebf3; }
+html.dark .hdr .k{ color:#8a97ad; }
+html.dark .card, html.dark .gd, html.dark .jr, html.dark .bh, html.dark .pop, html.dark .mbox, html.dark .sheet, html.dark .bs, html.dark .yto, html.dark .konumkart, html.dark .dserit{ background:#141c2b; border-color:#222d41; color:#e6ebf3; }
+html.dark .kv, html.dark .rng2, html.dark .erow, html.dark .bi, html.dark .tr2, html.dark .gi, html.dark .gr, html.dark .kti, html.dark .yto, html.dark .pdfis label, html.dark .bh h5, html.dark .bs .bh3, html.dark .gsek{ border-color:#222d41; }
+html.dark .kv b, html.dark .rng2 .r1 b, html.dark .erow b, html.dark .bi .a b, html.dark .tr2 .l b, html.dark .tr2 .l span.v, html.dark .jr .t b, html.dark .sr .st span b, html.dark .gi b, html.dark .gr .st, html.dark .bh h5, html.dark .bs .bh3 b, html.dark .yto .t b, html.dark .yto .r, html.dark .kti .t b, html.dark .sheet .nm, html.dark .konumkart b, html.dark .dserit, html.dark .stdk .hb, html.dark .kv.uz .uzs i, html.dark .gsek button.on, html.dark .chips span{ color:#e6ebf3; }
+html.dark .bs .bh3 b.tl{ color:#fb923c; }
+html.dark .sr .st, html.dark .gi b, html.dark .rng2 .r2{ color:#c8d1df; }
+html.dark .tr2.top2, html.dark .seg2, html.dark .seg, html.dark .ytmini, html.dark .search, html.dark .top .search, html.dark .pdfara input{ background:#0f1726; border-color:#222d41; color:#e6ebf3; }
+html.dark .seg2 button.on, html.dark .seg button.on{ background:#22304a; color:#fff; }
+html.dark .tr2.acik, html.dark .gr.acik, html.dark .yto.on, html.dark .drk.on .kti, html.dark .ilblok{ background:#2a1d14; }
+html.dark .bedel2 div{ background:#0f2a1c; border-color:#1d4d33; } html.dark .bedel2 span{ color:#86c7a0; } html.dark .bedel2 b, html.dark .kv b.g{ color:#4ade80; }
+html.dark .ytlist, html.dark .ktl, html.dark .drk, html.dark .pdfis, html.dark .pdfbol label{ border-color:#222d41; }
+html.dark .bar, html.dark .pbar{ background:#2f5fbf; }
+html.dark .durb, html.dark .arb, html.dark .ikb, html.dark .yukle, html.dark .tm, html.dark .dbtn, html.dark .btn.alt, html.dark .pdfara button{ background:#2a1d14; border-color:#7c2d12; color:#fdba74; }
+html.dark .durb.on, html.dark .ikb.on{ background:#ea580c; color:#fff; }
+html.dark .btn.yt{ background:#13213d; border-color:#2a4a85; color:#93b4ff; }
+html.dark .warn{ background:#3a2e10; border-color:#7a5d12; color:#fcd34d; }
+html.dark .pop .tx{ background:#0f1726; border-color:#222d41; color:#e6ebf3; }
+html.dark .x, html.dark .pop .x, html.dark .bs .bh3 .x{ background:#22304a !important; color:#c8d1df !important; }
+html.dark th{ background:#2a1d14; color:#fdba74; } html.dark td{ border-color:#222d41; }
+html.dark .sagk button{ background:#141c2b; color:#e6ebf3; } html.dark .sagk .kat{ background:#0f2440; }
+html.dark .dh{ background:linear-gradient(135deg,#0f2440,#3b1d0d); }
+html.dark .kutu.on{ border-color:#4ade80; }
+html.dark .tg{ background:#2b3850; }
+html.dark .ytuy{ background:#3a2e10; border-color:#7a5d12; color:#fcd34d; }
+html.dark .ksec, html.dark .tbh, html.dark .bgrp, html.dark .sec, html.dark .muted{ color:#8a97ad; }
 </style>
 </head>
 <body>
-<div id="app"><main id="main"></main><nav class="tabs" id="tabs"></nav></div>
-<script src="leaflet.js"></script>
+<div id="app"><main id="main"><div class="hos" id="acilis"><div class="hos-logo"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M9 4L3 6v14l6-2 6 2 6-2V4l-6 2-6-2zM9 4v14M15 6v14"/></svg></div><h1>İşTakip</h1><div class="hos-alt">Strateji Geliştirme Başmühendisliği<br><b>KGM</b> 7. Bölge Müdürlüğü</div><div class="acil-y"><i></i></div></div></main><nav class="tabs" id="tabs" style="display:none"></nav></div>
 <script>
 "use strict";
 let D = null, ISLER = [];
@@ -314,67 +550,134 @@ function cubuk(ad, h, b, extra, attrs){
 }
 function isMini(j, ad){
   const c = j.cats.find(x => x.ad === ad);
-  return `<button class="gi" data-is="${esc(j.id)}"><div class="st"><b>${esc(j.ad)}</b>${c ? `<i>%${yuzde(c.b, c.h)}</i>` : ""}</div><small>${c ? `${f2(c.b)} / ${f2(c.h)} km · ` : ""}${esc(j.il.join(" · "))}</small></button>`;
+  return `<button class="gi" data-is="${esc(j.id)}"><div class="st"><b>${esc(j.ad)}</b>${c ? `<i>${c.h === 0 && c.b > 0 ? "–" : "%" + yuzde(c.b, c.h)}</i>` : ""}</div><small>${c ? `Biten ${f2(c.b)} · Hedef ${c.h > 0 ? f2(c.h) : "–"} km · ` : ""}${esc(j.il.join(" · "))}</small></button>`;
+}
+// ---------- Genel Durum (profesyonel görünüm) ----------
+// Standartlar: STANDART · BİTEN · HEDEF · % tablosu + TOPLAM; satıra dokununca
+// o standarttaki işler açılır. İl Bazlı: il satırları (iş / fiziksel hedefli
+// sayıları), açılınca o ilin standart tablosu. Açılan uzun listeler kendi
+// kutusunda kayar.
+function tabloSatir(ad, h, b, extra, attrs, ok){
+  const yok = h === 0 && b > 0, p = yuzde(b, h), tag = attrs ? "button" : "div";
+  return `<${tag} class="tr2${extra || ""}"${attrs || ""}><div class="l"><b>${ok ? `<em>${ok}</em>` : ""}${ad}</b><span class="v">${f2(b)}</span><span>${yok || !h ? "–" : f2(h)}</span><i>${yok ? "–" : p}</i></div><div class="bar${yok ? " yok" : ""}"><i style="width:${yok ? 100 : p}%"></i></div></${tag}>`;
+}
+function stdTablo(jobs, acilir){
+  const t = stdToplam(jobs);
+  const adlar = stdSirala(Object.keys(t));
+  if(!adlar.length) return '<div class="gbos">Standart verisi yok.</div>';
+  let H = 0, B = 0;
+  const satirlar = adlar.map(ad => {
+    H += t[ad].h; B += t[ad].b;
+    if(!acilir) return tabloSatir(esc(ad), t[ad].h, t[ad].b, "", "");
+    const acik = gdSec === "s:" + ad;
+    return tabloSatir(esc(ad), t[ad].h, t[ad].b, acik ? " acik" : "", ` data-gd="s:${esc(ad)}"`, acik ? "▾" : "▸") +
+      (acik ? `<div class="gac">${jobs.filter(j => j.cats.some(c => c.ad === ad)).map(j => isMini(j, ad)).join("") || '<div class="gbos">İş yok.</div>'}</div>` : "");
+  }).join("");
+  return satirlar + (adlar.length > 1 ? tabloSatir("TOPLAM", H, B, " top2", "") : "");
 }
 function genelDurum(){
   const jobs = sayilan();
-  let govde = "";
-  if(gdAcik){
-    if(gdSekme === "std"){
-      const t = stdToplam(jobs);
-      govde = stdSirala(Object.keys(t)).map(ad => {
-        const acik = gdSec === "s:" + ad;
-        return cubuk(`<em>${acik ? "▾" : "▸"}</em>${esc(ad)}`, t[ad].h, t[ad].b, acik ? " acik" : "", ` data-gd="s:${esc(ad)}"`) +
-          (acik ? `<div class="gac">${jobs.filter(j => j.cats.some(c => c.ad === ad)).map(j => isMini(j, ad)).join("") || '<div class="gbos">İş yok.</div>'}</div>` : "");
-      }).join("") || '<div class="gbos">Standart verisi yok.</div>';
-    }else{
-      const iller = IL_SIRA.concat([...new Set(jobs.flatMap(j => j.il))].filter(il => !IL_SIRA.includes(il)).sort((a, b) => a.localeCompare(b, "tr")));
-      const satir = (key, ad, liste, ic) => { const acik = gdSec === key;
-        return `<button class="gr ilr${acik ? " acik" : ""}" data-gd="${esc(key)}"><span class="st" style="flex:1"><span><em>${acik ? "▾" : "▸"}</em>${esc(ad)}</span></span><span class="ilsay"><span title="Toplam iş">${IKON_IS}${liste.length}</span><span title="Fiziksel hedefli">${IKON_HEDEF}${liste.filter(j => j.fh).length}</span></span></button>${acik ? `<div class="gac">${ic()}</div>` : ""}`; };
-      govde = iller.map(il => {
-        const ilJobs = jobs.filter(j => j.il.includes(il));
-        return satir("i:" + il, il, ilJobs, () => { const t = stdToplam(ilJobs); return stdSirala(Object.keys(t)).map(ad => cubuk(esc(ad), t[ad].h, t[ad].b, "", "")).join("") || '<div class="gbos">Bu ilde standart verisi yok.</div>'; });
-      }).join("");
-      const cok = jobs.filter(j => j.il.length > 1);
-      govde += `<div class="ayrac"></div>` + satir("cok", "Birden Fazla İl", cok, () => cok.map(j => `<button class="gi" data-is="${esc(j.id)}"><b>${esc(j.ad)}</b><small>${esc(j.il.join(" · "))}</small></button>`).join("") || '<div class="gbos">Birden fazla ilde iş yok.</div>');
-    }
+  let govde = "", bas = "";
+  if(gdSekme === "std"){
+    bas = `<div class="tbh"><span>STANDART</span><span>BİTEN</span><span>HEDEF</span><span>%</span></div>`;
+    govde = stdTablo(jobs, true);
+  }else{
+    bas = `<div class="tbh il"><span>İL</span><span>${IKON_IS}İŞ</span><span>${IKON_HEDEF}FİZ.</span></div>`;
+    const iller = IL_SIRA.concat([...new Set(jobs.flatMap(j => j.il))].filter(il => !IL_SIRA.includes(il)).sort((a, b) => a.localeCompare(b, "tr")));
+    const satir = (key, ad, liste, ic) => { const acik = gdSec === key;
+      return `<button class="tr2 ilr2${acik ? " acik" : ""}" data-gd="${esc(key)}"><div class="l"><b><em>${acik ? "▾" : "▸"}</em>${esc(ad)}</b><span>${liste.length}</span><span>${liste.filter(j => j.fh).length}</span></div></button>${acik ? `<div class="gac">${ic()}</div>` : ""}`; };
+    govde = iller.map(il => {
+      const ilJobs = jobs.filter(j => j.il.includes(il));
+      return satir("i:" + il, il, ilJobs, () => `<div class="tbh" style="padding:4px 0 2px"><span>STANDART</span><span>BİTEN</span><span>HEDEF</span><span>%</span></div>` + stdTablo(ilJobs, false));
+    }).join("");
+    const cok = jobs.filter(j => j.il.length > 1);
+    govde += `<div class="ayrac"></div>` + satir("cok", "Birden Fazla İl", cok, () => cok.map(j => `<button class="gi" data-is="${esc(j.id)}"><b>${esc(j.ad)}</b><small>${esc(j.il.join(" · "))}</small></button>`).join("") || '<div class="gbos">Birden fazla ilde iş yok.</div>');
   }
-  const IA = IKON_IS.replace(/#ea580c/g, "#fb923c"), HA = IKON_HEDEF.replace(/#16a34a/g, "#4ade80");
-  if(gdSekme === "il") govde = `<div class="ilbas"><div><span>${IKON_IS}İş</span><span>${IKON_HEDEF}Fiz.</span></div></div>` + govde;
-  return `<div class="gd" id="gd"><div class="gdh2"><div class="t"><b>Genel Durum</b><span>${D.yil}</span></div>
-<div class="n"><div><i class="ik">${IA}</i><span><b>${ISLER.length}</b><small>Toplam İş</small></span></div><div><i class="ik">${HA}</i><span><b>${ISLER.filter(j => j.fh).length}</b><small>Fiziksel Hedefli</small></span></div></div></div>
-<div class="seg"><button data-gdsekme="std"${gdSekme === "std" ? ' class="on"' : ""}>Standartlar</button><button data-gdsekme="il"${gdSekme === "il" ? ' class="on"' : ""}>İl Bazlı</button></div><div class="gdg" id="gdg">${govde}</div></div>`;
+  const d = new Date(D.olusturma);
+  const IA = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>';
+  const HA = '<svg viewBox="0 0 24 24" fill="none" stroke="#fb923c" stroke-width="1.6"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1" fill="#fb923c"/></svg>';
+  return `<div class="gd" id="gd"><div class="gdh3"><div class="t"><b>GENEL DURUM</b><span>${D.yil}</span></div><div class="d">Veri: ${p2(d.getDate())}.${p2(d.getMonth() + 1)}.${d.getFullYear()} ${p2(d.getHours())}:${p2(d.getMinutes())}</div>
+<div class="n"><div>${IA}<p style="margin:0"><b>${ISLER.length}</b><small>Toplam İş</small></p></div><div>${HA}<p style="margin:0"><b>${ISLER.filter(j => j.fh).length}</b><small>Fiziksel Hedefli</small></p></div></div></div>
+<div class="gsek"><button data-gdsekme="std"${gdSekme === "std" ? ' class="on"' : ""}>Standartlar</button><button data-gdsekme="il"${gdSekme === "il" ? ' class="on"' : ""}>İl Bazlı</button></div>${bas}<div class="gdg" id="gdg">${govde}</div></div>`;
+}
+
+// ---------- Bu Hafta Girilen KM'ler ----------
+// Verinin oluşturulduğu haftada (Pazartesi–Pazar) programa girilen KM aralıkları
+function haftaPenceresi(){
+  const n = new Date(D.olusturma);
+  const pt = new Date(n); pt.setDate(n.getDate() - ((n.getDay() + 6) % 7)); pt.setHours(0, 0, 0, 0);
+  const pz = new Date(pt); pz.setDate(pt.getDate() + 6); pz.setHours(23, 59, 59, 999);
+  return { a: pt.getTime(), b: pz.getTime(), pt, pz };
+}
+const kmSayi = v => { const s = String(v ?? "").trim(); const m = s.match(/^(-?\d+)\s*\+\s*(\d+)$/); if(m) return +m[1] + +m[2] / 1000; const x = parseFloat(s.replace(",", ".")); return Number.isFinite(x) ? x : null; };
+function haftaGirisleri(){
+  const w = haftaPenceresi(), out = [];
+  ISLER.forEach(j => { if(j.ekleme) return; (j.kmler || []).forEach(k => {
+    if(!k.g || k.g < w.a || k.g > w.b) return;
+    const s = kmSayi(k.a), e = kmSayi(k.e); if(s === null || e === null) return;
+    out.push({ j, k, km: Math.abs(e - s) / (k.y ? 2 : 1) });
+  }); });
+  return out.sort((x, y) => y.k.g - x.k.g);
+}
+function buHafta(){
+  const w = haftaPenceresi(), l = haftaGirisleri();
+  const gun = d => `${p2(d.getDate())}.${p2(d.getMonth() + 1)}`;
+  return `<div class="bh"><h5>Bu Hafta Girilen KM'ler <em>${gun(w.pt)} – ${gun(w.pz)} · ${l.length} giriş</em></h5><div class="bhl">${l.length ? l.map(x => {
+    const d = new Date(x.k.g);
+    return `<button class="bi" data-is="${esc(x.j.id)}"><span class="a"><b>${esc(x.j.ad)}</b><span>${p2(d.getDate())}.${p2(d.getMonth() + 1)}.${d.getFullYear()} · ${esc(x.k.s)} · ${esc(x.k.a)} – ${esc(x.k.e)}${x.k.y ? " · yarısı" : ""}</span></span><span class="k">+${f2(x.km)} km<span>${D.yil}: ${f2(sum(x.j, "b"))}</span></span></button>`;
+  }).join("") : '<div class="bos">Bu hafta henüz KM girilmedi.</div>'}</div></div>`;
 }
 function gdYenile(korunsun){ const g = document.getElementById("gd"); if(!g) return; const y = korunsun ? (document.getElementById("gdg")?.scrollTop || 0) : 0; g.outerHTML = genelDurum(); const n = document.getElementById("gdg"); if(n) n.scrollTop = y; }
 
 // ---------- Anasayfa ----------
-// Her standart için ayrı satır + harita kartındaki gibi kırmızı/mavi çizgi
-function stdSatirlari(j){
-  return j.cats.map(c => { const p = yuzde(c.b, c.h); return `<div class="sr"><div class="st"><span><b>${esc(c.ad)}</b>${f2(c.b)} / ${f2(c.h)} km</span><i>%${p}</i></div><div class="bar"><i style="width:${p}%"></i></div></div>`; }).join("");
+// Her standart için ayrı satır: "Biten X km · Hedef Y km" + kırmızı/mavi çizgi.
+// Hedefi olmayan (biten > 0) standartta çizgi dolu, yüzde yerine "Sene başı
+// hedefi yok" yazar; anim: önce yeşil yanar, sonra kırmızıya döner.
+function stdSatirlari(j, anim){
+  return j.cats.map(c => {
+    const yok = c.h === 0 && c.b > 0, p = yuzde(c.b, c.h);
+    return `<div class="sr"><div class="st"><span><b>${esc(c.ad)}</b></span>${yok ? '<span class="hy">Sene başı hedefi yok</span>' : `<i>%${p}</i>`}</div>
+<div class="bh2"><span><em>Biten</em>${f2(c.b)} km</span><span><em>Hedef</em>${c.h > 0 ? f2(c.h) + " km" : "–"}</span></div>
+<div class="bar${yok ? " yok" + (anim ? " anim" : "") : ""}"><i style="width:${yok ? 100 : p}%"></i></div></div>`;
+  }).join("");
 }
+// Favoriler yalnızca bu telefonda saklanır; yeni veri yüklense de kalır
+let FAV = (() => { try{ return JSON.parse(yerel("istakip-mobil-fav") || "[]"); }catch(e){ return []; } })();
+const favMi = id => FAV.includes(id);
+function favDegis(id){ FAV = favMi(id) ? FAV.filter(x => x !== id) : FAV.concat(id); yerel("istakip-mobil-fav", JSON.stringify(FAV)); }
 function isSatir(j){
-  return `<div class="jr" data-is="${esc(j.id)}"><div class="t"><b>${esc(j.ad)}</b></div>
+  return `<div class="jr" data-is="${esc(j.id)}"><button class="fav${favMi(j.id) ? " on" : ""}" data-fav="${esc(j.id)}" aria-label="Favori">${favMi(j.id) ? "★" : "☆"}</button><div class="t"><b>${esc(j.ad)}</b></div>
 <div class="m">${esc([j.il.join(" · "), j.firma].filter(Boolean).join(" · "))}</div>${stdSatirlari(j)}</div>`;
 }
-let aramaAcik = false;
+let aramaAcik = false, kmAcik = false, durumAcik = false;
 function aramaSonuc(){
   const q = fold(isAra);
   return ISLER.filter(j => !q || fold([j.ad, j.firma, j.sef, j.il.join(" ")].join(" ")).includes(q));
 }
 function isListesi(list){
-  return list.length ? list.map(isSatir).join("") : '<div class="empty">Aramaya uyan iş yok.</div>';
+  if(!list.length) return '<div class="empty">Aramaya uyan iş yok.</div>';
+  const fav = list.filter(j => favMi(j.id)), diger = list.filter(j => !favMi(j.id));
+  const bas = isAra.trim() ? "ARAMA SONUÇLARI" : "TÜM İŞLER";
+  return (fav.length ? `<div class="sec">⭐ Favoriler · ${fav.length}</div>${fav.map(isSatir).join("")}` : "") +
+    (diger.length ? `<div class="sec">${fav.length ? bas.replace("TÜM İŞLER", "Diğer işler") : bas} · ${diger.length}</div>${diger.map(isSatir).join("")}` : "") +
+    (!FAV.length && !isAra.trim() ? '<div class="muted" style="text-align:center;padding:4px 0 8px">☆ yıldıza dokunun, iş favorilere eklenir.</div>' : "");
 }
-const aramaBaslik = n => `${isAra.trim() ? "Arama sonuçları" : "Tüm işler"} · ${n} iş`;
-// Anasayfa: normalde yalnızca Genel Durum; 🔍 ile bütün işler listelenir,
-// yazdıkça süzülür, ✕ ile Genel Durum'a dönülür.
+// Karanlık / açık mod: en son seçilen mod saklanır ve açılışta kullanılır
+let tema = yerel("istakip-mobil-tema") === "koyu" ? "koyu" : "acik";
+function temaUygula(){
+  document.documentElement.classList.toggle("dark", tema === "koyu");
+  document.querySelector('meta[name="theme-color"]')?.setAttribute("content", tema === "koyu" ? "#121a29" : "#ffffff");
+}
+temaUygula();
+// Anasayfa: Genel Durum + Bu Hafta Girilen KM'ler; 🔍 ile bütün işler
+// listelenir (favoriler üstte), yazdıkça süzülür, ✕ ile geri dönülür.
 function anasayfa(){
   const list = aramaAcik ? aramaSonuc() : [];
-  return `<div class="hdr"><div><div class="u">Strateji Geliştirme Başmühendisliği</div><div class="k"><b>KGM</b>7. Bölge Müdürlüğü</div><div class="vt">Veri: ${veriTarih()}</div></div>
-<div class="hbtn"><button class="ikb${aramaAcik ? " on" : ""}" data-arama aria-label="${aramaAcik ? "Aramayı kapat" : "İş ara"}">${aramaAcik ? "✕" : "🔍"}</button><button class="yukle" data-yukle>📂 Veri Yükle</button></div></div>
+  return `<div class="hdr"><div class="marka"><div class="u">Strateji Geliştirme Başmühendisliği</div><div class="k"><b>KGM</b>7. Bölge Müdürlüğü</div></div>
+<div class="hbtn"><button class="ikb${aramaAcik ? " on" : ""}" data-arama aria-label="${aramaAcik ? "Aramayı kapat" : "İş ara"}">${aramaAcik ? "✕" : "🔍"}</button><span class="tm"><button data-tema="acik"${tema === "acik" ? ' class="on"' : ""} aria-label="Açık mod">☀</button><button data-tema="koyu"${tema === "koyu" ? ' class="on"' : ""} aria-label="Karanlık mod">☾</button></span><button class="yukle" data-yukle>📂 Veri Yükle</button></div></div>
 <div class="pad">${eskiUyari()}
 ${aramaAcik ? `<input class="search" id="isAra" type="search" placeholder="🔍 İş, firma, şef ya da il ara…" value="${esc(isAra)}" autocomplete="off">
-<div class="sec" id="isSay">${aramaBaslik(list.length)}</div>
-<div id="isListe" style="display:flex;flex-direction:column;gap:10px">${isListesi(list)}</div>` : genelDurum()}
+<div id="isListe" style="display:flex;flex-direction:column;gap:10px">${isListesi(list)}</div>` : genelDurum() + buHafta()}
 </div>`;
 }
 
@@ -384,22 +687,31 @@ function detaySayfa(j, from){
   const cokStd = j.cats.length > 1;
   // İş Bilgileri kartında yalnızca tarihler; bedeller "Parasal" düğmesiyle açılır
   const uz = j.uz || [];
-  const uzBlok = (label, fn) => `<div class="kv uz"><span>${label}</span><b>${uz.map(r => `<span><em>${esc(r.s)}</em> ${fn(r)}</span>`).join("")}</b></div>`;
+  // Standart adları ve km'ler bütün satırlarda aynı sütunlarda (hizalı)
+  const uzBlok = (label, fn, cls) => `<div class="kv uz${cls || ""}"><span>${label}</span><b>${uz.map(r => `<span class="uzs"><em>${esc(r.s)}</em><i>${fn(r)}</i></span>`).join("")}</b></div>`;
+  // Toplam Kalan = ihale uzunluğu − öncesi − bu yıl; <yıl> Kalan = hedef − bu yıl
   const kalan = r => r.u === null || r.u === undefined ? "–" : f2(Math.max(0, r.u - (r.o || 0) - (r.y || 0))) + " km";
-  const parHtml = (par.it || par.st || uz.length) ? `<div class="card"><div class="ct">İş Bilgileri</div>
-<div class="kv"><span>İhale Tarihi</span><b>${tarih(par.it) || "–"}</b></div><div class="kv"><span>Sözleşme Tarihi</span><b>${tarih(par.st) || "–"}</b></div>
-${uz.length ? uzBlok("İhale Uzunluğu", r => r.u === null || r.u === undefined ? "–" : f2(r.u) + " km") + uzBlok(`${D.yil} Öncesi Yapılan`, r => f2(r.o) + " km") + uzBlok(`${yilEki(D.yil)} Yapılan`, r => f2(r.y) + " km") + uzBlok("Kalan", kalan) : ""}</div>` : "";
+  // "<yıl>'da Yapılan" satırındaki "Aralıklar" düğmesi KM aralıklarını açar;
+  // açıklamalar düğme olmadan aralığın altında yazar
+  const arBtn = j.kmler.length ? ` <button class="arb${kmAcik ? " on" : ""}" data-kmac>Aralıklar ${j.kmler.length} ${kmAcik ? "▴" : "▾"}</button>` : "";
+  const arListe = j.kmler.length ? `<div class="kml${kmAcik ? " acik" : ""}">${j.kmler.map(k => `<div class="rng2"><div class="r1"><b>${cokStd ? `<em>${esc(k.s)}</em> ` : ""}${esc(k.a)} – ${esc(k.e)}${k.y ? " (yarısı)" : ""}</b><span>${tarih(k.t)}</span></div>${(k.ac || "").trim() ? `<div class="r2">${esc(k.ac.trim())}</div>` : ""}</div>`).join("")}</div>` : "";
+  const yapilanCats = `<div class="kv uz"><span>${yilEki(D.yil)} Yapılan${arBtn}</span><b>${j.cats.map(c => `<span class="uzs"><em>${esc(c.ad)}</em><i>${f2(c.b)} km</i></span>`).join("")}</b></div>`;
+  // "Öncesi Yapılan"dan "Toplam Kalan"a kadar olan satırlar tek düğmeyle açılır
+  const durumAc = () => `<button class="durb${durumAcik ? " on" : ""}" data-durac><span>Yapılan ve Kalan KM'ler</span><i>${durumAcik ? "▴" : "▾"}</i></button><div class="dur${durumAcik ? " acik" : ""}">`;
+  const yilKalan = r => (r.h || 0) > 0 ? f2(Math.max(0, r.h - (r.y || 0))) + " km" : "–";
+  // İhale / Sözleşme tarihi ve ihale uzunluğu satırları Yüklenici · Kontrol Şefi kartında
+  const parHtml = (par.it || par.st || uz.length) ? `<div class="kv"><span>İhale Tarihi</span><b>${tarih(par.it) || "–"}</b></div><div class="kv"><span>Sözleşme Tarihi</span><b>${tarih(par.st) || "–"}</b></div>
+${uz.length ? uzBlok("İhale Uzunluğu", r => r.u === null || r.u === undefined ? "–" : f2(r.u) + " km") + durumAc() + uzBlok(`${D.yil} Öncesi Yapılan`, r => f2(r.o) + " km") + uzBlok(`${D.yil} Hedef`, r => (r.h || 0) > 0 ? f2(r.h) + " km" : "–") + uzBlok(`${yilEki(D.yil)} Yapılan${arBtn}`, r => f2(r.y) + " km") + arListe + uzBlok(`${D.yil} Kalan`, yilKalan, " kln") + uzBlok("Toplam Kalan", kalan, " kln") + `</div>` : ""}` : "";
   const yb = (k, ad) => `<button class="dbtn${(j[k] || "").trim() ? "" : " bos"}" data-yazi="${k}">${D.yil} ${ad}</button>`;
   const haritadaGoster = from !== "map" && j.kutular.length;
   return `<div class="dh"><button class="back" data-geri>‹ ${GERI_AD[from]}</button><h2>${esc(j.ad)}</h2><div class="mt">${esc([j.il.join(" · "), std(j), j.kk ? "K.K.No " + j.kk : ""].filter(Boolean).join(" · "))}</div></div>
 <div class="pad">
-${j.cats.length ? `<div class="card">${j.cats.map(c => { const p = yuzde(c.b, c.h); return `<div class="stdk"><div class="ad">${esc(c.ad)}</div><div class="hb">Hedef: ${f2(c.h)} KM<br>Biten: ${f2(c.b)} KM</div><div class="pbar"><i style="width:${p}%">${p}%</i></div></div>`; }).join("")}</div>` : ""}
-<div class="card"><div class="kv"><span>Yüklenici</span><b>${esc(j.firma) || "–"}</b></div><div class="kv"><span>Kontrol Şefi</span><b>${esc(j.sef) || "–"}</b></div></div>
-${j.kmler.length ? `<div class="card"><div class="ct">KM Aralıkları</div>${j.kmler.map((k, i) => `<div class="rng"><b>${cokStd ? esc(k.s) + " · " : ""}${esc(k.a)} – ${esc(k.e)}${k.y ? " (yarısı)" : ""}</b><span>${(k.ac || "").trim() ? `<button class="acb" data-ac="${i}">Açıklama</button>` : ""}${tarih(k.t)}</span></div>`).join("")}</div>` : ""}
-${parHtml}
+${j.cats.length ? `<div class="card">${j.cats.map(c => { const p = yuzde(c.b, c.h), yok = c.h === 0 && c.b > 0; return `<div class="stdk"><div class="ad">${esc(c.ad)}</div><div class="hb">Hedef: ${yok ? "Sene başı hedefi yok" : f2(c.h) + " KM"}<br>Biten: ${f2(c.b)} KM</div><div class="pbar${yok ? " yok anim" : ""}"><i style="width:${yok ? 100 : p}%">${yok ? "" : p + "%"}</i></div></div>`; }).join("")}</div>` : ""}
+<div class="card"><div class="kv"><span>Yüklenici</span><b>${esc(j.firma) || "–"}</b></div><div class="kv"><span>Kontrol Şefi</span><b>${esc(j.sef) || "–"}</b></div>${parHtml}${!uz.length && (j.kmler.length || j.cats.length) ? durumAc() + yapilanCats + arListe + `</div>` : ""}</div>
 <div class="btns">${yb("devam", "Devam Eden")}${yb("biten", "Biten")}</div>
 ${parVar(j) || itiVar(j) ? `<div class="btns">${parVar(j) ? `<button class="btn alt" data-parasal="${esc(j.id)}">₺ Parasal</button>` : ""}${itiVar(j) ? `<button class="btn iti" data-iti="${esc(j.id)}">İtinerer</button>` : ""}</div>` : ""}
 <div class="btns">${haritadaGoster ? `<button class="btn" data-haritada="${esc(j.id)}">🗺 Haritada Göster</button>` : ""}${kmzBtn(j, "")}</div>
+<div class="btns">${ytBtn(j)}<button class="btn alt" data-pdf="${esc(j.id)}">📄 PDF Gönder</button></div>
 </div>`;
 }
 
@@ -411,17 +723,34 @@ function yilEki(y){
   return `${y}'${b ? birler[b] : o ? onlar[o] : "de"}`;
 }
 
-// Parasal küçük penceresi: İhale Bedeli, Proje Bedeli (çok illi işte il il),
-// altında Excel'den seçilen sütunlar (Excel'deki sırasıyla). Oran yok.
+// Alttan açılan pencere: arkadaki sayfa/harita kaymaz, yalnız içerik kayar
+function altSayfa(ikon, baslik, alt, govde, id, cls){
+  kapatAlt();
+  const ov = document.createElement("div"); ov.className = "bsov"; ov.id = "bsov";
+  ov.innerHTML = `<div class="bs${cls ? " " + cls : ""}" role="dialog" aria-label="${esc(baslik)}"><div class="grab"></div><div class="bh3">${ikon ? `<span class="ic">${ikon}</span>` : ""}<div style="min-width:0"><b class="${ikon ? "" : "tl"}">${esc(baslik)}</b><small>${esc(alt)}</small></div><button class="x" data-altkapat aria-label="Kapat">✕</button></div><div class="bb" id="${id || "bb"}">${govde}</div></div>`;
+  ov.addEventListener("click", e => { if(e.target === ov || e.target.closest("[data-altkapat]")) kapatAlt(); });
+  // arka plan kaymasın: kayan içerik dışında dokunmalar yutulur
+  ov.addEventListener("touchmove", e => { if(!e.target.closest(".bb")) e.preventDefault(); }, { passive: false });
+  document.body.appendChild(ov);
+  return ov;
+}
+function kapatAlt(){ document.getElementById("bsov")?.remove(); }
+
+// Parasal: İhale Bedeli ve Proje Bedeli üstte iki kutu, altında Excel'den
+// seçilen sütunlar (başlık üstte, değer altta). Çok illi işte il il.
 const parVar = j => j.par.ib !== null || j.par.pb !== null || (j.ek && j.ek.length);
 function parasalPenceresi(j){
   const par = j.par;
   const tl = n => n !== null && n !== undefined ? f2(n) + " ₺" : "–";
-  let html = `<div class="kv"><span>İhale Bedeli</span><b class="g">${tl(par.ib)}</b></div>
-<div class="kv"><span>Proje Bedeli</span><b class="g">${tl(par.pb)}</b></div>`;
-  if(par.iller && j.il.length > 1) html += `<div class="ils" style="margin:6px 0 4px">${Object.keys(par.iller).map(il => { const x = par.iller[il] || {}; return `<div class="il" style="padding:3px 0 0"><span class="ad">${esc(il)}</span><span>İhale ${tl(x.ihaleTutari)}</span></div><div class="il" style="padding:0 0 3px"><span></span><span>Proje ${tl(x.projeBedeli)}</span></div>`; }).join("")}</div>`;
-  if(j.ek && j.ek.length) html += `<div class="ekler">${j.ek.map(([b, v]) => `<div class="kv"><span>${esc(b)}</span><b>${esc(v)}</b></div>`).join("")}</div>`;
-  pencere("Parasal", j.ad, html, false, true);
+  const kutular = (ib, pb) => `<div class="bedel2"><div><span>İhale Bedeli</span><b>${tl(ib)}</b></div><div><span>Proje Bedeli</span><b>${tl(pb)}</b></div></div>`;
+  const satirlar = l => l.map(([b, v]) => `<div class="erow"><span>${esc(b)}</span><b>${esc(v)}</b></div>`).join("");
+  let html = kutular(par.ib, par.pb);
+  if(j.ek && j.ek.length) html += `<div class="bgrp">EXCEL BİLGİLERİ${par.iller && j.il.length > 1 ? " · TOPLAM" : ""}</div>${satirlar(j.ek)}`;
+  if(par.iller && j.il.length > 1){
+    html += Object.keys(par.iller).map(il => { const x = par.iller[il] || {}; const e = (j.eki && j.eki[il]) || [];
+      return `<div class="ilblok"><div class="ilad">${esc(il)}</div>${kutular(x.ihaleTutari, x.projeBedeli)}${e.length ? `<div style="margin-top:6px">${satirlar(e)}</div>` : ""}</div>`; }).join("");
+  }
+  altSayfa("", "₺ Parasal", j.ad, html);
 }
 
 // Devam Eden / Biten küçük penceresi
@@ -475,6 +804,10 @@ function kapatModal(){ document.getElementById("modal")?.remove(); }
 // konumlanır ve resimle aynı katmanda durur; yakınlaştırınca birlikte
 // büyür, kaymaz.
 function harita(){
+  if(!D._agirTam){
+    agirHazir().then(() => { if(tab === "map" && !detay){ ciz(); if(secKutu) kutuyaGit(secKutu); } });
+    return '<div class="empty" style="padding-top:80px">Harita yükleniyor…</div>';
+  }
   if(!D.harita) return '<div class="empty" style="padding-top:80px">Bu dosyada harita yok.</div>';
   const j = secKutu ? byId(secKutu) : null;
   const kutular = [];
@@ -483,8 +816,8 @@ function harita(){
 ${kutular.map(([id, k]) => `<button class="kutu${secKutu === id ? " on" : ""}" data-kutu="${esc(id)}" style="left:${k[0]}%;top:${k[1]}%;width:${k[2]}%;height:${k[3]}%" aria-label="${esc(byId(id).ad)}"></button>`).join("")}</div>
 <div class="zoom"><button data-zoom="1.5">+</button><button data-zoom="0.667">−</button></div>
 ${j ? `<div class="sheet"><div class="handle"></div><button class="x" data-kutukapat aria-label="Kapat">✕</button><div class="nm">${esc(j.ad)}</div><div class="mt" style="margin-bottom:0">${esc([j.il.join(" · "), j.firma].filter(Boolean).join(" · "))}</div>
-${stdSatirlari(j)}
-<div class="btns kart-btns${[parVar(j), itiVar(j)].filter(Boolean).length + 2 > 3 ? " dort" : ""}" style="margin-top:12px"><button class="btn" data-is="${esc(j.id)}">İş Bilgileri</button>${parVar(j) ? `<button class="btn alt" data-parasal="${esc(j.id)}">₺ Parasal</button>` : ""}${itiVar(j) ? `<button class="btn iti" data-iti="${esc(j.id)}">İtinerer</button>` : ""}${kmzBtn(j, "")}</div></div>` : ""}
+${stdSatirlari(j, true)}
+<div class="btns kart-btns${[parVar(j), itiVar(j)].filter(Boolean).length + 2 > 3 ? " dort" : ""}" style="margin-top:12px"><button class="btn" data-is="${esc(j.id)}">İş Bilgileri</button>${parVar(j) ? `<button class="btn alt" data-parasal="${esc(j.id)}">₺ Parasal</button>` : ""}${itiVar(j) ? `<button class="btn iti" data-iti="${esc(j.id)}">İtinerer</button>` : ""}${kmzBtn(j, "")}</div><div style="margin-top:8px">${ytBtn(j)}</div></div>` : ""}
 </div>`;
 }
 function mapUygula(){
@@ -552,22 +885,34 @@ function kutuyaGit(id){
 // ---------- KMZ (yol hattı gerçek harita üzerinde) ----------
 // KMZ düğmesi her zaman görünür; işe KMZ bağlanmamışsa soluk durur.
 const kmzBtn = (j, st) => j.hat ? `<button class="btn teal" data-hat="${esc(j.id)}"${st}>KMZ</button>` : `<button class="btn teal bos" data-kmzyok${st}>KMZ</button>`;
-let hatHarita = null;
-function hatGoster(id){
+let hatHarita = null, hatIs = null;
+// Katmanlar: genel KMZ'ler ve drone uçuşları. KMZ her açıldığında hepsi
+// kapalı başlar (seçimler hatırlanmaz).
+let kat = null;
+async function hatGoster(id){
   const j = byId(id); if(!j || !j.hat) return;
+  try{ await Promise.all([agirHazir(), leafletHazir()]); }catch(e){ bildir(e.message); return; }
   hatKapat();
+  hatIs = j;
+  const K = D.katman || {};
+  const katVar = (K.kmz && K.kmz.length) || (K.drone && K.drone.ucus && K.drone.ucus.length);
   const v = document.createElement("div"); v.className = "hatv"; v.id = "hatv";
   v.innerHTML = `<div class="hatbar"><button class="x" data-hatkapat>✕ Kapat</button><div class="ad">${esc(j.ad)}</div></div>
 <div class="hatmap etiketsiz" id="hatmap"></div>
-<div class="katman"><button data-katman="uydu" class="on">Uydu</button><button data-katman="sokak">Sokak</button></div>
-<div class="konumbtn"><button data-konumum aria-label="Konumum"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg></button><button data-yola aria-label="Yol hattı">🛣</button></div>
-<div class="konumkart" id="konumkart" style="display:none"><span class="nok"></span><div><b id="konumb"></b><small id="konums"></small></div></div>
-<div class="hatnot" id="hatnot" style="display:none">Arka plan haritası yüklenemedi (internet yok olabilir). Yol çizgileri ve KM'ler yine de gösteriliyor.</div>`;
+<div class="katman"><button data-katman="sokak">Sokak</button><button data-katman="uydu" class="on">Uydu</button></div>
+<div class="sagk">${katVar ? `<button class="kat" data-katlar>🗂 Katmanlar<i id="katsay">0</i></button>` : ""}<button data-konumum aria-label="Konumum"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg></button><button data-yola aria-label="Yol hattına dön">🛣</button><button data-yt="${esc(j.id)}" aria-label="Yol tarifi">🧭</button></div>
+<div class="solk"><div class="hatnot" id="hatnot" style="display:none">Arka plan haritası yüklenemedi (internet yok olabilir). Yol çizgileri ve KM'ler yine de gösteriliyor.</div><div class="chips" id="chips"></div></div>
+<div class="dserit" id="dserit" style="display:none"></div>
+<div class="konumkart" id="konumkart" style="display:none"><span class="nok"></span><div><b id="konumb"></b><small id="konums"></small></div></div>`;
   document.body.appendChild(v);
   history.pushState({ hat: 1 }, "");
   if(typeof L === "undefined"){ document.getElementById("hatmap").innerHTML = '<div class="empty">Harita bileşeni yüklenemedi.</div>'; return; }
   const m = L.map("hatmap", { zoomControl: false, attributionControl: true, preferCanvas: true, maxZoom: 19 });
   hatHarita = m;
+  // Katman sırası: drone şeridi < genel KMZ < işin kendi hattı < drone noktaları
+  [["serit", 350], ["genel", 380], ["drone", 450]].forEach(([ad, z]) => { m.createPane(ad).style.zIndex = z; });
+  kat = { kmz: new Set(), drone: false, alan: "is", zaman: "3", gruplar: {}, droneGrup: null, seritGrup: null,
+          rGenel: L.canvas({ pane: "genel" }), rDrone: L.svg({ pane: "drone" }), rSerit: L.canvas({ pane: "serit" }) };
   const uydu = L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", { maxZoom: 19, maxNativeZoom: 17, attribution: "Esri" });
   const etiket = L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}", { maxZoom: 19, maxNativeZoom: 16, zIndex: 650 });
   const sokak = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19, attribution: "© OpenStreetMap" });
@@ -592,11 +937,307 @@ function hatGoster(id){
   const el = document.getElementById("hatmap");
   const etiketGuncelle = () => el.classList.toggle("etiketsiz", m.getZoom() < 14);
   m.on("zoomend", etiketGuncelle);
+  m.on("zoomend", () => { if(kat && kat.drone){ seritCiz(); droneNoktalar(); } });
   if(sinir.length) m.fitBounds(sinir, { padding: [30, 30], maxZoom: 16 }); else m.setView([40.7, 36.3], 8);
   etiketGuncelle();
   if(navigator.onLine === false) document.getElementById("hatnot").style.display = "";
   konumBaslat(j, m, sinir);
 }
+
+// ----- Katmanlar penceresi -----
+function katmanPenceresi(){
+  altSayfa('<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0f2440" stroke-width="2"><path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/></svg>', "Katmanlar", "Açmak istediklerinizi seçin", "", "katbb");
+  katmanCiz();
+}
+const ZAMAN = { "1": ["Son 1 ay", 31], "3": ["Son 3 ay", 92], "t": ["Tümü", 0] };
+function katmanCiz(){
+  const b = document.getElementById("katbb"); if(!b || !kat) return;
+  const K = D.katman || {}, dr = K.drone;
+  let h = "";
+  if(dr && dr.ucus && dr.ucus.length){
+    const son = Math.max(...dr.ucus.map(u => u.t || 0));
+    const n = droneSuz().length;
+    h += `<div class="ksec"><span>DRONE</span></div><div class="drk${kat.drone ? " on" : ""}"><div class="kti"><span class="sw" style="background:#dbeafe">🛸</span><span class="t"><b>Drone Uçuşları</b><span>${dr.klasorler && dr.klasorler.length > 1 ? "Tüm klasörler · " : ""}${dr.ucus.length} uçuş${son ? " · son " + tarihKisa(son) : ""}</span></span><button class="tg${kat.drone ? " on" : ""}" data-katdrone aria-label="Drone uçuşları"></button></div>
+${kat.drone ? `<div class="dro"><div class="lb">GÖSTERİLECEK ALAN</div><div class="seg2"><button data-katalan="is"${kat.alan === "is" ? ' class="on"' : ""}>Bu işin çevresi</button><button data-katalan="tum"${kat.alan === "tum" ? ' class="on"' : ""}>Tüm bölge</button></div>
+<div class="lb">ZAMAN</div><div class="seg2 uc">${Object.keys(ZAMAN).map(k => `<button data-katzaman="${k}"${kat.zaman === k ? ' class="on"' : ""}>${ZAMAN[k][0]}</button>`).join("")}</div>
+<div class="inf">🛸 ${kat.alan === "is" ? "Bu işin çevresinde (1 km)" : "Tüm bölgede"} ${kat.zaman === "t" ? "" : ZAMAN[kat.zaman][0].toLocaleLowerCase("tr-TR") + "da "}${n} uçuş</div></div>` : ""}</div>`;
+  }
+  if(K.kmz && K.kmz.length){
+    h += `<div class="ksec"><span>GENEL KMZ'LER · ${K.kmz.length}</span><button data-kattum>${K.kmz.every(k => kat.kmz.has(k.id)) ? "Tümünü kapat" : "Tümünü aç"}</button></div><div class="ktl">${K.kmz.map(k => {
+      const renk = kmzRenk(k);
+      const say = [k.cizgi.length ? k.cizgi.length + " çizgi" : "", k.nok.length ? k.nok.length + " nokta" : ""].filter(Boolean).join(" · ") || "boş";
+      return `<div class="kti"><span class="sw"><i style="background:${esc(renk)}"></i></span><span class="t"><b>${esc(k.ad)}</b><span>${say}</span></span><button class="tg${kat.kmz.has(k.id) ? " on" : ""}" data-katkmz="${esc(k.id)}" aria-label="${esc(k.ad)}"></button></div>`;
+    }).join("")}</div>`;
+  }
+  h += `<div class="knot">ⓘ Seçimler hatırlanmaz; KMZ her açıldığında katmanlar kapalı başlar.</div><button class="go" data-altkapat style="margin-top:12px">Tamam</button>`;
+  b.innerHTML = h;
+}
+// Katmanın simge rengi: beyaz olmayan ilk çizgi (yoksa nokta) rengi
+function kmzRenk(k){
+  const beyaz = c => { const m = /^#?([0-9a-f]{6})$/i.exec(String(c || "").trim()); let r, g, b; if(m){ const n = parseInt(m[1], 16); r = n >> 16; g = (n >> 8) & 255; b = n & 255; } else { const x = /rgba?\((\d+),\s*(\d+),\s*(\d+)/.exec(c || ""); if(!x) return false; r = +x[1]; g = +x[2]; b = +x[3]; } return 0.299 * r + 0.587 * g + 0.114 * b > 190; };
+  const c = k.cizgi.find(x => !beyaz(x.r)) || k.cizgi[0];
+  return (c && c.r) || (k.nok[0] && k.nok[0][3]) || "#64748b";
+}
+const tarihKisa = t => { const d = new Date(t); return `${p2(d.getDate())}.${p2(d.getMonth() + 1)}.${d.getFullYear()}`; };
+function katmanOzet(){
+  if(!kat) return;
+  const K = D.katman || {};
+  const say = kat.kmz.size + (kat.drone ? 1 : 0);
+  const s = document.getElementById("katsay"); if(s) s.textContent = say;
+  const c = document.getElementById("chips");
+  if(c) c.innerHTML = (K.kmz || []).filter(k => kat.kmz.has(k.id)).map(k => `<span><i style="background:${esc(kmzRenk(k))}"></i>${esc(k.ad)}</span>`).join("") + (kat.drone ? "<span>🛸 Drone uçuşları</span>" : "");
+}
+function kmzKatman(id, ac){
+  const m = hatHarita; if(!m || !kat) return;
+  if(!ac){ if(kat.gruplar[id]){ m.removeLayer(kat.gruplar[id]); delete kat.gruplar[id]; } kat.kmz.delete(id); return; }
+  const k = (D.katman.kmz || []).find(x => x.id === id); if(!k) return;
+  const g = L.layerGroup();
+  k.cizgi.forEach(c => L.polyline(c.p, { color: c.r, weight: 3, opacity: .95, pane: "genel", renderer: kat.rGenel }).addTo(g));
+  k.nok.forEach(n => { const mk = L.circleMarker([n[0], n[1]], { radius: 5, color: "#fff", weight: 1.5, fillColor: n[3] || "#f59e0b", fillOpacity: 1, pane: "genel", renderer: kat.rGenel }).addTo(g); if(n[2]) mk.bindTooltip(n[2], { direction: "top", offset: [0, -6] }); });
+  g.addTo(m); kat.gruplar[id] = g; kat.kmz.add(id);
+}
+
+// ----- Drone uçuşları -----
+// Süzme: zaman (son 1 / 3 ay / tümü) ve alan (işin hattına 1 km / tüm bölge).
+// Aynı güzergâhta farklı zamanlarda yapılan uçuşlardan yalnız en yenisi
+// gösterilir: eski uçuşun rotasının ~%70'i daha yeni bir rotaya 50 m'den
+// yakınsa aynı güzergâh sayılır. Rotası olmayan uçuşlarda başlangıç noktası
+// 60 m içindeyse aynı yer sayılır.
+function hatKutusu(j){
+  if(j._kutu) return j._kutu;
+  let a0 = 90, a1 = -90, o0 = 180, o1 = -180;
+  anaCizgiler(j).forEach(c => c.p.forEach(p => { a0 = Math.min(a0, p[0]); a1 = Math.max(a1, p[0]); o0 = Math.min(o0, p[1]); o1 = Math.max(o1, p[1]); }));
+  const da = 0.0095, doo = 0.0095 / Math.max(0.3, Math.cos((a0 + a1) / 2 * Math.PI / 180));
+  return (j._kutu = [a0 - da, a1 + da, o0 - doo, o1 + doo]);
+}
+function rotaOrtak(r, s){
+  // r'nin örnek noktalarından kaçı s'ye 50 m'den yakın (oran)
+  const lat = r[0][0], k = Math.cos(lat * Math.PI / 180), M = 111320;
+  const xy = p => [(p[1] - r[0][1]) * k * M, (p[0] - lat) * M];
+  const S = s.map(xy), R = r.map(xy);
+  // rota boyunca eşit aralıklı örnek noktalar (yalnız köşeler değil)
+  let boy = 0; for(let i = 1; i < R.length; i++) boy += Math.hypot(R[i][0] - R[i - 1][0], R[i][1] - R[i - 1][1]);
+  const ara = Math.max(15, boy / 60), ornek = [R[0]];
+  for(let i = 1; i < R.length; i++){ const A = R[i - 1], B = R[i], d = Math.hypot(B[0] - A[0], B[1] - A[1]); for(let t = ara; t < d; t += ara) ornek.push([A[0] + (B[0] - A[0]) * t / d, A[1] + (B[1] - A[1]) * t / d]); ornek.push(B); }
+  let n = 0, ok = 0;
+  for(const P of ornek){
+    n++;
+    let en = Infinity;
+    for(let q = 1; q < S.length && en > 50; q++){
+      const A = S[q - 1], B = S[q], dx = B[0] - A[0], dy = B[1] - A[1], L2 = dx * dx + dy * dy;
+      let t = L2 ? ((P[0] - A[0]) * dx + (P[1] - A[1]) * dy) / L2 : 0; t = Math.max(0, Math.min(1, t));
+      en = Math.min(en, Math.hypot(P[0] - A[0] - t * dx, P[1] - A[1] - t * dy));
+    }
+    if(en <= 50) ok++;
+  }
+  return n ? ok / n : 0;
+}
+const rotaKutu = r => { let a0 = 90, a1 = -90, o0 = 180, o1 = -180; r.forEach(p => { a0 = Math.min(a0, p[0]); a1 = Math.max(a1, p[0]); o0 = Math.min(o0, p[1]); o1 = Math.max(o1, p[1]); }); return [a0, a1, o0, o1]; };
+const kesisir = (x, y) => !(x[1] < y[0] - 0.0006 || y[1] < x[0] - 0.0006 || x[3] < y[2] - 0.0008 || y[3] < x[2] - 0.0008);
+function droneSuz(){
+  const dr = D.katman && D.katman.drone; if(!dr || !kat) return [];
+  const anahtar = kat.alan + "|" + kat.zaman;
+  if(kat.suzOnbellek && kat.suzOnbellek.k === anahtar) return kat.suzOnbellek.l;
+  const gun = ZAMAN[kat.zaman][1], sinirT = gun ? Date.now() - gun * 86400000 : 0;
+  let l = dr.ucus.filter(u => !sinirT || (u.t && u.t >= sinirT));
+  if(kat.alan === "is" && hatIs){
+    const kt = hatKutusu(hatIs);
+    kat.mesafe = kat.mesafe || new Map();
+    l = l.filter(u => {
+      if(u.a < kt[0] || u.a > kt[1] || u.o < kt[2] || u.o > kt[3]) return false;   // kaba eleme
+      if(!kat.mesafe.has(u)){ const r = kmBul(hatIs, u.a, u.o); kat.mesafe.set(u, r ? r.d : Infinity); }
+      return kat.mesafe.get(u) <= 1000;
+    });
+  }
+  l = l.slice().sort((a, b) => (b.t || 0) - (a.t || 0));
+  const tut = [];
+  l.forEach(u => {
+    if(u.r && u.r.length > 1 && !u._kutu) u._kutu = rotaKutu(u.r);
+    const ayni = tut.some(x => {
+      if(haversine([x.a, x.o], [u.a, u.o]) < 60) return true;
+      return u.r && x.r && u.r.length > 1 && x.r.length > 1 && kesisir(u._kutu, x._kutu) && rotaOrtak(u.r, x.r) >= 0.7;
+    });
+    if(!ayni) tut.push(u);
+  });
+  kat.suzOnbellek = { k: anahtar, l: tut };
+  return tut;
+}
+function yasRenk(t){
+  const g = t ? (Date.now() - t) / 86400000 : 9999;
+  return g <= 31 ? "#1d4ed8" : g <= 92 ? "#3b82f6" : g <= 183 ? "#60a5fa" : g <= 365 ? "#93c5fd" : "#cbd5e1";
+}
+function dronePop(u){
+  const d = u.t ? new Date(u.t) : null;
+  return `<div class="dpop"><b>🛸 Drone uçuşu</b><div>Tarih <em>${d ? `${tarihKisa(u.t)} ${p2(d.getHours())}:${p2(d.getMinutes())}` : "–"}</em></div><div>Süre <em>${u.s ? Math.max(1, Math.round(u.s / 60)) + " dk" : "–"}</em></div><div>Mesafe <em>${u.m ? (u.m >= 1000 ? (u.m / 1000).toLocaleString("tr-TR", { maximumFractionDigits: 1 }) + " km" : u.m + " m") : "–"}</em></div><div>Klasör <em>${esc(u.k || "–")}</em></div></div>`;
+}
+function seritCiz(){
+  const m = hatHarita; if(!m || !kat) return;
+  if(kat.seritGrup){ m.removeLayer(kat.seritGrup); kat.seritGrup = null; }
+  if(!kat.drone || kat.alan !== "is" || !hatIs) return;
+  const lat = m.getCenter().lat, mpp = 40075016.686 * Math.cos(lat * Math.PI / 180) / Math.pow(2, m.getZoom() + 8);
+  const w = Math.min(3000, 2000 / mpp);
+  const g = L.layerGroup();
+  anaCizgiler(hatIs).forEach(c => L.polyline(c.p, { color: "#ffffff", weight: w, opacity: .13, lineCap: "round", lineJoin: "round", pane: "serit", renderer: kat.rSerit, interactive: false }).addTo(g));
+  g.addTo(m); kat.seritGrup = g;
+}
+function droneNoktalar(){
+  const m = hatHarita; if(!m || !kat) return;
+  if(kat.droneGrup){ m.removeLayer(kat.droneGrup); kat.droneGrup = null; }
+  const serit = document.getElementById("dserit");
+  if(!kat.drone){ if(serit) serit.style.display = "none"; return; }
+  const l = droneSuz();
+  const g = L.layerGroup();
+  // rotalar (masaüstünde çözülmüş olanlar)
+  // rotalar ince çizilir ve yumuşak yanıp söner; alttaki iş hattı görünür kalır
+  l.forEach(u => { if(u.r) L.polyline(u.r, { color: yasRenk(u.t), weight: 2.5, opacity: 1, pane: "drone", renderer: kat.rDrone, interactive: false, className: "dyan" }).addTo(g); });
+  // uzaklaştırınca yakın noktalar tek yuvarlakta toplanır
+  const z = m.getZoom(), kume = [];
+  l.forEach(u => {
+    const p = m.latLngToLayerPoint([u.a, u.o]);
+    const k = z < 15 ? kume.find(x => Math.hypot(x.p.x - p.x, x.p.y - p.y) < 38) : null;
+    if(k) k.u.push(u); else kume.push({ p, u: [u] });
+  });
+  kume.forEach(k => {
+    if(k.u.length === 1){
+      const u = k.u[0];
+      L.circleMarker([u.a, u.o], { radius: 7, color: "#fff", weight: 2, fillColor: yasRenk(u.t), fillOpacity: 1, pane: "drone", renderer: kat.rDrone, className: "dyan" }).bindPopup(dronePop(u)).addTo(g);
+    }else{
+      const n = k.u.length, r = Math.min(40, 24 + n);
+      const enYeni = k.u.reduce((a, b) => (b.t || 0) > (a.t || 0) ? b : a);
+      const lat = k.u.reduce((s, u) => s + u.a, 0) / n, lon = k.u.reduce((s, u) => s + u.o, 0) / n;
+      L.marker([lat, lon], { icon: L.divIcon({ className: "", html: `<div class="dkume dyan" style="width:${r}px;height:${r}px;background:${yasRenk(enYeni.t)}">${n}</div>`, iconSize: [r, r] }) })
+        .on("click", () => m.fitBounds(k.u.map(u => [u.a, u.o]), { padding: [60, 60], maxZoom: 17 })).addTo(g);
+    }
+  });
+  g.addTo(m); kat.droneGrup = g;
+  if(serit){
+    serit.style.display = "";
+    serit.innerHTML = `<div class="r1"><b>🛸 ${kat.alan === "is" ? "Bu işin çevresinde" : "Tüm bölgede"} ${l.length} uçuş</b><button data-katzamandon>${ZAMAN[kat.zaman][0]} ▾</button></div><div class="lg">Yeni<i></i>Eski</div>`;
+  }
+}
+function droneYenile(){ if(kat) kat.suzOnbellek = null; seritCiz(); droneNoktalar(); katmanOzet(); }
+document.addEventListener("click", e => {
+  if(!kat || !hatHarita) return;
+  if(e.target.closest("[data-katlar]")){ katmanPenceresi(); return; }
+  const km = e.target.closest("[data-katkmz]"); if(km){ kmzKatman(km.dataset.katkmz, !kat.kmz.has(km.dataset.katkmz)); katmanOzet(); katmanCiz(); return; }
+  if(e.target.closest("[data-kattum]")){ const K = D.katman.kmz || [], hepsi = K.every(k => kat.kmz.has(k.id)); K.forEach(k => kmzKatman(k.id, !hepsi)); katmanOzet(); katmanCiz(); return; }
+  if(e.target.closest("[data-katdrone]")){ kat.drone = !kat.drone; droneYenile(); katmanCiz(); return; }
+  const al = e.target.closest("[data-katalan]"); if(al){ kat.alan = al.dataset.katalan; droneYenile(); katmanCiz(); return; }
+  const zm = e.target.closest("[data-katzaman]"); if(zm){ kat.zaman = zm.dataset.katzaman; droneYenile(); katmanCiz(); return; }
+  if(e.target.closest("[data-katzamandon]")){ const s = Object.keys(ZAMAN); kat.zaman = s[(s.indexOf(kat.zaman) + 1) % s.length]; droneYenile(); return; }
+});
+
+// ---------- Yol Tarifi ----------
+// İşin KMZ hattından başlangıç / bitiş ve size en yakın nokta bulunur; seçilen
+// nokta Apple Haritalar ya da Google Haritalar'da yol tarifiyle açılır.
+// Konum yalnızca bu ekranda kullanılır, hiçbir yere gönderilmez.
+const ytBtn = j => j.hat ? `<button class="btn yt" data-yt="${esc(j.id)}">🧭 Yol Tarifi</button>` : `<button class="btn yt bos" data-kmzyok>🧭 Yol Tarifi</button>`;
+const PIN = c => `<svg viewBox="0 0 24 24"><path d="M12 22s7-6.6 7-12a7 7 0 1 0-14 0c0 5.4 7 12 7 12z" fill="${c}"/><circle cx="12" cy="10" r="2.6" fill="#fff"/></svg>`;
+function haversine(a, b){
+  const R = 6371000, r = Math.PI / 180, dA = (b[0] - a[0]) * r, dO = (b[1] - a[1]) * r;
+  const x = Math.sin(dA / 2) ** 2 + Math.cos(a[0] * r) * Math.cos(b[0] * r) * Math.sin(dO / 2) ** 2;
+  return 2 * R * Math.atan2(Math.sqrt(x), Math.sqrt(1 - x));
+}
+const anaCizgiler = j => { const r = j.hat.cizgi.filter(c => !c.i); return r.length ? r : j.hat.cizgi; };
+// Başlangıç / bitiş: adında KM yazan noktalardan en küçük ve en büyük KM;
+// yoksa en uzun çizginin iki ucu
+function uclar(j){
+  const kms = [];
+  j.hat.nok.forEach(n => { const x = /(\d+)\s*\+\s*(\d{3})/.exec(n[2] || ""); if(x) kms.push({ km: +x[1] + +x[2] / 1000, p: [n[0], n[1]] }); });
+  if(kms.length >= 2){
+    kms.sort((a, b) => a.km - b.km);
+    return { bas: { p: kms[0].p, km: kms[0].km }, son: { p: kms[kms.length - 1].p, km: kms[kms.length - 1].km } };
+  }
+  const uz = l => l.p.reduce((s, q, i) => i ? s + haversine(l.p[i - 1], q) : 0, 0);
+  const c = anaCizgiler(j).slice().sort((a, b) => uz(b) - uz(a))[0];
+  if(!c) return null;
+  return { bas: { p: c.p[0], km: null }, son: { p: c.p[c.p.length - 1], km: null } };
+}
+// Hatta size en yakın nokta (enlem/boylam) ve yaklaşık KM
+function enYakin(j, lat, lon){
+  const k = Math.cos(lat * Math.PI / 180), M = 111320;
+  const xy = p => [(p[1] - lon) * k * M, (p[0] - lat) * M];
+  const geri = q => [lat + q[1] / M, lon + q[0] / (k * M)];
+  let en = null;
+  anaCizgiler(j).forEach(c => { for(let i = 1; i < c.p.length; i++){
+    const A = xy(c.p[i - 1]), B = xy(c.p[i]), dx = B[0] - A[0], dy = B[1] - A[1], L2 = dx * dx + dy * dy;
+    let t = L2 ? -(A[0] * dx + A[1] * dy) / L2 : 0; t = Math.max(0, Math.min(1, t));
+    const q = [A[0] + t * dx, A[1] + t * dy], d = Math.hypot(q[0], q[1]);
+    if(!en || d < en.d) en = { d, p: geri(q) };
+  } });
+  if(!en) return null;
+  const r = kmBul(j, en.p[0], en.p[1]);
+  return { p: en.p, km: r && r.km !== null && r.d < 300 ? r.km : null };
+}
+function ytMini(j, u, yakin, konum){
+  const cz = anaCizgiler(j), pts = [];
+  cz.forEach(c => c.p.forEach(p => pts.push(p)));
+  const icine = konum && yakin && haversine(konum, yakin.p) < 5000;
+  if(icine) pts.push(konum);
+  let la0 = Infinity, la1 = -Infinity, lo0 = Infinity, lo1 = -Infinity;
+  pts.forEach(p => { la0 = Math.min(la0, p[0]); la1 = Math.max(la1, p[0]); lo0 = Math.min(lo0, p[1]); lo1 = Math.max(lo1, p[1]); });
+  const W = 340, H = 116, pad = 16, kx = Math.cos((la0 + la1) / 2 * Math.PI / 180);
+  const sw = Math.max(1e-9, (lo1 - lo0) * kx), sh = Math.max(1e-9, la1 - la0);
+  const s = Math.min((W - 2 * pad) / sw, (H - 2 * pad - 10) / sh);
+  const ox = (W - sw * s) / 2, oy = (H - sh * s) / 2 + 6;
+  const X = p => [ox + (p[1] - lo0) * kx * s, oy + (la1 - p[0]) * s];
+  const yol = cz.map(c => `<polyline points="${c.p.map(p => X(p).map(v => v.toFixed(1)).join(",")).join(" ")}" fill="none" stroke="#dc2626" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>`).join("");
+  const nok = (p, r, c) => { const [x, y] = X(p); return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${r}" fill="${c}" stroke="#fff" stroke-width="2"/>`; };
+  let ek = "";
+  if(icine){ const [a, b] = X(konum), [c, d] = X(yakin.p); ek = `<line x1="${a}" y1="${b}" x2="${c}" y2="${d}" stroke="#2563eb" stroke-width="1.5" stroke-dasharray="4 4"/><circle cx="${a}" cy="${b}" r="12" fill="#3b82f6" opacity=".2"/>` + nok(konum, 6, "#2563eb"); }
+  const lj = [`<i style="color:#16a34a">●</i> Başlangıç`, yakin ? `<i style="color:#ea580c">●</i> En yakın` : "", `<i style="color:#111827">●</i> Bitiş`, icine ? `<i style="color:#2563eb">●</i> Siz` : ""].filter(Boolean).join(" &nbsp;");
+  return `<div class="ytmini"><svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet">${yol}${nok(u.bas.p, 7, "#16a34a")}${nok(u.son.p, 7, "#111827")}${yakin ? nok(yakin.p, 8, "#ea580c") : ""}${ek}</svg><span class="lj">${lj}</span></div>`;
+}
+const iosMu = () => /iPhone|iPad|iPod|Macintosh/.test(navigator.userAgent) && "ontouchend" in document;
+let ytDurum = null;
+function yolTarifi(j){
+  if(!j || !j.hat) return;
+  const u = uclar(j); if(!u) return;
+  const app = yerel("istakip-mobil-harita-app") || (iosMu() ? "apple" : "google");
+  ytDurum = { j, u, konum: null, yakin: null, hata: null, bekle: !!navigator.geolocation, sec: "yakin", app };
+  altSayfa("🧭", "Yol Tarifi", [j.ad, j.il.join(" · ")].filter(Boolean).join(" · "), "", "ytbb");
+  ytCiz();
+  if(!navigator.geolocation){ ytDurum.hata = 2; ytDurum.sec = "bas"; ytDurum.bekle = false; ytCiz(); return; }
+  navigator.geolocation.getCurrentPosition(pos => {
+    if(!ytDurum || ytDurum.j !== j) return;
+    ytDurum.konum = [pos.coords.latitude, pos.coords.longitude];
+    ytDurum.yakin = enYakin(j, ytDurum.konum[0], ytDurum.konum[1]);
+    ytDurum.bekle = false; ytCiz();
+  }, err => {
+    if(!ytDurum || ytDurum.j !== j) return;
+    ytDurum.hata = err.code; ytDurum.bekle = false; if(ytDurum.sec === "yakin") ytDurum.sec = "bas"; ytCiz();
+  }, { enableHighAccuracy: true, timeout: 12000, maximumAge: 30000 });
+}
+function ytHedef(){ const d = ytDurum; return d.sec === "yakin" ? (d.yakin && d.yakin.p) : d.sec === "son" ? d.u.son.p : d.u.bas.p; }
+function ytCiz(){
+  const b = document.getElementById("ytbb"); if(!b || !ytDurum) return;
+  const d = ytDurum, uz = p => d.konum && p ? `${mesafe(haversine(d.konum, p))}<span>kuş uçuşu</span>` : "–";
+  const yakinYok = !d.konum;
+  const sat = (k, renk, ad, alt, p, kapali) => `<button class="yto${d.sec === k ? " on" : ""}${kapali ? " off" : ""}" data-ytsec="${k}"${kapali ? " disabled" : ""}>${PIN(renk)}<span class="t"><b>${ad}</b><span>${alt}</span></span><span class="r">${uz(p)}</span><span class="ck"></span></button>`;
+  const kmT = km => km !== null && km !== undefined ? kmYaz(km) : "";
+  b.innerHTML = ytMini(d.j, d.u, d.yakin, d.konum) +
+    (d.hata ? `<div class="ytuy">📍 ${d.hata === 1 ? "Konum izni verilmedi." : "Konum alınamadı."} En yakın nokta ve uzaklıklar gösterilemiyor.</div>` : "") +
+    `<div class="bgrp" style="margin-top:12px">NEREYE GİDİLSİN?</div><div class="ytlist">` +
+    sat("yakin", "#ea580c", "Bana en yakın nokta", d.bekle ? "Konum alınıyor…" : d.hata ? "Konum izni gerekli" : (d.yakin && d.yakin.km !== null ? "Yaklaşık " + kmT(d.yakin.km) : "Hattın size en yakın yeri"), d.yakin && d.yakin.p, yakinYok) +
+    sat("bas", "#16a34a", "Başlangıç", kmT(d.u.bas.km) || "Hattın bir ucu", d.u.bas.p, false) +
+    sat("son", "#111827", "Bitiş", kmT(d.u.son.km) || "Hattın diğer ucu", d.u.son.p, false) + `</div>
+<div class="bgrp" style="margin-top:12px">UYGULAMA</div><div class="seg2"><button data-ytapp="apple"${d.app === "apple" ? ' class="on"' : ""}>Apple Haritalar</button><button data-ytapp="google"${d.app === "google" ? ' class="on"' : ""}>Google Haritalar</button></div>
+<button class="go" data-ytgit><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4"><path d="M3 11l18-8-8 18-2-8z"/></svg>Yol Tarifini Başlat</button>
+<div class="ytalt"><span>Uygulama seçiminiz hatırlanır</span><button data-ytkopya>Koordinatı kopyala</button></div>`;
+}
+document.addEventListener("click", async e => {
+  if(!ytDurum || !document.getElementById("ytbb")) return;
+  const s = e.target.closest("[data-ytsec]"); if(s){ ytDurum.sec = s.dataset.ytsec; ytCiz(); return; }
+  const a = e.target.closest("[data-ytapp]"); if(a){ ytDurum.app = a.dataset.ytapp; yerel("istakip-mobil-harita-app", ytDurum.app); ytCiz(); return; }
+  if(e.target.closest("[data-ytgit]")){
+    const p = ytHedef(); if(!p){ bildir("Önce bir nokta seçin"); return; }
+    const ll = `${p[0].toFixed(6)},${p[1].toFixed(6)}`;
+    const url = ytDurum.app === "apple" ? `https://maps.apple.com/?daddr=${ll}&dirflg=d` : `https://www.google.com/maps/dir/?api=1&destination=${ll}&travelmode=driving`;
+    window.open(url, "_blank") || (location.href = url);
+    return;
+  }
+  if(e.target.closest("[data-ytkopya]")){ const p = ytHedef(); if(!p) return; const ok = await kopyala(`${p[0].toFixed(6)}, ${p[1].toFixed(6)}`); bildir(ok ? "Koordinat kopyalandı" : "Kopyalanamadı"); }
+});
 
 // ---------- Mevcut konum (yalnızca ekranda gösterilir, hiçbir yere gönderilmez) ----------
 let konumIzle = null;
@@ -654,6 +1295,7 @@ function kmBul(j, lat, lon){
 }
 function hatKapat(){
   konumDurdur();
+  kat = null; hatIs = null; kapatAlt();
   if(hatHarita){ hatHarita.remove(); hatHarita = null; }
   document.getElementById("hatv")?.remove();
 }
@@ -663,7 +1305,7 @@ window.addEventListener("popstate", () => { if(document.getElementById("hatv")) 
 // ---------- İtinerer (Yol Takip'in kendi çizimi; yalnızca telefonda) ----------
 // Çizimler masaüstünde Yol Takip programının koduyla üretilip veri dosyasına
 // konur; burada kendi stilleriyle yalıtılmış (shadow DOM) olarak gösterilir.
-const itiVar = j => !!(D && D.iti && D.iti.projeler && (j.iti || []).some(k => D.iti.projeler[k]));
+const itiVar = j => !!(D && D.itiKod && (j.iti || []).some(k => D.itiKod.has(k)));
 let itiDurum = null;
 function itiCss(){
   return String(D.iti.css || "").replace(/:root/g, ":host") + `
@@ -674,7 +1316,9 @@ function itiCss(){
 .leg-box{ margin:0 !important; }`;
 }
 function kisaAd(t){ t = String(t || ""); return t.length > 34 ? t.slice(0, 32) + "…" : t; }
-function itinererGoster(j){
+async function itinererGoster(j){
+  await agirHazir();
+  if(!D.iti || !D.iti.projeler) return;
   const kodlar = (j.iti || []).filter(k => D.iti.projeler[k]);
   if(!kodlar.length) return;
   itiKapat();
@@ -708,13 +1352,13 @@ function itiBoyut(){
   const svgs = [...sr.querySelectorAll("svg")].filter(x => !x.parentElement.closest("svg") && x.viewBox && x.viewBox.baseVal && x.viewBox.baseVal.width);
   svgs.forEach(x => { x.style.height = "0px"; x.style.width = "0px"; });
   const diger = kap ? kap.offsetHeight : 0;
-  const H = Math.max(140, (a.clientHeight - diger) * itiDurum.z);
+  const H = Math.max(24, (a.clientHeight - diger) * itiDurum.z);
   const tek = svgs.length ? H / Math.max(1, svgs.length > 1 && kap.querySelector(".iti-yatay") ? 1 : 1) : H;
   svgs.forEach(x => { const vb = x.viewBox.baseVal; x.style.height = tek + "px"; x.style.width = (tek * vb.width / vb.height) + "px"; });
 }
 function itiZoom(f, mx, my){
   const a = document.getElementById("itialan"); if(!a) return;
-  const z0 = itiDurum.z, z = Math.min(5, Math.max(1, z0 * f));
+  const z0 = itiDurum.z, z = Math.min(5, Math.max(0.2, z0 * f));   // 5 kat küçültme … 5 kat büyütme
   if(z === z0) return;
   mx = mx ?? a.clientWidth / 2; my = my ?? a.clientHeight / 2;
   const ox = (a.scrollLeft + mx) / Math.max(1, a.scrollWidth), oy = (a.scrollTop + my) / Math.max(1, a.scrollHeight);
@@ -767,6 +1411,321 @@ document.addEventListener("click", e => {
   const z = e.target.closest("[data-itizoom]"); if(z){ itiZoom(Number(z.dataset.itizoom)); }
 });
 
+// ---------- PDF Gönder ----------
+// Bu iş ya da birden fazla iş; İş Bilgileri / Parasal / İtinerer
+// bölümlerinden istenenler. PDF telefonda üretilir (internete gönderilmez),
+// sonra paylaşım menüsü (WhatsApp, Mail…) açılır. Türkçe harfler için yazı
+// tipi PDF'e gömülür.
+let pdfDurum = null;
+function pdfPenceresi(j){
+  pdfDurum = { tek: true, j, sec: new Set([j.id]), bol: { bilgi: true, par: parVar(j), iti: itiVar(j) }, ara: "", blob: null, ad: "" };
+  altSayfa("📄", "PDF Gönder", j.ad, "", "pdfbb", "pdfs");
+  pdfCiz();
+}
+function pdfSecili(){ return pdfDurum.tek ? [pdfDurum.j] : ISLER.filter(x => pdfDurum.sec.has(x.id)); }
+function pdfCiz(){
+  const b = document.getElementById("pdfbb"); if(!b || !pdfDurum) return;
+  const d = pdfDurum, sec = pdfSecili();
+  const parOk = sec.some(parVar), itiOk = sec.some(itiVar);
+  const q = fold(d.ara);
+  const liste = ISLER.filter(x => !q || fold([x.ad, x.firma, x.il.join(" ")].join(" ")).includes(q));
+  const bol = (k, ad, alt, ok) => `<label class="${ok ? "" : "yok"}"><input type="checkbox" data-pdfbol="${k}"${d.bol[k] && ok ? " checked" : ""}${ok ? "" : " disabled"}><span>${ad}<small>${alt}</small></span></label>`;
+  b.innerHTML = `<div class="seg2"><button data-pdftek="1"${d.tek ? ' class="on"' : ""}>Bu iş</button><button data-pdftek="0"${d.tek ? "" : ' class="on"'}>Birden fazla iş</button></div>
+${d.tek ? "" : `<div class="pdfara"><input id="pdfara" type="search" placeholder="İş ara…" value="${esc(d.ara)}" autocomplete="off"><button data-pdftum>${liste.every(x => d.sec.has(x.id)) && liste.length ? "Seçimi kaldır" : "Tümünü seç"}</button></div>
+<div class="pdfis" id="pdfis">${liste.map(x => `<label><input type="checkbox" data-pdfis="${esc(x.id)}"${d.sec.has(x.id) ? " checked" : ""}><span>${esc(x.ad)}</span></label>`).join("") || '<div class="muted" style="padding:10px">İş bulunamadı.</div>'}</div>
+<div class="muted" style="margin:6px 2px 12px">${d.sec.size} iş seçili</div>`}
+<div class="bgrp" style="margin-top:${d.tek ? 4 : 0}px">BÖLÜMLER</div>
+<div class="pdfbol">${bol("bilgi", "İş Bilgileri", "İhale uzunluğu, yapılan ve kalan km'ler", true)}${bol("par", "Parasal", parOk ? "İhale / Proje Bedeli ve Excel bilgileri" : "Seçili işlerde parasal bilgi yok", parOk)}${bol("iti", "İtinerer", itiOk ? "Her itinerer ayrı yatay sayfada" : "Seçili işlerde itinerer yok", itiOk)}</div>
+${d.blob ? `<button class="go" data-pdfpaylas>📤 Paylaş / Gönder</button><div class="ytalt"><span>${esc(d.ad)}</span><button data-pdfonizle>Önizle</button></div>` : `<button class="go" data-pdfyap>📄 PDF Oluştur</button>`}
+<div class="pdfdur" id="pdfdur"></div>`;
+}
+document.addEventListener("click", e => {
+  if(!pdfDurum || !document.getElementById("pdfbb")) return;
+  const d = pdfDurum;
+  const t = e.target.closest("[data-pdftek]"); if(t){ d.tek = t.dataset.pdftek === "1"; d.blob = null; pdfCiz(); return; }
+  if(e.target.closest("[data-pdftum]")){ const q = fold(d.ara), l = ISLER.filter(x => !q || fold([x.ad, x.firma, x.il.join(" ")].join(" ")).includes(q)); const hepsi = l.every(x => d.sec.has(x.id)); l.forEach(x => hepsi ? d.sec.delete(x.id) : d.sec.add(x.id)); d.blob = null; pdfCiz(); return; }
+  if(e.target.closest("[data-pdfyap]")){ pdfYap(); return; }
+  if(e.target.closest("[data-pdfpaylas]")){ pdfPaylas(); return; }
+  if(e.target.closest("[data-pdfonizle]")){ if(d.blob) window.open(URL.createObjectURL(d.blob), "_blank"); return; }
+});
+document.addEventListener("change", e => {
+  if(!pdfDurum) return;
+  const d = pdfDurum;
+  const i = e.target.closest("[data-pdfis]"); if(i){ i.checked ? d.sec.add(i.dataset.pdfis) : d.sec.delete(i.dataset.pdfis); d.blob = null; const y = document.getElementById("pdfis")?.scrollTop || 0; pdfCiz(); const n = document.getElementById("pdfis"); if(n) n.scrollTop = y; return; }
+  const b = e.target.closest("[data-pdfbol]"); if(b){ d.bol[b.dataset.pdfbol] = b.checked; d.blob = null; pdfCiz(); }
+});
+document.addEventListener("input", e => {
+  if(e.target.id === "pdfara" && pdfDurum){ pdfDurum.ara = e.target.value; const p = e.target.selectionStart; pdfCiz(); const n = document.getElementById("pdfara"); if(n){ n.focus(); n.setSelectionRange(p, p); } }
+});
+const pdfDurumYaz = m => { const x = document.getElementById("pdfdur"); if(x) x.textContent = m; };
+
+// jsPDF ve yazı tipleri ilk kullanımda yüklenir (çevrimdışı önbellekte durur)
+let pdfKutuphane = null;
+function pdfHazirla(){
+  if(pdfKutuphane) return pdfKutuphane;
+  pdfKutuphane = (async () => {
+    if(!window.jspdf) await new Promise((ok, no) => { const s = document.createElement("script"); s.src = "jspdf.min.js"; s.onload = ok; s.onerror = () => no(new Error("PDF bileşeni yüklenemedi")); document.head.appendChild(s); });
+    const b64 = async u => { const r = await fetch(u); if(!r.ok) throw new Error("Yazı tipi yüklenemedi"); const a = new Uint8Array(await r.arrayBuffer()); let s = ""; for(let i = 0; i < a.length; i += 0x8000) s += String.fromCharCode.apply(null, a.subarray(i, i + 0x8000)); return btoa(s); };
+    return { normal: await b64("DejaVuSans-tr.ttf"), kalin: await b64("DejaVuSans-Bold-tr.ttf") };
+  })();
+  pdfKutuphane.catch(() => { pdfKutuphane = null; });
+  return pdfKutuphane;
+}
+
+// Yol Takip çizimini resme çevir: stiller öğelere işlenir, SVG → canvas → JPEG
+async function itiResimleri(kod){
+  const pr = D.iti.projeler[kod]; if(!pr) return [];
+  const host = document.createElement("div");
+  host.style.cssText = "position:fixed;left:-10000px;top:0;width:4000px;background:#fff";
+  document.body.appendChild(host);
+  host.attachShadow({ mode: "open" }).innerHTML = `<style>${itiCss()}</style><div class="kap">${pr.html}</div>`;
+  const ozellik = ["fill", "fill-opacity", "stroke", "stroke-width", "stroke-opacity", "stroke-dasharray", "stroke-linecap", "stroke-linejoin", "opacity", "font-size", "font-family", "font-weight", "font-style", "text-anchor", "dominant-baseline", "visibility", "display", "letter-spacing"];
+  const svgs = [...host.shadowRoot.querySelectorAll("svg")].filter(x => !x.parentElement.closest("svg") && x.viewBox && x.viewBox.baseVal && x.viewBox.baseVal.width);
+  const out = [];
+  for(const s of svgs){
+    const vb = s.viewBox.baseVal;
+    s.style.width = vb.width + "px"; s.style.height = vb.height + "px";
+    const kopya = s.cloneNode(true);
+    const kaynak = [s, ...s.querySelectorAll("*")], hedef = [kopya, ...kopya.querySelectorAll("*")];
+    kaynak.forEach((el, i) => { const cs = getComputedStyle(el); hedef[i].setAttribute("style", ozellik.map(p => `${p}:${cs.getPropertyValue(p)}`).join(";")); });
+    kopya.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+    kopya.setAttribute("width", vb.width); kopya.setAttribute("height", vb.height);
+    const metin = new XMLSerializer().serializeToString(kopya);
+    const img = new Image();
+    await new Promise((ok, no) => { img.onload = ok; img.onerror = () => no(new Error("İtinerer çizimi resme çevrilemedi")); img.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(metin); });
+    const k = Math.min(3, 3600 / vb.width, 2400 / vb.height);
+    const c = document.createElement("canvas"); c.width = Math.round(vb.width * k); c.height = Math.round(vb.height * k);
+    const g = c.getContext("2d"); g.fillStyle = "#fff"; g.fillRect(0, 0, c.width, c.height); g.drawImage(img, 0, 0, c.width, c.height);
+    out.push({ veri: c.toDataURL("image/jpeg", 0.9), w: c.width, h: c.height });
+  }
+  host.remove();
+  return out;
+}
+
+const dosyaGuvenli = s => String(s).replace(/[\\/:*?"<>|]+/g, "-").replace(/\s+/g, " ").trim().slice(0, 120);
+async function pdfYap(){
+  const d = pdfDurum, isler = pdfSecili();
+  const bol = { bilgi: d.bol.bilgi, par: d.bol.par && isler.some(parVar), iti: d.bol.iti && isler.some(itiVar) };
+  if(!isler.length){ pdfDurumYaz("En az bir iş seçin."); return; }
+  if(!bol.bilgi && !bol.par && !bol.iti){ pdfDurumYaz("En az bir bölüm seçin."); return; }
+  const btn = document.querySelector("[data-pdfyap]"); if(btn){ btn.disabled = true; btn.textContent = "Hazırlanıyor…"; }
+  try{
+    await agirHazir();
+    pdfDurumYaz("PDF bileşeni yükleniyor…");
+    const font = await pdfHazirla();
+    const doc = new window.jspdf.jsPDF({ unit: "mm", format: "a4", orientation: "portrait", compress: true });
+    doc.addFileToVFS("dv.ttf", font.normal); doc.addFont("dv.ttf", "DV", "normal");
+    doc.addFileToVFS("dvb.ttf", font.kalin); doc.addFont("dvb.ttf", "DV", "bold");
+    doc.setFont("DV", "normal");
+    doc._bos = true;
+    for(let n = 0; n < isler.length; n++){
+      pdfDurumYaz(`Hazırlanıyor… ${n + 1} / ${isler.length}`);
+      await pdfIs(doc, isler[n], bol);
+    }
+    pdfCerceve(doc);
+    const t = new Date(), tarihS = `${p2(t.getDate())}.${p2(t.getMonth() + 1)}.${t.getFullYear()}`;
+    const secBol = Object.keys(bol).filter(k => bol[k]);
+    const bolAd = { bilgi: "İş Bilgileri", par: "Parasal", iti: "İtinerer" };
+    let ad = isler.length === 1 ? isler[0].ad : `${isler[0].ad} ve ${isler.length - 1} iş daha`;
+    if(secBol.length === 1) ad += " - " + bolAd[secBol[0]];
+    d.ad = dosyaGuvenli(`${ad} (${tarihS})`) + ".pdf";
+    d.blob = doc.output("blob");
+    pdfCiz();
+    pdfDurumYaz(`PDF hazır (${Math.max(1, Math.round(d.blob.size / 1024))} KB). Göndermek için Paylaş'a dokunun.`);
+  }catch(err){
+    if(btn){ btn.disabled = false; btn.textContent = "📄 PDF Oluştur"; }
+    pdfDurumYaz("PDF oluşturulamadı: " + err.message);
+  }
+}
+async function pdfPaylas(){
+  const d = pdfDurum; if(!d || !d.blob) return;
+  const f = new File([d.blob], d.ad, { type: "application/pdf" });
+  try{
+    if(navigator.canShare && navigator.canShare({ files: [f] })){ await navigator.share({ files: [f], title: d.ad.replace(/\.pdf$/, "") }); return; }
+  }catch(e){ if(e && e.name === "AbortError") return; }
+  // paylaşım desteklenmiyorsa indir
+  const a = document.createElement("a"); a.href = URL.createObjectURL(d.blob); a.download = d.ad; document.body.appendChild(a); a.click(); a.remove();
+  bildir("PDF indirildi");
+}
+
+// ----- PDF sayfa düzeni -----
+const PDF = { k: 14, ust: 24, alt: 16, turuncu: [234, 88, 12], koyu: [17, 24, 39], gri: [100, 116, 139], cizgi: [226, 232, 240] };
+const BUYUK = s => String(s || "").toLocaleUpperCase("tr-TR");
+// Her sayfaya üst başlık ve alt bilgi (sayfa numarası)
+function pdfCerceve(doc){
+  const n = doc.getNumberOfPages(), t = new Date();
+  const tarihS = `${p2(t.getDate())}.${p2(t.getMonth() + 1)}.${t.getFullYear()}`;
+  for(let i = 1; i <= n; i++){
+    doc.setPage(i);
+    const W = doc.internal.pageSize.getWidth(), H = doc.internal.pageSize.getHeight();
+    doc.setFillColor(...PDF.turuncu); doc.rect(0, 0, W, 2.2, "F");
+    doc.setFont("DV", "bold"); doc.setFontSize(10.5); doc.setTextColor(...PDF.koyu);
+    doc.text("KARAYOLLARI 7. BÖLGE MÜDÜRLÜĞÜ", PDF.k, 12);
+    doc.setFont("DV", "normal"); doc.setFontSize(8.5); doc.setTextColor(...PDF.gri);
+    doc.text("Strateji Geliştirme Başmühendisliği", PDF.k, 16.5);
+    doc.text(tarihS, W - PDF.k, 12, { align: "right" });
+    doc.setDrawColor(...PDF.cizgi); doc.setLineWidth(0.3); doc.line(PDF.k, 19, W - PDF.k, 19);
+    doc.line(PDF.k, H - 11, W - PDF.k, H - 11);
+    doc.setFontSize(7.5);
+    doc.text("İşTakip · Bilgi amaçlıdır", PDF.k, H - 6.5);
+    doc.text(`Sayfa ${i} / ${n}`, W - PDF.k, H - 6.5, { align: "right" });
+  }
+}
+function pdfBolumBaslik(doc, y, ad){
+  const W = doc.internal.pageSize.getWidth();
+  doc.setFont("DV", "bold"); doc.setFontSize(9.5); doc.setTextColor(...PDF.turuncu);
+  doc.text(BUYUK(ad), PDF.k, y);
+  doc.setDrawColor(253, 186, 116); doc.setLineWidth(0.4); doc.line(PDF.k, y + 1.8, W - PDF.k, y + 1.8);
+  return y + 7;
+}
+// Sayfaya sığmıyorsa yeni dikey sayfa
+function pdfYer(doc, y, h){
+  const H = doc.internal.pageSize.getHeight();
+  if(y + h <= H - PDF.alt) return y;
+  doc.addPage("a4", "portrait");
+  return PDF.ust;
+}
+// İşin sabit kutusu (her işte bir kez): iş adı, yüklenici, kontrol şefi, il, tarihler
+function pdfKutu(doc, j, y){
+  const W = doc.internal.pageSize.getWidth(), gen = W - 2 * PDF.k;
+  doc.setFont("DV", "bold"); doc.setFontSize(13);
+  const adS = doc.splitTextToSize(j.ad, gen - 10);
+  const alanlar = [["Yüklenici", j.firma], ["Kontrol Şefi", j.sef], ["İl", j.il.join(" · ")], ["İhale Tarihi", tarih(j.par.it)], ["Sözleşme Tarihi", tarih(j.par.st)]];
+  const satir = Math.ceil(alanlar.length / 2), h = 8 + adS.length * 5.6 + satir * 10 + 2;
+  doc.setFillColor(255, 247, 237); doc.setDrawColor(254, 215, 170); doc.setLineWidth(0.4);
+  doc.roundedRect(PDF.k, y, gen, h, 2.5, 2.5, "FD");
+  doc.setFillColor(...PDF.turuncu); doc.rect(PDF.k, y, 1.4, h, "F");
+  doc.setTextColor(...PDF.koyu); doc.text(adS, PDF.k + 5, y + 7.5);
+  let yy = y + 8 + adS.length * 5.6;
+  alanlar.forEach(([e, v], i) => {
+    const x = PDF.k + 5 + (i % 2) * (gen / 2);
+    const ry = yy + Math.floor(i / 2) * 10;
+    doc.setFont("DV", "normal"); doc.setFontSize(7.5); doc.setTextColor(...PDF.gri); doc.text(e, x, ry);
+    doc.setFont("DV", "bold"); doc.setFontSize(9.5); doc.setTextColor(...PDF.koyu);
+    doc.text(doc.splitTextToSize(v || "–", gen / 2 - 8)[0], x, ry + 4.4);
+  });
+  return y + h + 7;
+}
+function pdfTablo(doc, y, basliklar, satirlar, opt){
+  const W = doc.internal.pageSize.getWidth(), gen = W - 2 * PDF.k;
+  const ilkG = opt && opt.ilk ? opt.ilk : Math.min(62, gen * 0.4);
+  const sw = basliklar.length ? (gen - ilkG) / basliklar.length : 0, sh = 7;
+  y = pdfYer(doc, y, sh * (satirlar.length + 1));
+  doc.setFillColor(255, 247, 237); doc.rect(PDF.k, y, gen, sh, "F");
+  doc.setFont("DV", "bold"); doc.setFontSize(8); doc.setTextColor(154, 52, 18);
+  basliklar.forEach((b, i) => doc.text(b, PDF.k + ilkG + sw * (i + 1) - 2, y + 4.8, { align: "right" }));
+  y += sh;
+  satirlar.forEach(([e, deg, vurgu]) => {
+    if(vurgu){ doc.setFillColor(248, 250, 252); doc.rect(PDF.k, y, gen, sh, "F"); }
+    doc.setFont("DV", vurgu ? "bold" : "normal"); doc.setFontSize(8.5); doc.setTextColor(...(vurgu ? [154, 52, 18] : PDF.koyu));
+    doc.text(e, PDF.k + 2, y + 4.8);
+    doc.setFont("DV", "bold");
+    deg.forEach((v, i) => doc.text(v, PDF.k + ilkG + sw * (i + 1) - 2, y + 4.8, { align: "right" }));
+    doc.setDrawColor(...PDF.cizgi); doc.setLineWidth(0.2); doc.line(PDF.k, y + sh, PDF.k + gen, y + sh);
+    y += sh;
+  });
+  return y + 6;
+}
+function pdfBilgi(doc, j, y){
+  y = pdfYer(doc, y, 30);
+  y = pdfBolumBaslik(doc, y, "İş Bilgileri");
+  const km = v => v === null || v === undefined ? "–" : f2(v) + " km";
+  const uz = j.uz || [];
+  if(uz.length){
+    const kalan = r => r.u === null || r.u === undefined ? "–" : km(Math.max(0, r.u - (r.o || 0) - (r.y || 0)));
+    y = pdfTablo(doc, y, uz.map(r => r.s), [
+      ["İhale Uzunluğu", uz.map(r => km(r.u))],
+      [`${D.yil} Öncesi Yapılan`, uz.map(r => km(r.o || 0))],
+      [`${D.yil} Hedef`, uz.map(r => (r.h || 0) > 0 ? km(r.h) : "–")],
+      [`${yilEki(D.yil)} Yapılan`, uz.map(r => km(r.y || 0))],
+      [`${D.yil} Kalan`, uz.map(r => (r.h || 0) > 0 ? km(Math.max(0, r.h - (r.y || 0))) : "–"), true],
+      ["Toplam Kalan", uz.map(kalan), true]
+    ]);
+  }else if(j.cats.length){
+    y = pdfTablo(doc, y, j.cats.map(c => c.ad), [
+      [`${D.yil} Hedef`, j.cats.map(c => c.h > 0 ? km(c.h) : "–")],
+      [`${yilEki(D.yil)} Yapılan`, j.cats.map(c => km(c.b))],
+      ["Gerçekleşme", j.cats.map(c => c.h > 0 ? "%" + yuzde(c.b, c.h) : "Hedef yok"), true]
+    ]);
+  }else{
+    doc.setFont("DV", "normal"); doc.setFontSize(9); doc.setTextColor(...PDF.gri); doc.text("Bu iş için km bilgisi girilmemiş.", PDF.k, y + 2); y += 10;
+  }
+  return y;
+}
+function pdfParasal(doc, j, y){
+  const W = doc.internal.pageSize.getWidth(), gen = W - 2 * PDF.k;
+  y = pdfYer(doc, y, 34);
+  y = pdfBolumBaslik(doc, y, "Parasal");
+  const tl = n => n !== null && n !== undefined ? f2(n) + " ₺" : "–";
+  const kutular = (ib, pb, ust) => {
+    y = pdfYer(doc, y, 18);
+    if(ust){ doc.setFont("DV", "bold"); doc.setFontSize(9); doc.setTextColor(194, 65, 12); doc.text(ust, PDF.k, y + 1); y += 4; }
+    const w = (gen - 4) / 2;
+    [["İhale Bedeli", ib], ["Proje Bedeli", pb]].forEach(([e, v], i) => {
+      const x = PDF.k + i * (w + 4);
+      doc.setFillColor(240, 250, 243); doc.setDrawColor(205, 235, 215); doc.setLineWidth(0.3); doc.roundedRect(x, y, w, 13, 2, 2, "FD");
+      doc.setFont("DV", "normal"); doc.setFontSize(7.5); doc.setTextColor(75, 107, 87); doc.text(e, x + 3.5, y + 4.6);
+      doc.setFont("DV", "bold"); doc.setFontSize(11); doc.setTextColor(21, 128, 61); doc.text(tl(v), x + 3.5, y + 10.2);
+    });
+    y += 17;
+  };
+  const satirlar = l => l.forEach(([b, v]) => {
+    doc.setFont("DV", "normal"); doc.setFontSize(8.5);
+    const sol = doc.splitTextToSize(String(b), gen * 0.58);
+    doc.setFont("DV", "bold"); doc.setFontSize(9);
+    const sag = doc.splitTextToSize(String(v), gen * 0.38);
+    const h = Math.max(sol.length, sag.length) * 4.2 + 3;
+    y = pdfYer(doc, y, h);
+    doc.setFont("DV", "normal"); doc.setFontSize(8.5); doc.setTextColor(...PDF.gri); doc.text(sol, PDF.k + 1, y + 4);
+    doc.setFont("DV", "bold"); doc.setFontSize(9); doc.setTextColor(...PDF.koyu); doc.text(sag, W - PDF.k - 1, y + 4, { align: "right" });
+    doc.setDrawColor(...PDF.cizgi); doc.setLineWidth(0.2); doc.line(PDF.k, y + h, W - PDF.k, y + h);
+    y += h;
+  });
+  const p = j.par;
+  kutular(p.ib, p.pb, p.iller && j.il.length > 1 ? "Toplam" : "");
+  if(j.ek && j.ek.length){ satirlar(j.ek); y += 4; }
+  if(p.iller && j.il.length > 1) Object.keys(p.iller).forEach(il => { const x = p.iller[il] || {}; kutular(x.ihaleTutari, x.projeBedeli, il); const e = (j.eki && j.eki[il]) || []; if(e.length){ satirlar(e); y += 4; } });
+  return y + 2;
+}
+// İlk (boş) sayfa kullanılır; sonrakiler eklenir
+function yeniSayfa(doc, yatay){
+  if(doc._bos){
+    doc._bos = false;
+    if(yatay){ doc.addPage("a4", "landscape"); doc.deletePage(1); }
+    return;
+  }
+  doc.addPage("a4", yatay ? "landscape" : "portrait");
+}
+async function pdfIs(doc, j, bol){
+  const dikey = bol.bilgi || (bol.par && parVar(j));
+  let kutuYazildi = false;
+  if(dikey){
+    yeniSayfa(doc, false);
+    let y = pdfKutu(doc, j, PDF.ust);
+    kutuYazildi = true;
+    if(bol.bilgi) y = pdfBilgi(doc, j, y);
+    if(bol.par && parVar(j)) y = pdfParasal(doc, j, y);
+  }
+  if(bol.iti && itiVar(j)){
+    const kodlar = (j.iti || []).filter(k => D.iti.projeler[k]);
+    for(const kod of kodlar){
+      const resimler = await itiResimleri(kod);
+      for(const r of resimler){
+        yeniSayfa(doc, true);
+        const W = doc.internal.pageSize.getWidth(), H = doc.internal.pageSize.getHeight();
+        let yy = PDF.ust;
+        if(!kutuYazildi){ yy = pdfKutu(doc, j, yy); kutuYazildi = true; }
+        doc.setFont("DV", "bold"); doc.setFontSize(10); doc.setTextColor(...PDF.koyu);
+        doc.text(doc.splitTextToSize(`İtinerer · ${D.iti.projeler[kod].ad}`, W - 2 * PDF.k)[0], PDF.k, yy + 1);
+        yy += 5;
+        const mw = W - 2 * PDF.k, mh = H - PDF.alt - yy - 2;
+        const sc = Math.min(mw / r.w, mh / r.h), w = r.w * sc, h = r.h * sc;
+        doc.addImage(r.veri, "JPEG", PDF.k + (mw - w) / 2, yy, w, h);
+      }
+    }
+  }
+}
+
 // ---------- çizim ----------
 function ciz(){
   const main = document.getElementById("main");
@@ -774,8 +1733,11 @@ function ciz(){
   else if(tab === "home") main.innerHTML = anasayfa();
   else main.innerHTML = harita();
   main.style.overflowY = (tab === "map" && !detay) ? "hidden" : "auto";
-  main.classList.toggle("dolu", tab === "home" && !detay && !aramaAcik);
+  // Anasayfa sayfa olarak kayar; Genel Durum'daki açılan listeler ve Bu Hafta
+  // kutusu kendi içinde kayar
+  main.classList.remove("dolu");
   const secili = detay ? detay.from : tab;
+  document.getElementById("tabs").style.display = "";
   document.getElementById("tabs").innerHTML = TABLAR.map(([k, t]) => `<button class="tab${k === secili ? " on" : ""}" data-tab="${k}">${ICON[k]}${t}</button>`).join("");
   if(tab === "map" && !detay) mapKur();
 }
@@ -793,6 +1755,10 @@ document.addEventListener("click", e => {
   if(e.target.closest("[data-kmzyok]")){ bildir("Bu işe KMZ bağlanmamış"); return; }
   const it = e.target.closest("[data-iti]"); if(it && byId(it.dataset.iti)){ itinererGoster(byId(it.dataset.iti)); return; }
   const pz = e.target.closest("[data-parasal]"); if(pz && byId(pz.dataset.parasal)){ parasalPenceresi(byId(pz.dataset.parasal)); return; }
+  const db = e.target.closest("[data-durac]");
+  if(db){ durumAcik = !durumAcik; db.nextElementSibling?.classList.toggle("acik", durumAcik); db.classList.toggle("on", durumAcik); db.querySelector("i").textContent = durumAcik ? "▴" : "▾"; return; }
+  const kb = e.target.closest("[data-kmac]");
+  if(kb){ kmAcik = !kmAcik; document.querySelector(".kml")?.classList.toggle("acik", kmAcik); kb.classList.toggle("on", kmAcik); kb.textContent = kb.textContent.replace(/[▴▾]/, kmAcik ? "▴" : "▾"); return; }
   const ac = e.target.closest("[data-ac]"); if(ac && detay){ aciklamaPenceresi(byId(detay.id), Number(ac.dataset.ac)); return; }
   const yz = e.target.closest("[data-yazi]"); if(yz && detay){ yaziPenceresi(byId(detay.id), yz.dataset.yazi); return; }
   const h = e.target.closest("[data-hat]"); if(h){ hatGoster(h.dataset.hat); return; }
@@ -800,10 +1766,14 @@ document.addEventListener("click", e => {
   const kt = e.target.closest("[data-kutu]"); if(kt){ secKutu = kt.dataset.kutu; const keep = { ...mz }; ciz(); mz = keep; resimHazir(mapUygula); return; }
   if(e.target.closest("[data-kutukapat]")){ secKutu = null; const keep = { ...mz }; ciz(); mz = keep; resimHazir(mapUygula); return; }
   const z = e.target.closest("[data-zoom]"); if(z){ mapZoom(Number(z.dataset.zoom)); return; }
-  const is = e.target.closest("[data-is]"); if(is && byId(is.dataset.is)){ detay = { id: is.dataset.is, from: tab }; ciz(); ust(); }
+  const fv = e.target.closest("[data-fav]"); if(fv){ favDegis(fv.dataset.fav); const l = document.getElementById("isListe"); if(l) l.innerHTML = isListesi(aramaSonuc()); return; }
+  const tm = e.target.closest("[data-tema]"); if(tm){ tema = tm.dataset.tema; yerel("istakip-mobil-tema", tema); temaUygula(); document.querySelectorAll("[data-tema]").forEach(b => b.classList.toggle("on", b.dataset.tema === tema)); return; }
+  const yt = e.target.closest("[data-yt]"); if(yt && byId(yt.dataset.yt)){ yolTarifi(byId(yt.dataset.yt)); return; }
+  const pd = e.target.closest("[data-pdf]"); if(pd && byId(pd.dataset.pdf)){ pdfPenceresi(byId(pd.dataset.pdf)); return; }
+  const is = e.target.closest("[data-is]"); if(is && byId(is.dataset.is)){ detay = { id: is.dataset.is, from: tab }; kmAcik = false; durumAcik = false; ciz(); ust(); }
 });
 document.addEventListener("input", e => {
-  if(e.target.id === "isAra"){ isAra = e.target.value; const l = aramaSonuc(); document.getElementById("isListe").innerHTML = isListesi(l); document.getElementById("isSay").textContent = aramaBaslik(l.length); }
+  if(e.target.id === "isAra"){ isAra = e.target.value; const l = aramaSonuc(); document.getElementById("isListe").innerHTML = isListesi(l); }
 });
 window.addEventListener("resize", () => { if(tab === "map" && !detay) mapUygula(); });
 
@@ -818,20 +1788,65 @@ function idb(){
     r.onerror = () => no(r.error);
   });
 }
+// Hızlı açılış için veri iki parça saklanır: "son" (işler, km'ler — açılışta
+// okunur) ve "agir" (bölge haritası resmi, itinerer çizimleri, genel KMZ /
+// drone katmanları — gerektiğinde okunur).
+async function idbOku(anahtar){
+  const db = await idb();
+  return await new Promise(ok => { const t = db.transaction(DEPO).objectStore(DEPO).get(anahtar); t.onsuccess = () => ok(t.result || null); t.onerror = () => ok(null); });
+}
 async function veriOku(){
-  try{
-    const db = await idb();
-    return await new Promise(ok => { const t = db.transaction(DEPO).objectStore(DEPO).get("son"); t.onsuccess = () => ok(t.result || null); t.onerror = () => ok(null); });
-  }catch(e){ try{ return JSON.parse(localStorage.getItem("istakip-mobil-veri") || "null"); }catch(_){ return null; } }
+  try{ return await idbOku("son"); }
+  catch(e){ try{ return JSON.parse(localStorage.getItem("istakip-mobil-veri") || "null"); }catch(_){ return null; } }
+}
+function bol(v){
+  const agir = { harita: v.harita || "", iti: v.iti || null, katman: v.katman || null };
+  const kodlar = v.iti && v.iti.projeler ? Object.keys(v.iti.projeler) : (v.itiKodlar || []);
+  const cekirdek = { ...v, harita: null, iti: null, katman: null, itiKodlar: kodlar, haritaVar: !!(v.harita || v.haritaVar), katmanVar: !!(v.katman || v.katmanVar), _parcali: 1 };
+  return { cekirdek, agir };
 }
 async function veriYaz(v){
+  const { cekirdek, agir } = bol(v);
   try{
     const db = await idb();
-    await new Promise((ok, no) => { const t = db.transaction(DEPO, "readwrite"); t.objectStore(DEPO).put(v, "son"); t.oncomplete = ok; t.onerror = () => no(t.error); });
-  }catch(e){ localStorage.setItem("istakip-mobil-veri", JSON.stringify(v)); }
+    await new Promise((ok, no) => { const t = db.transaction(DEPO, "readwrite"); const st = t.objectStore(DEPO); st.put(cekirdek, "son"); st.put(agir, "agir"); t.oncomplete = ok; t.onerror = () => no(t.error); });
+  }catch(e){ try{ localStorage.setItem("istakip-mobil-veri", JSON.stringify(v)); }catch(_){} }
+}
+// Ağır parça bir kez okunur; harita, itinerer, katmanlar ve PDF bunu bekler
+let agirSoz = null;
+function agirHazir(){
+  if(!D || D._agirTam) return Promise.resolve();
+  if(!agirSoz) agirSoz = idbOku("agir").then(a => {
+    if(a){ D.harita = a.harita || ""; D.iti = a.iti || null; D.katman = a.katman || null; }
+    D._agirTam = true;
+  }).catch(() => { D._agirTam = true; });
+  return agirSoz;
+}
+// Harita bileşeni (Leaflet) yalnız KMZ ekranı açılınca yüklenir
+let leafletSoz = null;
+function leafletHazir(){
+  if(typeof L !== "undefined") return Promise.resolve();
+  if(!leafletSoz) leafletSoz = new Promise((ok, no) => { const sc = document.createElement("script"); sc.src = "leaflet.js"; sc.onload = ok; sc.onerror = () => { leafletSoz = null; no(new Error("Harita bileşeni yüklenemedi")); }; document.head.appendChild(sc); });
+  return leafletSoz;
 }
 // Eski (1. sürüm) dosyalar da açılsın
+// Excel başlığı tamamı büyük harfse Türkçe kurala göre ilk harfler büyük;
+// ABD biçimli sayılar Türkçe biçime (yalnız eski dosyalarda gerekir)
+function baslikGuzel(h){
+  const s = String(h || ""), harf = s.replace(/[^A-Za-zÇĞİÖŞÜçğıöşü]/g, "");
+  if(!harf || harf !== harf.toLocaleUpperCase("tr-TR")) return s;
+  return s.split(/(\([^)]*\))/).map(p => p.startsWith("(") ? p : p.toLocaleLowerCase("tr-TR").replace(/(^|[\s\-/.])([a-zçğıöşü])/g, (m, a, b) => a + b.toLocaleUpperCase("tr-TR"))).join("");
+}
+function trSayi(v){
+  const s = String(v ?? "").trim(), m = s.match(/^(-?)(\d{1,3}(?:,\d{3})+|\d+)(?:\.(\d+))?(%?)$/);
+  if(!m) return s;
+  const [, e, t, o, y] = m;
+  if(!y && !o && !t.includes(",")) return s;
+  const r = e + t.replace(/,/g, ".") + (o ? "," + o : "");
+  return y ? "%" + r : r;
+}
 function duzelt(v){
+  if(!(v.v >= 3)) (v.isler || []).forEach(j => { if(Array.isArray(j.ek)) j.ek = j.ek.map(([b, x]) => [baslikGuzel(b), trSayi(x)]); });
   (v.isler || []).forEach(j => {
     j.il = j.il || []; j.cats = j.cats || []; j.kmler = j.kmler || [];
     j.par = j.par || { it: "", st: "", ib: null, pb: null, iller: null };
@@ -844,6 +1859,10 @@ function duzelt(v){
 }
 function kur(v){
   D = duzelt(v); ISLER = D.isler || [];
+  agirSoz = null;
+  // parçalı kayıttan okunduysa ağır kısım sonra gelir; dosyadan yüklendiyse hepsi elde
+  D._agirTam = !D._parcali;
+  D.itiKod = new Set(D.iti && D.iti.projeler ? Object.keys(D.iti.projeler) : (D.itiKodlar || []));
   tab = "home"; detay = null; isAra = ""; aramaAcik = false; parAra = ""; secKutu = null; mz = { s: 1, x: 0, y: 0 };
 }
 function hosgeldin(mesaj){
@@ -893,7 +1912,13 @@ function bildir(m){
 document.addEventListener("click", e => { if(e.target.closest("[data-yukle]")){ e.preventDefault(); e.stopImmediatePropagation(); dosyaSec(); } }, true);
 (async () => {
   const v = await veriOku();
-  if(v){ kur(v); ciz(); }
+  if(v){
+    kur(v); ciz();
+    // eski (tek parça) kayıt: bir kez parçalı olarak yeniden yazılır
+    if(!v._parcali) setTimeout(() => veriYaz(v).catch(() => {}), 1500);
+    // ağır kısım boşta okunur; kullanıcı haritaya geçtiğinde hazır olur
+    else setTimeout(() => agirHazir(), 600);
+  }
   else hosgeldin();
 })();
 // Çevrimdışı çalışma (yalnızca https adresinde)
