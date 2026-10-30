@@ -321,6 +321,9 @@ tr.t td{ font-weight:800; background:#fff7ed; color:#7c2d12; }
 .tbh.il{ grid-template-columns:1fr 46px 46px; }
 .tbh.il span{ display:flex; align-items:center; justify-content:flex-end; gap:3px; }
 .tbh.il svg{ width:11px; height:11px; }
+.tbh.il span:first-child{ justify-content:flex-start; }
+.ilr2 .l span{ color:#0f172a; font-size:13.5px; font-variant-numeric:tabular-nums; }
+html.dark .ilr2 .l span{ color:#f1f5f9; }
 /* bu hafta */
 main.dolu > .pad{ display:flex; flex-direction:column; }
 .bh{ background:#fff; border-radius:16px; border:1px solid #eef0f3; overflow:hidden; flex:none; display:flex; flex-direction:column; max-height:46vh; box-shadow:0 1px 3px rgba(15,23,42,.06); }
@@ -820,14 +823,18 @@ function genelDurum(){
     govde = stdTablo(jobs, true);
   }else{
     bas = `<div class="tbh il"><span>İL</span><span>${IKON_IS}İŞ</span><span>${IKON_HEDEF}FİZ.</span></div>`;
-    const iller = IL_SIRA.concat([...new Set(jobs.flatMap(j => j.il))].filter(il => !IL_SIRA.includes(il)).sort((a, b) => a.localeCompare(b, "tr")));
+    // İş sayıları bütün işlerle ("toplam KM'ye ekleme" seçililer dahil); KM tablosu yalnız toplama eklenenlerle
+    const tumIs = ISLER;
+    const iller = IL_SIRA.concat([...new Set(tumIs.filter(j => j.il.length === 1).flatMap(j => j.il))].filter(il => !IL_SIRA.includes(il)).sort((a, b) => a.localeCompare(b, "tr")));
     const satir = (key, ad, liste, ic) => { const acik = gdSec === key;
       return `<button class="tr2 ilr2${acik ? " acik" : ""}" data-gd="${esc(key)}"><div class="l"><b><em>${acik ? "▾" : "▸"}</em>${esc(ad)}</b><span>${liste.length}</span><span>${liste.filter(j => j.fh).length}</span></div></button>${acik ? `<div class="gac">${ic()}</div>` : ""}`; };
     govde = iller.map(il => {
-      const ilJobs = jobs.filter(j => j.il.includes(il));
-      return satir("i:" + il, il, ilJobs, () => `<div class="tbh" style="padding:4px 0 2px"><span>STANDART</span><span>BİTEN</span><span>HEDEF</span><span>%</span></div>` + stdTablo(ilJobs, false));
+      // Birden fazla ildeki işler il satırlarında değil, yalnız "Birden Fazla İl"de
+      const tekIl = j => j.il.length === 1 && j.il[0] === il;
+      const ilJobs = tumIs.filter(tekIl);
+      return satir("i:" + il, il, ilJobs, () => `<div class="tbh" style="padding:4px 0 2px"><span>STANDART</span><span>BİTEN</span><span>HEDEF</span><span>%</span></div>` + stdTablo(jobs.filter(tekIl), false));
     }).join("");
-    const cok = jobs.filter(j => j.il.length > 1);
+    const cok = tumIs.filter(j => j.il.length > 1);
     govde += `<div class="ayrac"></div>` + satir("cok", "Birden Fazla İl", cok, () => cok.map(j => `<button class="gi" data-is="${esc(j.id)}"><b>${esc(j.ad)}</b><small>${esc(j.il.join(" · "))}</small></button>`).join("") || '<div class="gbos">Birden fazla ilde iş yok.</div>');
   }
   const d = new Date(D.olusturma);
@@ -1242,8 +1249,8 @@ async function hatGoster(id, korun){
   const K = D.katman || {};
   const katVar = (K.kmz && K.kmz.length) || (K.drone && K.drone.ucus && K.drone.ucus.length);
   const v = document.createElement("div"); v.className = "hatv"; v.id = "hatv";
-  v.innerHTML = `<div class="hatbar hb2"><div class="hr1"><button class="x" data-hatkapat aria-label="Kapat">${IK("geri")}</button><div class="ad"><b>${hatTum ? "Tüm İşler" : esc(j.ad)}</b><small>${hatTum ? "Seçili: " + esc(j.ad) : esc([j.il.join(" · "), j.firma].filter(Boolean).join(" · ")) + " · KMZ"}</small></div></div>
-<div class="hr2"><div class="hara" id="hara"><button data-hara aria-label="İş ara">${IK("ara")}</button><input id="hara2" type="search" placeholder="İş ara…" autocomplete="off"></div><button class="htum${hatTum ? " on" : ""}" data-htum>${IK("lejant")}Tüm İşler</button><span class="hsp"></span><div class="hseg"><button data-hmod="2b"${hatMod === "2b" ? ' class="on"' : ""}>2B</button><button data-hmod="3b"${hatMod === "3b" ? ' class="on"' : ""}>3B</button></div></div><div class="honer" id="honer2"></div></div>
+  v.innerHTML = `<div class="hatbar hb2"><div class="hr1"><button class="x" data-hatkapat aria-label="Kapat">${IK("geri")}</button><div class="ad"><b>${hatTum ? "Tüm İşler KMZ" : esc(j.ad)}</b><small>${hatTum ? "Seçili: " + esc(j.ad) : esc([j.il.join(" · "), j.firma].filter(Boolean).join(" · ")) + " · KMZ"}</small></div></div>
+<div class="hr2"><div class="hara" id="hara"><button data-hara aria-label="İş ara">${IK("ara")}</button><input id="hara2" type="search" placeholder="İş ara…" autocomplete="off"></div><button class="htum${hatTum ? " on" : ""}" data-htum>${IK("lejant")}Tüm İşler KMZ</button><span class="hsp"></span><div class="hseg"><button data-hmod="2b"${hatMod === "2b" ? ' class="on"' : ""}>2B</button><button data-hmod="3b"${hatMod === "3b" ? ' class="on"' : ""}>3B</button></div></div><div class="honer" id="honer2"></div></div>
 <div class="hatmap etiketsiz" id="hatmap"></div><div class="hat3b" id="hat3b" hidden></div>
 <div class="katman"><button data-katman="sokak">Sokak</button><button data-katman="uydu" class="on">Uydu</button></div>
 <div class="sagk">${katVar ? `<button class="kat" data-katlar>${IK("katman")}Katmanlar<i id="katsay">0</i></button>` : ""}<button data-konumum aria-label="Konumum"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg></button><button data-yola aria-label="Yol hattına dön">${IK("yol")}</button><button data-olc aria-label="Mesafe ölç">${IK("cetvel")}</button><button data-yt="${esc(j.id)}" aria-label="Yol tarifi">${IK("yt")}</button><button class="kuz" data-kuzey aria-label="Kuzeyi yukarı al">K↑</button><button class="egm" data-egim aria-label="Eğik / tepeden">${IK("egim")}</button></div>
@@ -1930,15 +1937,18 @@ function pdfCerceve(doc){
     doc.setPage(i);
     const W = doc.internal.pageSize.getWidth(), H = doc.internal.pageSize.getHeight();
     doc.setFillColor(...PDF.turuncu); doc.rect(0, 0, W, 2.2, "F");
-    doc.setFont("DV", "bold"); doc.setFontSize(10.5); doc.setTextColor(...PDF.koyu);
-    doc.text("KARAYOLLARI 7. BÖLGE MÜDÜRLÜĞÜ", PDF.k, 12);
     doc.setFont("DV", "normal"); doc.setFontSize(8.5); doc.setTextColor(...PDF.gri);
-    doc.text("Strateji Geliştirme Başmühendisliği", PDF.k, 16.5);
     doc.text(tarihS, W - PDF.k, 12, { align: "right" });
     doc.setDrawColor(...PDF.cizgi); doc.setLineWidth(0.3); doc.line(PDF.k, 19, W - PDF.k, 19);
     doc.line(PDF.k, H - 11, W - PDF.k, H - 11);
+    // Alt satır: kurum · birim | Kontrol Şefi (o sayfadaki işin)
     doc.setFontSize(7.5);
-    doc.text("İşTakip · Bilgi amaçlıdır", PDF.k, H - 6.5);
+    let x = PDF.k;
+    doc.setFont("DV", "bold"); doc.setTextColor(...PDF.koyu); doc.text("KARAYOLLARI 7. BÖLGE MÜDÜRLÜĞÜ", x, H - 6.5); x += doc.getTextWidth("KARAYOLLARI 7. BÖLGE MÜDÜRLÜĞÜ");
+    doc.setFont("DV", "normal"); doc.setTextColor(...PDF.gri); doc.text(" · Strateji Geliştirme Başmühendisliği", x, H - 6.5); x += doc.getTextWidth(" · Strateji Geliştirme Başmühendisliği");
+    let sef; for(let q = i; q >= 1 && sef === undefined; q--) sef = (doc._sef || {})[q];
+    if(sef){ doc.setTextColor(203, 213, 225); doc.text("|", x + 2, H - 6.5); x += 5; doc.setTextColor(...PDF.gri); doc.text("Kontrol Şefi: ", x, H - 6.5); x += doc.getTextWidth("Kontrol Şefi: "); doc.setFont("DV", "bold"); doc.setTextColor(55, 65, 81); doc.text(sef, x, H - 6.5); }
+    doc.setFont("DV", "normal"); doc.setTextColor(...PDF.gri);
     doc.text(`Sayfa ${i} / ${n}`, W - PDF.k, H - 6.5, { align: "right" });
   }
 }
@@ -1962,22 +1972,24 @@ function pdfYer(doc, y, h){
 // İşin başlığı (her işte bir kez): sade — iş adı, altında tek satırda
 // Yüklenici · Kontrol Şefi · İl, altında ince çizgi
 function pdfKutu(doc, j, y){
+  // İş adı kalın, yanında parantez içinde yüklenici (ince, gri); altında çizgi
   const W = doc.internal.pageSize.getWidth(), gen = W - 2 * PDF.k;
-  doc.setFont("DV", "bold"); doc.setFontSize(14); doc.setTextColor(...PDF.koyu);
+  const yk = j.firma ? ` (${j.firma})` : "";
+  doc.setFont("DV", "bold"); doc.setFontSize(14);
   const adS = doc.splitTextToSize(j.ad, gen);
-  doc.text(adS, PDF.k, y + 5);
-  let yy = y + 5 + (adS.length - 1) * 6 + 6;
-  const alanlar = [["Yüklenici", j.firma], ["Kontrol Şefi", j.sef], ["İl", j.il.join(", ")]].filter(([, v]) => v);
-  let x = PDF.k;
-  doc.setFontSize(8.5);
-  alanlar.forEach(([e, v], i) => {
-    if(i){ doc.setFont("DV", "normal"); doc.setTextColor(203, 213, 225); doc.text("|", x + 1.6, yy); x += 5; }
-    doc.setFont("DV", "normal"); doc.setTextColor(...PDF.gri); doc.text(e + ": ", x, yy); x += doc.getTextWidth(e + ": ");
-    doc.setFont("DV", "bold"); doc.setTextColor(55, 65, 81); doc.text(String(v), x, yy); x += doc.getTextWidth(String(v));
-  });
+  let yy = y + 5;
+  adS.forEach((sat, n) => { doc.setFont("DV", "bold"); doc.setFontSize(14); doc.setTextColor(...PDF.koyu); doc.text(sat, PDF.k, yy); if(n < adS.length - 1) yy += 6; });
+  if(yk){
+    doc.setFont("DV", "bold"); doc.setFontSize(14);
+    const sonG = doc.getTextWidth(adS[adS.length - 1]);
+    doc.setFont("DV", "normal"); doc.setFontSize(12);
+    const ykG = doc.getTextWidth(yk);
+    if(PDF.k + sonG + ykG <= W - PDF.k){ doc.setTextColor(...PDF.gri); doc.text(yk, PDF.k + sonG, yy); }
+    else { yy += 5.5; doc.setTextColor(...PDF.gri); doc.text(doc.splitTextToSize(yk.trim(), gen)[0], PDF.k, yy); }
+  }
   yy += 3.5;
+  doc.setDrawColor(...PDF.cizgi); doc.setLineWidth(0.3); doc.line(PDF.k, yy, W - PDF.k, yy);
   doc.setDrawColor(...PDF.turuncu); doc.setLineWidth(0.6); doc.line(PDF.k, yy, PDF.k + 18, yy);
-  doc.setDrawColor(...PDF.cizgi); doc.setLineWidth(0.3); doc.line(PDF.k + 18, yy, W - PDF.k, yy);
   return yy + 8;
 }
 function pdfTablo(doc, y, basliklar, satirlar, opt){
@@ -2084,12 +2096,29 @@ function pdfParasal(doc, j, y){
 // kendi yerinde (₺ ile). Seçilmemişse listede yer almaz.
 function pdfIhaleListe(j, tl){
   const p = j.par, bedel = b => { const f = fold(b); return /proje\s*bedel/.test(f) ? p.pb : /ihale\s*(bedel|tutar)/.test(f) ? p.ib : undefined; };
-  return (j.ek || []).map(([b, v]) => { const n = bedel(b); return [b, n !== undefined && n !== null ? tl(n) : v]; });
+  const liste = (j.ek || []).map(([b, v]) => { const n = bedel(b); return [b, n !== undefined && n !== null ? tl(n) : v]; });
+  if((j.il || []).length){
+    const k = liste.findIndex(([b]) => /^kbos\b|^k\.?\s*b\.?\s*o\.?\s*s/.test(fold(b).trim()));
+    liste.splice(k >= 0 ? k + 1 : 0, 0, ["İl", j.il.join(", ")]);
+  }
+  return liste;
 }
 // KMZ kare resmi: uydu karoları (internet varsa) + KMZ çizgileri kendi
 // renkleriyle; üzerinde yazı yok. İnternet yoksa düz gri zemin.
 const PDF_UYDU = "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/";
+// İşe programda atanmış harita resmi (veri dosyasının ağır parçasında)
+async function haritaResmiAl(j){
+  if(!j.hr) return null;
+  await agirHazir();
+  return (D.hResim || {})[j.id] || null;
+}
 async function pdfHarita(doc, j, x, y, S){
+  // İşe atanmış harita resmi varsa KMZ yerine o (genişliğe sığdırılır)
+  const resim = await haritaResmiAl(j);
+  if(resim){
+    const im = await new Promise(ok => { const i = new Image(); i.onload = () => ok(i); i.onerror = () => ok(null); i.src = resim; });
+    if(im){ const h = Math.min(S * 1.6, S * im.height / im.width); const w = h * im.width / im.height; doc.addImage(resim, "JPEG", x, y, w, h); doc.setDrawColor(0, 0, 0); doc.setLineWidth(0.5); doc.rect(x, y, w, h, "S"); return h; }
+  }
   const PX = 760, TS = 256;
   const cz = j.hat.cizgi.filter(c => c.p && c.p.length > 1);
   const mx = o => (o + 180) / 360, my = a => { const r = a * Math.PI / 180; return (1 - Math.log(Math.tan(r) + 1 / Math.cos(r)) / Math.PI) / 2; };
@@ -2122,6 +2151,7 @@ async function pdfHarita(doc, j, x, y, S){
   doc.setFillColor(207, 214, 222); doc.rect(x, y, S, S, "F");
   if(veri) doc.addImage(veri, "JPEG", x, y, S, S);
   doc.setDrawColor(0, 0, 0); doc.setLineWidth(0.5); doc.rect(x, y, S, S, "S");
+  return S;
 }
 // İlk (boş) sayfa kullanılır; sonrakiler eklenir
 function yeniSayfa(doc, yatay){
@@ -2140,9 +2170,11 @@ async function pdfIs(doc, j, bol){
     let y = pdfKutu(doc, j, PDF.ust);
     kutuYazildi = true;
     // İşin haritası solda; İhale Bilgileri ve KM Bilgileri haritanın sağında
-    const harV = bol.par && parVar(j) && !!(j.hat && j.hat.cizgi && j.hat.cizgi.some(c => c.p && c.p.length > 1));
+    const harV = bol.par && parVar(j) && (!!j.hr || !!(j.hat && j.hat.cizgi && j.hat.cizgi.some(c => c.p && c.p.length > 1)));
     const HS = 66, ust = y - 4.5;
-    if(harV){ await pdfHarita(doc, j, PDF.k, ust, HS); PDF.sx = PDF.k + HS + 7; }
+    let HY = HS;
+    (doc._sef = doc._sef || {})[doc.getNumberOfPages()] = j.sef || "";
+    if(harV){ HY = await pdfHarita(doc, j, PDF.k, ust, HS); PDF.sx = PDF.k + HS + 7; }
     const sayfa = doc.getNumberOfPages();
     // İhale Bilgileri ve KM Bilgileri ilk sayfaya sığsın: önce aralıklar,
     // sonra yazı (en az ~7,5 punto) küçültülür; yetmezse İhale listesi iki
@@ -2160,7 +2192,7 @@ async function pdfIs(doc, j, bol){
     Object.assign(PDF, { o: sec[0], a: sec[1], iki: sec[2], olcum: false });
     y = ciz(doc, y);
     Object.assign(PDF, { o: 1, a: 1, iki: false });
-    if(harV && doc.getNumberOfPages() === sayfa) y = Math.max(y, ust + HS + 6);
+    if(harV && doc.getNumberOfPages() === sayfa) y = Math.max(y, ust + HY + 6);
     PDF.sx = PDF.k;
   }
   if(bol.iti && itiVar(j)){
@@ -2171,6 +2203,7 @@ async function pdfIs(doc, j, bol){
         yeniSayfa(doc, true);
         const W = doc.internal.pageSize.getWidth(), H = doc.internal.pageSize.getHeight();
         let yy = PDF.ust;
+        (doc._sef = doc._sef || {})[doc.getNumberOfPages()] = j.sef || "";
         if(!kutuYazildi){ yy = pdfKutu(doc, j, yy); kutuYazildi = true; }
         doc.setFont("DV", "bold"); doc.setFontSize(10); doc.setTextColor(...PDF.koyu);
         doc.text(doc.splitTextToSize(`İtinerer · ${D.iti.projeler[kod].ad}`, W - 2 * PDF.k)[0], PDF.k, yy + 1);
@@ -2571,7 +2604,7 @@ document.addEventListener("input", e => {
 // Arama ve Tüm İşler iki görünümde de aynı; iş değişince görünüm korunur.
 function hatYenidenBaslik(){
   const j = hatIs; if(!j) return;
-  const b = document.querySelector(".hb2 .ad"); if(b) b.innerHTML = `<b>${hatTum ? "Tüm İşler" : esc(j.ad)}</b><small>${hatTum ? "Seçili: " + esc(tumSecili ? byId(tumSecili).ad : j.ad) : esc([j.il.join(" · "), j.firma].filter(Boolean).join(" · ")) + " · KMZ"}</small>`;
+  const b = document.querySelector(".hb2 .ad"); if(b) b.innerHTML = `<b>${hatTum ? "Tüm İşler KMZ" : esc(j.ad)}</b><small>${hatTum ? "Seçili: " + esc(tumSecili ? byId(tumSecili).ad : j.ad) : esc([j.il.join(" · "), j.firma].filter(Boolean).join(" · ")) + " · KMZ"}</small>`;
   document.querySelector("[data-htum]")?.classList.toggle("on", hatTum);
   document.querySelectorAll("[data-hmod]").forEach(x => x.classList.toggle("on", x.dataset.hmod === hatMod));
 }
@@ -2637,9 +2670,9 @@ document.addEventListener("click", e => {
   if(md || e.target.closest("[data-htum]")){ const h = document.getElementById("hara"); if(h){ h.classList.remove("acik"); document.getElementById("hara2").value = ""; document.getElementById("honer2").innerHTML = ""; } }
   if(md){ if(md.dataset.hmod === hatMod) return; hatMod = md.dataset.hmod; hatYenidenBaslik(); hatMod === "3b" ? hat3bAc() : hat2bAc(); return; }
   if(e.target.closest("[data-htum]")){
+    // Harita olduğu yerde kalır; yalnız bütün işlerin hatları eklenir/kaldırılır
     hatTum = !hatTum; tumIslerCiz(); hatYenidenBaslik();
-    const sn = hatTum ? tumSinir() : hatSinir;
-    if(uc){ uc.popupKapat(); uc.guncelle(); uc.git(sn); } else if(hatHarita && sn.length){ hatHarita.closePopup(); hatHarita.fitBounds(sn, { padding: [30, 30], maxZoom: 16 }); }
+    if(uc){ uc.popupKapat(); uc.guncelle(); } else if(hatHarita) hatHarita.closePopup();
     return;
   }
   if(e.target.closest("[data-hara]")){ const h = document.getElementById("hara"); h.classList.toggle("acik"); if(h.classList.contains("acik")) setTimeout(() => document.getElementById("hara2")?.focus(), 50); else { document.getElementById("hara2").value = ""; document.getElementById("honer2").innerHTML = ""; } return; }
@@ -2881,9 +2914,9 @@ async function veriOku(){
   catch(e){ try{ return JSON.parse(localStorage.getItem("istakip-mobil-veri") || "null"); }catch(_){ return null; } }
 }
 function bol(v){
-  const agir = { harita: v.harita || "", iti: v.iti || null, katman: v.katman || null };
+  const agir = { harita: v.harita || "", iti: v.iti || null, katman: v.katman || null, hResim: v.hResim || null };
   const kodlar = v.iti && v.iti.projeler ? Object.keys(v.iti.projeler) : (v.itiKodlar || []);
-  const cekirdek = { ...v, harita: null, iti: null, katman: null, itiKodlar: kodlar, haritaVar: !!(v.harita || v.haritaVar), katmanVar: !!(v.katman || v.katmanVar), _parcali: 1 };
+  const cekirdek = { ...v, harita: null, iti: null, katman: null, hResim: null, itiKodlar: kodlar, haritaVar: !!(v.harita || v.haritaVar), katmanVar: !!(v.katman || v.katmanVar), _parcali: 1 };
   return { cekirdek, agir };
 }
 async function veriYaz(v){
@@ -2898,7 +2931,7 @@ let agirSoz = null;
 function agirHazir(){
   if(!D || D._agirTam) return Promise.resolve();
   if(!agirSoz) agirSoz = idbOku("agir").then(a => {
-    if(a){ D.harita = a.harita || ""; D.iti = a.iti || null; D.katman = a.katman || null; }
+    if(a){ D.harita = a.harita || ""; D.iti = a.iti || null; D.katman = a.katman || null; D.hResim = a.hResim || null; }
     D._agirTam = true;
   }).catch(() => { D._agirTam = true; });
   return agirSoz;
