@@ -1920,7 +1920,7 @@ async function pdfPaylas(){
 }
 
 // ----- PDF sayfa düzeni -----
-const PDF = { sx: 14, k: 14, ust: 24, alt: 16, turuncu: [234, 88, 12], koyu: [17, 24, 39], gri: [100, 116, 139], cizgi: [226, 232, 240] };
+const PDF = { sx: 14, k: 14, ust: 24, alt: 16, o: 1, a: 1, iki: false, olcum: false, turuncu: [234, 88, 12], koyu: [17, 24, 39], gri: [100, 116, 139], cizgi: [226, 232, 240] };
 const BUYUK = s => String(s || "").toLocaleUpperCase("tr-TR");
 // Her sayfaya üst başlık ve alt bilgi (sayfa numarası)
 function pdfCerceve(doc){
@@ -1944,13 +1944,14 @@ function pdfCerceve(doc){
 }
 function pdfBolumBaslik(doc, y, ad){
   const W = doc.internal.pageSize.getWidth();
-  doc.setFont("DV", "bold"); doc.setFontSize(9.5); doc.setTextColor(...PDF.turuncu);
+  doc.setFont("DV", "bold"); doc.setFontSize(9.5 * PDF.o); doc.setTextColor(...PDF.turuncu);
   doc.text(BUYUK(ad), PDF.sx, y);
-  doc.setDrawColor(253, 186, 116); doc.setLineWidth(0.4); doc.line(PDF.sx, y + 1.8, W - PDF.k, y + 1.8);
-  return y + 7;
+  doc.setDrawColor(253, 186, 116); doc.setLineWidth(0.4); doc.line(PDF.sx, y + 1.8 * PDF.a, W - PDF.k, y + 1.8 * PDF.a);
+  return y + 7 * PDF.a;
 }
 // Sayfaya sığmıyorsa yeni dikey sayfa
 function pdfYer(doc, y, h){
+  if(PDF.olcum) return y;   // ölçüm turunda sayfa bölünmez, yalnız yükseklik hesaplanır
   const H = doc.internal.pageSize.getHeight();
   if(y + h <= H - PDF.alt) return y;
   doc.addPage("a4", "portrait");
@@ -1981,26 +1982,26 @@ function pdfKutu(doc, j, y){
 }
 function pdfTablo(doc, y, basliklar, satirlar, opt){
   const W = doc.internal.pageSize.getWidth();
-  const sh = 7;
+  const sh = 7 * PDF.a, by = sh * 0.69;
   y = pdfYer(doc, y, sh * (satirlar.length + 1));
   const X = PDF.sx, gen = W - PDF.k - X;
   const ilkG = opt && opt.ilk ? opt.ilk : Math.min(62, gen * 0.42);
   const sw = basliklar.length ? (gen - ilkG) / basliklar.length : 0;
   doc.setFillColor(255, 247, 237); doc.rect(X, y, gen, sh, "F");
-  doc.setFont("DV", "bold"); doc.setFontSize(8); doc.setTextColor(154, 52, 18);
-  basliklar.forEach((b, i) => doc.text(b, X + ilkG + sw * (i + 1) - 2, y + 4.8, { align: "right" }));
+  doc.setFont("DV", "bold"); doc.setFontSize(8 * PDF.o); doc.setTextColor(154, 52, 18);
+  basliklar.forEach((b, i) => doc.text(b, X + ilkG + sw * (i + 1) - 2, y + by, { align: "right" }));
   y += sh;
   satirlar.forEach(([e, deg, vurgu]) => {
     if(vurgu){ doc.setFillColor(248, 250, 252); doc.rect(X, y, gen, sh, "F"); }
-    doc.setFont("DV", vurgu ? "bold" : "normal"); doc.setFontSize(8.5); doc.setTextColor(...(vurgu ? [154, 52, 18] : PDF.gri));
-    doc.text(e, X + 2, y + 4.8);
+    doc.setFont("DV", vurgu ? "bold" : "normal"); doc.setFontSize(8.5 * PDF.o); doc.setTextColor(...(vurgu ? [154, 52, 18] : PDF.gri));
+    doc.text(e, X + 2, y + by);
     doc.setFont("DV", "bold");
     if(!vurgu) doc.setTextColor(...PDF.koyu);
-    deg.forEach((v, i) => doc.text(v, X + ilkG + sw * (i + 1) - 2, y + 4.8, { align: "right" }));
+    deg.forEach((v, i) => doc.text(v, X + ilkG + sw * (i + 1) - 2, y + by, { align: "right" }));
     doc.setDrawColor(...PDF.cizgi); doc.setLineWidth(0.2); doc.line(X, y + sh, X + gen, y + sh);
     y += sh;
   });
-  return y + 6;
+  return y + 6 * PDF.a;
 }
 // KM Bilgileri: İhale Uzunluğu ve <yıl> Öncesi tek (iş toplamı); sonrası
 // (Hedef, Yapılan, Kalan) standart standart; en altta Toplam Kalan.
@@ -2014,59 +2015,70 @@ function kmOzet(j){
   return { u, o, kalan: u === null ? null : Math.max(0, u - (o || 0) - yap) };
 }
 function pdfSatir(doc, y, e, v, vurgu){
-  const W = doc.internal.pageSize.getWidth(), sh = 7;
+  const W = doc.internal.pageSize.getWidth(), sh = 7 * PDF.a, by = sh * 0.69;
   y = pdfYer(doc, y, sh);
   const X = PDF.sx;
   if(vurgu){ doc.setFillColor(248, 250, 252); doc.rect(X, y, W - PDF.k - X, sh, "F"); }
-  doc.setFont("DV", vurgu ? "bold" : "normal"); doc.setFontSize(8.5); doc.setTextColor(...(vurgu ? [154, 52, 18] : PDF.gri)); doc.text(e, X + 2, y + 4.8);
-  doc.setFont("DV", "bold"); doc.setTextColor(...(vurgu ? [154, 52, 18] : PDF.koyu)); doc.text(v, W - PDF.k - 2, y + 4.8, { align: "right" });
+  doc.setFont("DV", vurgu ? "bold" : "normal"); doc.setFontSize(8.5 * PDF.o); doc.setTextColor(...(vurgu ? [154, 52, 18] : PDF.gri)); doc.text(e, X + 2, y + by);
+  doc.setFont("DV", "bold"); doc.setTextColor(...(vurgu ? [154, 52, 18] : PDF.koyu)); doc.text(v, W - PDF.k - 2, y + by, { align: "right" });
   doc.setDrawColor(...PDF.cizgi); doc.setLineWidth(0.2); doc.line(X, y + sh, W - PDF.k, y + sh);
   return y + sh;
 }
 function pdfBilgi(doc, j, y){
-  y = pdfYer(doc, y, 30);
+  const a = PDF.a;
+  y = pdfYer(doc, y, 30 * a);
   y = pdfBolumBaslik(doc, y, "KM Bilgileri");
   const km = v => v === null || v === undefined ? "–" : f2(v) + " km";
   const oz = kmOzet(j);
   if(!j.cats.length && oz.u === null){
-    doc.setFont("DV", "normal"); doc.setFontSize(9); doc.setTextColor(...PDF.gri); doc.text("Bu iş için km bilgisi girilmemiş.", PDF.sx, y + 2); return y + 10;
+    doc.setFont("DV", "normal"); doc.setFontSize(9 * PDF.o); doc.setTextColor(...PDF.gri); doc.text("Bu iş için km bilgisi girilmemiş.", PDF.sx, y + 2); return y + 10 * a;
   }
   if(oz.u !== null) y = pdfSatir(doc, y, "İhale Uzunluğu", km(oz.u));
   if(oz.o !== null) y = pdfSatir(doc, y, `${D.yil} Öncesi Yapılan`, km(oz.o));
   if(j.cats.length){
-    y = pdfTablo(doc, y + 3, j.cats.map(c => c.ad), [
+    y = pdfTablo(doc, y + 3 * a, j.cats.map(c => c.ad), [
       [`${D.yil} Hedef`, j.cats.map(c => c.h > 0 ? km(c.h) : "–")],
       [`${yilEki(D.yil)} Yapılan`, j.cats.map(c => km(c.b))],
       [`${D.yil} Kalan`, j.cats.map(c => c.h > 0 ? km(Math.max(0, c.h - c.b)) : "–"), true]
-    ]) - 6;
+    ]) - 6 * a;
   }
-  if(oz.u !== null) y = pdfSatir(doc, y + 3, "Toplam Kalan", km(oz.kalan), true);
-  return y + 6;
+  if(oz.u !== null) y = pdfSatir(doc, y + 3 * a, "Toplam Kalan", km(oz.kalan), true);
+  return y + 6 * a;
 }
 // İhale Bilgileri: solda işin KMZ'si (uydu altlıklı, yazısız kare), sağda
 // tek liste: Proje Bedeli, İhale Bedeli, ardından Excel satırları — hepsi
 // aynı biçimde. Çok illi işte yalnız toplam yazılır.
 // İhale Bilgileri listesi (PDF.sx'ten başlar; harita varsa onun sağında)
 function pdfParasal(doc, j, y){
-  const W = doc.internal.pageSize.getWidth();
+  const W = doc.internal.pageSize.getWidth(), o = PDF.o, a = PDF.a;
   const tl = n => n !== null && n !== undefined ? f2(n) + " ₺" : "–";
-  y = pdfYer(doc, y, 34);
+  y = pdfYer(doc, y, 34 * a);
   y = pdfBolumBaslik(doc, y, "İhale Bilgileri");
-  pdfIhaleListe(j, tl).forEach(([b, v]) => {
-    const x0 = PDF.sx, sagG = W - PDF.k - x0;
-    doc.setFont("DV", "normal"); doc.setFontSize(8.5);
-    const sol = doc.splitTextToSize(String(b), sagG * 0.56);
-    doc.setFont("DV", "bold"); doc.setFontSize(9);
-    const sag = doc.splitTextToSize(String(v), sagG * 0.42);
-    const h = Math.max(sol.length, sag.length) * 4.2 + 3.2;
-    y = pdfYer(doc, y, h);
-    const x = PDF.sx;
-    doc.setFont("DV", "normal"); doc.setFontSize(8.5); doc.setTextColor(...PDF.gri); doc.text(sol, x + 2, y + 4.3);
-    doc.setFont("DV", "bold"); doc.setFontSize(9); doc.setTextColor(...PDF.koyu); doc.text(sag, W - PDF.k - 2, y + 4.3, { align: "right" });
-    doc.setDrawColor(...PDF.cizgi); doc.setLineWidth(0.2); doc.line(x, y + h, W - PDF.k, y + h);
-    y += h;
+  const liste = pdfIhaleListe(j, tl);
+  // İki sütun: liste ikiye bölünür, sütunlar yan yana
+  const tumG = W - PDF.k - PDF.sx, ara = 5;
+  const sutunlar = PDF.iki && liste.length > 3 ? [liste.slice(0, Math.ceil(liste.length / 2)), liste.slice(Math.ceil(liste.length / 2))] : [liste];
+  const sG = sutunlar.length > 1 ? (tumG - ara) / 2 : tumG;
+  const y0 = y; let yMax = y;
+  sutunlar.forEach((l, si) => {
+    const x = PDF.sx + si * (sG + ara);
+    let yy = y0;
+    l.forEach(([b, v]) => {
+      doc.setFont("DV", "normal"); doc.setFontSize(8.5 * o);
+      const ikiS = sutunlar.length > 1, sol = doc.splitTextToSize(String(b), sG * (ikiS ? 0.62 : 0.56));
+      doc.setFont("DV", "bold"); doc.setFontSize(9 * o);
+      const sag = doc.splitTextToSize(String(v), sG * (ikiS ? 0.36 : 0.42));
+      const h = Math.max(sol.length, sag.length) * 4.2 * o + 3.2 * a;
+      if(sutunlar.length === 1) yy = pdfYer(doc, yy, h);
+      const by = 1.6 * a + 2.7 * o;
+      doc.setFont("DV", "normal"); doc.setFontSize(8.5 * o); doc.setTextColor(...PDF.gri); doc.text(sol, x + 2, yy + by);
+      doc.setFont("DV", "bold"); doc.setFontSize(9 * o); doc.setTextColor(...PDF.koyu); doc.text(sag, x + sG - 2, yy + by, { align: "right" });
+      doc.setDrawColor(...PDF.cizgi); doc.setLineWidth(0.2); doc.line(x, yy + h, x + sG, yy + h);
+      yy += h;
+    });
+    yMax = Math.max(yMax, yy);
   });
-  return y + 8;
+  return yMax + 8 * a;
 }
 // Excel'de seçilen sütunlar Excel sırasıyla; İhale/Proje Bedeli de seçildiyse
 // kendi yerinde (₺ ile). Seçilmemişse listede yer almaz.
@@ -2132,8 +2144,22 @@ async function pdfIs(doc, j, bol){
     const HS = 66, ust = y - 4.5;
     if(harV){ await pdfHarita(doc, j, PDF.k, ust, HS); PDF.sx = PDF.k + HS + 7; }
     const sayfa = doc.getNumberOfPages();
-    if(bol.par && parVar(j)) y = pdfParasal(doc, j, y);
-    if(bol.bilgi) y = pdfBilgi(doc, j, y);
+    // İhale Bilgileri ve KM Bilgileri ilk sayfaya sığsın: önce aralıklar,
+    // sonra yazı (en az ~7,5 punto) küçültülür; yetmezse İhale listesi iki
+    // sütuna bölünür; o da yetmezse normal boyutla sonraki sayfaya geçilir.
+    const sxIlk = PDF.sx, Hs = doc.internal.pageSize.getHeight() - PDF.alt;
+    const ciz = (d, yy) => { PDF.sx = sxIlk; if(bol.par && parVar(j)) yy = pdfParasal(d, j, yy); if(bol.bilgi) yy = pdfBilgi(d, j, yy); return yy; };
+    const sahte = new Proxy(doc, { get(t, p){ if(["text", "rect", "line", "addImage", "setFillColor", "setDrawColor", "setTextColor", "setLineWidth", "addPage"].includes(p)) return () => {}; const v = t[p]; return typeof v === "function" ? v.bind(t) : v; } });
+    const adimlar = [[1, 1, false], [1, .88, false], [.95, .8, false], [.92, .74, false], [.88, .68, false], [.95, .8, true], [.88, .68, true]];
+    let sec = [1, 1, false];
+    for(const [o, a, iki] of adimlar){
+      Object.assign(PDF, { o, a, iki, olcum: true });
+      const son = ciz(sahte, y) - 6 * a;
+      if(son <= Hs){ sec = [o, a, iki]; break; }
+    }
+    Object.assign(PDF, { o: sec[0], a: sec[1], iki: sec[2], olcum: false });
+    y = ciz(doc, y);
+    Object.assign(PDF, { o: 1, a: 1, iki: false });
     if(harV && doc.getNumberOfPages() === sayfa) y = Math.max(y, ust + HS + 6);
     PDF.sx = PDF.k;
   }
