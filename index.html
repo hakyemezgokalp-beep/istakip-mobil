@@ -427,8 +427,11 @@ main.dolu > .pad{ display:flex; flex-direction:column; }
 .hat3bic{ position:absolute !important; inset:0; }
 .hatv.uc .solk, .hatv.uc .dserit, .hatv.uc .konumkart{ display:none !important; }
 .sagk .kuz{ font-size:12px !important; font-weight:800; color:#334155; }
+.hatv:not(.uc) .sagk .egm{ display:none !important; }
+.uc-etiket{ background:rgba(15,23,42,.82); color:#fff; font-size:10.5px; font-weight:700; padding:2px 6px; border-radius:6px; white-space:nowrap; pointer-events:none; }
 .uc-pop .maplibregl-popup-content{ padding:0; border-radius:14px; box-shadow:0 10px 26px rgba(0,0,0,.35); overflow:hidden; }
 .uc-pop .maplibregl-popup-tip{ display:none; }
+.uc-pop .dpop{ padding:10px 12px; min-width:190px; }
 .solk{ position:absolute; left:12px; right:72px; top:calc(152px + env(safe-area-inset-top)); z-index:999; display:flex; flex-direction:column; align-items:flex-start; gap:6px; pointer-events:none; }
 .solk .hatnot{ position:static !important; max-width:100% !important; }
 .sagk{ position:absolute; right:12px; top:calc(110px + env(safe-area-inset-top)); z-index:1000; display:flex; flex-direction:column; gap:8px; align-items:flex-end; }
@@ -463,8 +466,8 @@ main.dolu > .pad{ display:flex; flex-direction:column; }
 .dserit b{ font-size:12.5px; }
 .dserit button{ border:none; background:none; color:#1d4ed8; font-weight:800; font-size:11.5px; padding:0; white-space:nowrap; }
 .dserit .lg{ display:flex; align-items:center; gap:6px; margin-top:6px; font-size:10.5px; color:#64748b; }
-.dserit .lg i{ flex:1; height:6px; border-radius:3px; background:linear-gradient(90deg,#1d4ed8,#60a5fa,#cbd5e1); }
-.dkume{ display:flex; align-items:center; justify-content:center; border-radius:50%; color:#fff; font-weight:800; font-size:12px; border:2px solid #fff; box-shadow:0 0 0 5px rgba(29,78,216,.25); }
+.dserit .lg i{ flex:1; height:6px; border-radius:3px; background:linear-gradient(90deg,#ea580c,#fb923c,#fed7aa); }
+.dkume{ display:flex; align-items:center; justify-content:center; border-radius:50%; color:#fff; font-weight:800; font-size:12px; border:2px solid #fff; box-shadow:0 0 0 5px rgba(234,88,12,.25); }
 .dpop b{ display:block; font-size:12.5px; margin-bottom:4px; }
 .dpop div{ display:flex; justify-content:space-between; gap:14px; font-size:11.5px; color:#64748b; } .dpop div em{ font-style:normal; color:#111827; font-weight:700; }
 /* drone: yumuşak yanıp sönme */
@@ -718,7 +721,8 @@ const IKP = {
   yagmur: '<path d="M6 14h11a4 4 0 0 0 0-8 5 5 0 0 0-9.5 2A3.5 3.5 0 0 0 6 14z"/><path d="M8 17l-1 3M12 17l-1 3M16 17l-1 3"/>',
   kmzYok: '<path d="M4 19c3-1 4-5 7-6s5 1 9-8" stroke-dasharray="2.5 3"/><path d="M3 3l18 18"/>',
   araYok: '<circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5M8.5 11h5"/>',
-  geri: '<path d="M15 5l-7 7 7 7"/>'
+  geri: '<path d="M15 5l-7 7 7 7"/>',
+  egim: '<path d="M3 18h18"/><path d="M5 18L12 6l7 12" opacity=".5"/><path d="M12 6v12"/>'
 };
 const IK = (ad, cls) => `<svg class="ik${cls ? " " + cls : ""}" viewBox="0 0 24 24" aria-hidden="true">${IKP[ad] || ""}</svg>`;
 
@@ -1231,7 +1235,7 @@ let kat = null;
 async function hatGoster(id, korun){
   const j = byId(id); if(!j || !j.hat) return;
   if(!korun){ hatMod = "2b"; hatTum = false; ucKam = null; }
-  else if(uc){ const mp = uc.map; ucKam = { center: mp.getCenter(), zoom: mp.getZoom(), pitch: mp.getPitch(), bearing: mp.getBearing() }; }
+  else if(uc){ ucKam = uc.kamera(); }
   try{ await Promise.all([agirHazir(), leafletHazir()]); }catch(e){ bildir(e.message); return; }
   hatKapat();
   hatIs = j;
@@ -1242,7 +1246,7 @@ async function hatGoster(id, korun){
 <div class="hr2"><div class="hara" id="hara"><button data-hara aria-label="İş ara">${IK("ara")}</button><input id="hara2" type="search" placeholder="İş ara…" autocomplete="off"></div><button class="htum${hatTum ? " on" : ""}" data-htum>${IK("lejant")}Tüm İşler</button><span class="hsp"></span><div class="hseg"><button data-hmod="2b"${hatMod === "2b" ? ' class="on"' : ""}>2B</button><button data-hmod="3b"${hatMod === "3b" ? ' class="on"' : ""}>3B</button></div></div><div class="honer" id="honer2"></div></div>
 <div class="hatmap etiketsiz" id="hatmap"></div><div class="hat3b" id="hat3b" hidden></div>
 <div class="katman"><button data-katman="sokak">Sokak</button><button data-katman="uydu" class="on">Uydu</button></div>
-<div class="sagk">${katVar ? `<button class="kat" data-katlar>${IK("katman")}Katmanlar<i id="katsay">0</i></button>` : ""}<button data-konumum aria-label="Konumum"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg></button><button data-yola aria-label="Yol hattına dön">${IK("yol")}</button><button data-olc aria-label="Mesafe ölç">${IK("cetvel")}</button><button data-yt="${esc(j.id)}" aria-label="Yol tarifi">${IK("yt")}</button><button class="kuz" data-kuzey aria-label="Kuzeyi yukarı al">K↑</button></div>
+<div class="sagk">${katVar ? `<button class="kat" data-katlar>${IK("katman")}Katmanlar<i id="katsay">0</i></button>` : ""}<button data-konumum aria-label="Konumum"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg></button><button data-yola aria-label="Yol hattına dön">${IK("yol")}</button><button data-olc aria-label="Mesafe ölç">${IK("cetvel")}</button><button data-yt="${esc(j.id)}" aria-label="Yol tarifi">${IK("yt")}</button><button class="kuz" data-kuzey aria-label="Kuzeyi yukarı al">K↑</button><button class="egm" data-egim aria-label="Eğik / tepeden">${IK("egim")}</button></div>
 <div class="solk"><div class="hatnot" id="hatnot" style="display:none">Arka plan haritası yüklenemedi (internet yok olabilir). Yol çizgileri ve KM'ler yine de gösteriliyor.</div><div class="chips" id="chips"></div></div>
 <div class="dserit" id="dserit" style="display:none"></div>
 <div class="konumkart" id="konumkart" style="display:none"><span class="nok"></span><div><b id="konumb"></b><small id="konums"></small></div></div>`;
@@ -1287,6 +1291,7 @@ async function hatGoster(id, korun){
   konumBaslat(j, m, sinir);
   hatSinir = sinir;
   m.on("contextmenu", e => basiliMenu(e.latlng.lat, e.latlng.lng, false));
+  m.on("popupclose", () => droneVurguSil());
   if(hatTum) tumIslerCiz();
   if(hatMod === "3b") hat3bAc();
 }
@@ -1411,11 +1416,27 @@ function droneSuz(){
 }
 function yasRenk(t){
   const g = t ? (Date.now() - t) / 86400000 : 9999;
-  return g <= 31 ? "#1d4ed8" : g <= 92 ? "#3b82f6" : g <= 183 ? "#60a5fa" : g <= 365 ? "#93c5fd" : "#cbd5e1";
+  return g <= 31 ? "#ea580c" : g <= 92 ? "#f97316" : g <= 183 ? "#fb923c" : g <= 365 ? "#fdba74" : "#fed7aa";
 }
 function dronePop(u){
   const d = u.t ? new Date(u.t) : null;
-  return `<div class="dpop"><b>${IK("drone")} Drone uçuşu</b><div>Tarih <em>${d ? `${tarihKisa(u.t)} ${p2(d.getHours())}:${p2(d.getMinutes())}` : "–"}</em></div><div>Süre <em>${u.s ? Math.max(1, Math.round(u.s / 60)) + " dk" : "–"}</em></div><div>Mesafe <em>${u.m ? (u.m >= 1000 ? (u.m / 1000).toLocaleString("tr-TR", { maximumFractionDigits: 1 }) + " km" : u.m + " m") : "–"}</em></div><div>Klasör <em>${esc(u.k || "–")}</em></div></div>`;
+  const yk = (u.r || []).map(p => p[2]).filter(Number.isFinite);
+  const enY = yk.length ? Math.round(Math.max(...yk)) : null;
+  return `<div class="dpop"><b>${IK("drone")} Drone uçuşu</b><div>Tarih <em>${d ? `${tarihKisa(u.t)} · ${p2(d.getHours())}:${p2(d.getMinutes())}` : "–"}</em></div><div>Süre <em>${u.s ? Math.max(1, Math.round(u.s / 60)) + " dk" : "–"}</em></div><div>Mesafe <em>${u.m ? (u.m >= 1000 ? (u.m / 1000).toLocaleString("tr-TR", { maximumFractionDigits: 1 }) + " km" : u.m + " m") : "–"}</em></div>${enY !== null ? `<div>En yüksek <em>${enY} m</em></div>` : ""}</div>`;
+}
+// Uçuşa (nokta ya da rota) dokununca kart; dokunulan rota öne çıkar
+function droneKart(i, ll){
+  const u = kat && kat.ucuslar && kat.ucuslar[i]; if(!u) return;
+  kat.secUcus = i;
+  if(kat.droneGrup) kat.droneGrup.eachLayer(ly => { if(ly.options.ucusId == null || !ly.setStyle) return; const sec = ly.options.ucusId === i; if(ly instanceof L.CircleMarker) ly.setStyle({ fillOpacity: sec ? 1 : .25, opacity: sec ? 1 : .3 }); else ly.setStyle({ opacity: sec ? 1 : .2, weight: sec ? 5 : 2.5 }); });
+  if(uc){ uc.vurgu(i); uc.popup(ll, dronePop(u)); }
+  else if(hatHarita) L.popup({ closeButton: false, offset: [0, -4] }).setLatLng(ll).setContent(dronePop(u)).openOn(hatHarita);
+}
+function droneVurguSil(){
+  if(!kat || kat.secUcus == null) return;
+  kat.secUcus = null;
+  if(kat.droneGrup) kat.droneGrup.eachLayer(ly => { if(ly.options.ucusId == null || !ly.setStyle) return; if(ly instanceof L.CircleMarker) ly.setStyle({ fillOpacity: 1, opacity: 1 }); else ly.setStyle({ opacity: 1, weight: 2.5 }); });
+  if(uc){ uc.vurgu(null); uc.popupKapat(); }
 }
 function seritCiz(){
   const m = hatHarita; if(!m || !kat) return;
@@ -1436,7 +1457,8 @@ function droneNoktalar(){
   const g = L.layerGroup();
   // rotalar (masaüstünde çözülmüş olanlar)
   // rotalar ince çizilir ve yumuşak yanıp söner; alttaki iş hattı görünür kalır
-  l.forEach(u => { if(u.r) L.polyline(u.r, { color: yasRenk(u.t), weight: 2.5, opacity: 1, pane: "drone", renderer: kat.rDrone, interactive: false, className: "dyan", uc3bYuk: true }).addTo(g); });
+  kat.ucuslar = l; kat.secUcus = null;
+  l.forEach((u, i) => { if(u.r) L.polyline(u.r, { color: yasRenk(u.t), weight: 2.5, opacity: 1, pane: "drone", renderer: kat.rDrone, className: "dyan", uc3bYuk: true, ucusId: i }).on("click", e => { L.DomEvent.stopPropagation(e); droneKart(i, e.latlng); }).addTo(g); });
   // uzaklaştırınca yakın noktalar tek yuvarlakta toplanır
   const z = m.getZoom(), kume = [];
   l.forEach(u => {
@@ -1446,14 +1468,14 @@ function droneNoktalar(){
   });
   kume.forEach(k => {
     if(k.u.length === 1){
-      const u = k.u[0];
-      L.circleMarker([u.a, u.o], { radius: 7, color: "#fff", weight: 2, fillColor: yasRenk(u.t), fillOpacity: 1, pane: "drone", renderer: kat.rDrone, className: "dyan" }).bindPopup(dronePop(u)).addTo(g);
+      const u = k.u[0], i = l.indexOf(u);
+      L.circleMarker([u.a, u.o], { radius: 7, color: "#fff", weight: 2, fillColor: yasRenk(u.t), fillOpacity: 1, pane: "drone", renderer: kat.rDrone, className: "dyan", ucusId: i }).on("click", e => { L.DomEvent.stopPropagation(e); droneKart(i, e.latlng); }).addTo(g);
     }else{
       const n = k.u.length, r = Math.min(40, 24 + n);
       const enYeni = k.u.reduce((a, b) => (b.t || 0) > (a.t || 0) ? b : a);
       const lat = k.u.reduce((s, u) => s + u.a, 0) / n, lon = k.u.reduce((s, u) => s + u.o, 0) / n;
       L.marker([lat, lon], { icon: L.divIcon({ className: "", html: `<div class="dkume dyan" style="width:${r}px;height:${r}px;background:${yasRenk(enYeni.t)}">${n}</div>`, iconSize: [r, r] }) })
-        .on("click", () => m.fitBounds(k.u.map(u => [u.a, u.o]), { padding: [60, 60], maxZoom: 17 })).addTo(g);
+        .on("click", () => { const pts = k.u.map(u => [u.a, u.o]); if(uc) uc.git(pts); else m.fitBounds(pts, { padding: [60, 60], maxZoom: 17 }); }).addTo(g);
     }
   });
   g.addTo(m); kat.droneGrup = g;
@@ -1936,25 +1958,26 @@ function pdfYer(doc, y, h){
   return PDF.ust;
 }
 // İşin sabit kutusu (her işte bir kez): iş adı, yüklenici, kontrol şefi, il, tarihler
+// İşin başlığı (her işte bir kez): sade — iş adı, altında tek satırda
+// Yüklenici · Kontrol Şefi · İl, altında ince çizgi
 function pdfKutu(doc, j, y){
   const W = doc.internal.pageSize.getWidth(), gen = W - 2 * PDF.k;
-  doc.setFont("DV", "bold"); doc.setFontSize(13);
-  const adS = doc.splitTextToSize(j.ad, gen - 10);
-  const alanlar = [["Yüklenici", j.firma], ["Kontrol Şefi", j.sef], ["İl", j.il.join(" · ")]];
-  const satir = Math.ceil(alanlar.length / 2), h = 8 + adS.length * 5.6 + satir * 10 + 2;
-  doc.setFillColor(255, 247, 237); doc.setDrawColor(254, 215, 170); doc.setLineWidth(0.4);
-  doc.roundedRect(PDF.k, y, gen, h, 2.5, 2.5, "FD");
-  doc.setFillColor(...PDF.turuncu); doc.rect(PDF.k, y, 1.4, h, "F");
-  doc.setTextColor(...PDF.koyu); doc.text(adS, PDF.k + 5, y + 7.5);
-  let yy = y + 8 + adS.length * 5.6;
+  doc.setFont("DV", "bold"); doc.setFontSize(14); doc.setTextColor(...PDF.koyu);
+  const adS = doc.splitTextToSize(j.ad, gen);
+  doc.text(adS, PDF.k, y + 5);
+  let yy = y + 5 + (adS.length - 1) * 6 + 6;
+  const alanlar = [["Yüklenici", j.firma], ["Kontrol Şefi", j.sef], ["İl", j.il.join(", ")]].filter(([, v]) => v);
+  let x = PDF.k;
+  doc.setFontSize(8.5);
   alanlar.forEach(([e, v], i) => {
-    const x = PDF.k + 5 + (i % 2) * (gen / 2);
-    const ry = yy + Math.floor(i / 2) * 10;
-    doc.setFont("DV", "normal"); doc.setFontSize(7.5); doc.setTextColor(...PDF.gri); doc.text(e, x, ry);
-    doc.setFont("DV", "bold"); doc.setFontSize(9.5); doc.setTextColor(...PDF.koyu);
-    doc.text(doc.splitTextToSize(v || "–", gen / 2 - 8)[0], x, ry + 4.4);
+    if(i){ doc.setFont("DV", "normal"); doc.setTextColor(203, 213, 225); doc.text("|", x + 1.6, yy); x += 5; }
+    doc.setFont("DV", "normal"); doc.setTextColor(...PDF.gri); doc.text(e + ": ", x, yy); x += doc.getTextWidth(e + ": ");
+    doc.setFont("DV", "bold"); doc.setTextColor(55, 65, 81); doc.text(String(v), x, yy); x += doc.getTextWidth(String(v));
   });
-  return y + h + 7;
+  yy += 3.5;
+  doc.setDrawColor(...PDF.turuncu); doc.setLineWidth(0.6); doc.line(PDF.k, yy, PDF.k + 18, yy);
+  doc.setDrawColor(...PDF.cizgi); doc.setLineWidth(0.3); doc.line(PDF.k + 18, yy, W - PDF.k, yy);
+  return yy + 8;
 }
 function pdfTablo(doc, y, basliklar, satirlar, opt){
   const W = doc.internal.pageSize.getWidth();
@@ -2086,7 +2109,7 @@ async function pdfHarita(doc, j, x, y, S){
   let veri; try{ veri = c.toDataURL("image/jpeg", 0.82); }catch(e){ veri = null; }
   doc.setFillColor(207, 214, 222); doc.rect(x, y, S, S, "F");
   if(veri) doc.addImage(veri, "JPEG", x, y, S, S);
-  doc.setDrawColor(203, 213, 225); doc.setLineWidth(0.4); doc.rect(x, y, S, S, "S");
+  doc.setDrawColor(0, 0, 0); doc.setLineWidth(0.5); doc.rect(x, y, S, S, "S");
 }
 // İlk (boş) sayfa kullanılır; sonrakiler eklenir
 function yeniSayfa(doc, yatay){
@@ -2139,7 +2162,8 @@ async function pdfIs(doc, j, bol){
 // genel KMZ'ler, tüm işler, drone rotaları) MapLibre ile uydu görüntüsü +
 // gerçek arazi üstünde eğik görünümde çizilir. Yüksekliği olan drone
 // rotaları (TXT'deki kalkışa göre yükseklik) havada, yere inen yarı saydam
-// bir perdeyle gösterilir. Uydu: Esri; arazi: AWS Terrarium (anahtarsız).
+// bir perdeyle gösterilir ve yanıp söner. KMZ nokta adları / KM etiketleri
+// yaklaşınca görünür. Uydu: Esri; arazi: AWS Terrarium (anahtarsız).
 // Veri hiçbir yere gönderilmez; yalnız harita karoları indirilir.
 const UC3B = (() => {
   let yukleme = null;
@@ -2153,9 +2177,10 @@ const UC3B = (() => {
     return yukleme;
   }
   const renk = c => { const s = String(c || "#dc2626"); const m = s.match(/rgba?\(([^)]+)\)/); if(!m) return s; const p = m[1].split(",").map(x => x.trim()); return `rgb(${p[0]},${p[1]},${p[2]})`; };
-  // Leaflet katmanlarını GeoJSON'a çevir
+  const metin = t => { if(typeof t === "string"){ const d = document.createElement("div"); d.innerHTML = t; return (d.textContent || "").trim(); } return t && t.textContent ? t.textContent.trim() : ""; };
+  // Leaflet katmanlarını GeoJSON'a çevir (+ HTML işaretler)
   function topla(lm){
-    const cizgi = [], nokta = [], serit = [], perde = [];
+    const cizgi = [], nokta = [], serit = [], perde = [], etiket = [], isaret = [];
     const isle = ly => {
       if(ly instanceof L.LayerGroup){ ly.eachLayer(isle); return; }
       if(ly instanceof L.Polyline && !(ly instanceof L.Polygon)){
@@ -2165,19 +2190,20 @@ const UC3B = (() => {
         if(ll.length < 2) return;
         const o = ly.options || {};
         if(o.uc3b === false) return;
+        const ucusId = o.ucusId == null ? -1 : o.ucusId;
         // yalnız drone rotaları (uc3bYuk) havada çizilir; KMZ'deki yükseklikler yok sayılır
         const yuk = o.uc3bYuk && ll.every(p => Number.isFinite(p.alt));
-        const props = { renk: renk(o.color), gen: Math.max(1, Number(o.weight) || 3), op: o.opacity == null ? 1 : Number(o.opacity), isId: o.isId || "" };
+        const props = { renk: renk(o.color), gen: Math.max(1, Number(o.weight) || 3), op: o.opacity == null ? 1 : Number(o.opacity), isId: o.isId || "", ucusId, yan: o.uc3bYuk ? 1 : 0 };
         if(yuk){
           // havada şerit: her parça için ince bir dörtgen, yüksekliğinde
           for(let i = 1; i < ll.length; i++){
             const a = ll[i - 1], b = ll[i], k = Math.cos(a.lat * Math.PI / 180);
-            const dx = (b.lng - a.lng) * k, dy = b.lat - a.lat, L2 = Math.hypot(dx, dy) || 1e-9, w = 2.2 / 111320;
+            const dx = (b.lng - a.lng) * k, dy = b.lat - a.lat, L2 = Math.hypot(dx, dy) || 1e-9, w = 2.6 / 111320;
             const nx = -dy / L2 * w / k, ny = dx / L2 * w;
             const poly = [[a.lng + nx, a.lat + ny], [b.lng + nx, b.lat + ny], [b.lng - nx, b.lat - ny], [a.lng - nx, a.lat - ny], [a.lng + nx, a.lat + ny]];
             const h = (a.alt + b.alt) / 2;
-            serit.push({ type: "Feature", properties: { renk: props.renk, alt: Math.max(2, h - 1.2), ust: Math.max(3, h + 1.2) }, geometry: { type: "Polygon", coordinates: [poly] } });
-            if(i % 2 === 0) perde.push({ type: "Feature", properties: { renk: props.renk, ust: Math.max(2, h) }, geometry: { type: "Polygon", coordinates: [poly] } });
+            serit.push({ type: "Feature", properties: { renk: props.renk, alt: Math.max(2, h - 1.4), ust: Math.max(3, h + 1.4), ucusId }, geometry: { type: "Polygon", coordinates: [poly] } });
+            if(i % 3 === 0) perde.push({ type: "Feature", properties: { renk: props.renk, ust: Math.max(2, h), ucusId }, geometry: { type: "Polygon", coordinates: [poly] } });
           }
           return;
         }
@@ -2191,23 +2217,36 @@ const UC3B = (() => {
       }
       if(ly instanceof L.CircleMarker){
         const o = ly.options || {}, p = ly.getLatLng();
-        nokta.push({ type: "Feature", properties: { renk: renk(o.fillColor || o.color), r: Math.max(3, Number(o.radius) || 5) }, geometry: { type: "Point", coordinates: [p.lng, p.lat] } });
+        const yan = /dyan/.test(o.className || "") ? 1 : 0;
+        nokta.push({ type: "Feature", properties: { renk: renk(o.fillColor || o.color), r: Math.max(3, Number(o.radius) || 5), yan, ucusId: o.ucusId == null ? -1 : o.ucusId }, geometry: { type: "Point", coordinates: [p.lng, p.lat] } });
+        const tt = ly.getTooltip && ly.getTooltip();
+        if(tt && tt.options.permanent){ const t = metin(tt.getContent()); if(t) etiket.push({ ll: [p.lng, p.lat], t }); }
+        if(o.ucusId != null) isaret.push({ ly, tik: true });
+        return;
+      }
+      // HTML işaretler (ör. drone gruplama balonları): aynı görünüm 3B'de de
+      if(ly instanceof L.Marker){
+        const ic = ly.options.icon;
+        if(ic && ic.options && ic.options.html && ly.options.uc3b !== false) isaret.push({ ly, html: ic.options.html, boy: ic.options.iconSize });
       }
     };
     lm.eachLayer(ly => { if(!(ly instanceof L.TileLayer)) isle(ly); });
     const fc = f => ({ type: "FeatureCollection", features: f });
-    return { cizgi: fc(cizgi), nokta: fc(nokta), serit: fc(serit), perde: fc(perde) };
+    return { cizgi: fc(cizgi), nokta: fc(nokta), serit: fc(serit), perde: fc(perde), etiket, isaret };
   }
-  // container: boş bir div; lm: Leaflet haritası; secenek: { kok, onBasili(ll, ekranNoktasi), onIs(isId, ll), basla:[[lat,lng],...] }
+  // container: boş bir div; lm: Leaflet haritası
+  // secenek: { kok, onBasili(ll), onIs(isId, ll), onUcus(ucusId, ll), onBos(), onHareket(kamera), basla:[[lat,lng],...], kamera:{center:[lat,lng], zoom, bearing} (Leaflet cinsinden) }
   async function ac(container, lm, secenek){
     await hazir(secenek.kok || "");
     const ml = window.maplibregl;
     const map = new ml.Map({
       container, attributionControl: { compact: true },
+      // akıcılık: telefonda en fazla 2x çözünürlük, solma animasyonu yok
+      pixelRatio: Math.min(window.devicePixelRatio || 1, 2), fadeDuration: 0, maxTileCacheSize: 160, renderWorldCopies: false,
       style: { version: 8,
         sources: {
           uydu: { type: "raster", tiles: ["https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"], tileSize: 256, maxzoom: 18, attribution: "Esri" },
-          dem: { type: "raster-dem", tiles: ["https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png"], tileSize: 256, maxzoom: 14, encoding: "terrarium", attribution: "Arazi: Mapzen/AWS" }
+          dem: { type: "raster-dem", tiles: ["https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png"], tileSize: 256, maxzoom: 12, encoding: "terrarium", attribution: "Arazi: Mapzen/AWS" }
         },
         layers: [{ id: "uydu", type: "raster", source: "uydu" }],
         sky: { "sky-color": "#9fc0e6", "horizon-color": "#dbe8f5", "sky-horizon-blend": .6 }
@@ -2216,32 +2255,84 @@ const UC3B = (() => {
     });
     let hazirOldu;
     const yuklendi = new Promise(ok => hazirOldu = ok);
+    let secUcus = -1, yanAcik = true, yanZaman = null;
+    const etiketler = [], isaretler = [];
+    let son = null;
     map.on("load", () => {
       map.setTerrain({ source: "dem", exaggeration: 1.3 });
-      map.addLayer({ id: "hillshade", type: "hillshade", source: "dem", paint: { "hillshade-exaggeration": .25, "hillshade-shadow-color": "#1e293b" } });
-      const v = topla(lm);
-      map.addSource("perde", { type: "geojson", data: v.perde });
-      map.addSource("serit", { type: "geojson", data: v.serit });
-      map.addSource("cizgi", { type: "geojson", data: v.cizgi });
-      map.addSource("nokta", { type: "geojson", data: v.nokta });
-      map.addLayer({ id: "cizgi-golge", type: "line", source: "cizgi", paint: { "line-color": "#000", "line-opacity": .25, "line-width": ["+", ["get", "gen"], 3], "line-blur": 2 } });
+      son = topla(lm);
+      map.addSource("perde", { type: "geojson", data: son.perde });
+      map.addSource("serit", { type: "geojson", data: son.serit });
+      map.addSource("cizgi", { type: "geojson", data: son.cizgi });
+      map.addSource("nokta", { type: "geojson", data: son.nokta });
+      map.addLayer({ id: "cizgi-golge", type: "line", source: "cizgi", filter: ["==", ["get", "yan"], 0], paint: { "line-color": "#000", "line-opacity": .25, "line-width": ["+", ["get", "gen"], 3], "line-blur": 2 } });
       map.addLayer({ id: "cizgi", type: "line", source: "cizgi", layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": ["get", "renk"], "line-width": ["get", "gen"], "line-opacity": ["get", "op"] } });
       map.addLayer({ id: "nokta", type: "circle", source: "nokta", paint: { "circle-color": ["get", "renk"], "circle-radius": ["*", ["get", "r"], .8], "circle-stroke-color": "#fff", "circle-stroke-width": 1.5, "circle-pitch-alignment": "map" } });
-      map.addLayer({ id: "perde", type: "fill-extrusion", source: "perde", paint: { "fill-extrusion-color": ["get", "renk"], "fill-extrusion-base": 0, "fill-extrusion-height": ["get", "ust"], "fill-extrusion-opacity": .18 } });
+      map.addLayer({ id: "perde", type: "fill-extrusion", source: "perde", paint: { "fill-extrusion-color": ["get", "renk"], "fill-extrusion-base": 0, "fill-extrusion-height": ["get", "ust"], "fill-extrusion-opacity": .16 } });
       map.addLayer({ id: "serit", type: "fill-extrusion", source: "serit", paint: { "fill-extrusion-color": ["get", "renk"], "fill-extrusion-base": ["get", "alt"], "fill-extrusion-height": ["get", "ust"], "fill-extrusion-opacity": .95 } });
+      htmlKur();
+      yanBasla();
       hazirOldu();
     });
     // Arazi karoları gelmezse (internet / erişim sorunu) araziyi kapat: eksik
     // karo yüksekliği bozuk okunup çizgileri aşağı çekiyor.
-    let demHata = 0;
-    map.on("error", e => { if(e && e.sourceId === "dem" && ++demHata === 2){ try{ map.setTerrain(null); if(map.getLayer("hillshade")) map.removeLayer("hillshade"); }catch(_){} } });
+    let demHata = 0, hedef = null;
+    map.on("error", e => { if(e && e.sourceId === "dem" && ++demHata === 2){ try{ map.setTerrain(null); }catch(_){} if(hedef && Date.now() - hedef.t < 4000) setTimeout(() => gitIc(hedef.ll, false), 50); } });
+    // Drone: yumuşak yanıp sönme (yalnız drone katmanları; seçili uçuş varken durur)
+    function yanBasla(){
+      clearInterval(yanZaman);
+      yanZaman = setInterval(() => {
+        if(!map.getLayer("serit") || secUcus >= 0) return;
+        yanAcik = !yanAcik;
+        const o = yanAcik ? .95 : .3;
+        map.setPaintProperty("serit", "fill-extrusion-opacity", o);
+        map.setPaintProperty("perde", "fill-extrusion-opacity", yanAcik ? .16 : .05);
+        map.setPaintProperty("cizgi", "line-opacity", ["case", ["==", ["get", "yan"], 1], yanAcik ? 1 : .25, ["get", "op"]]);
+        map.setPaintProperty("nokta", "circle-opacity", ["case", ["==", ["get", "yan"], 1], yanAcik ? 1 : .3, 1]);
+      }, 1200);
+    }
+    // HTML: KMZ adları / KM etiketleri (yaklaşınca) ve drone balonları
+    function htmlKur(){
+      etiketler.splice(0).forEach(m => m.remove());
+      isaretler.splice(0).forEach(m => m.remove());
+      if(!son) return;
+      son.isaret.forEach(x => {
+        if(x.tik) return;   // tek uçuş noktaları dairedir, tıklama aşağıda
+        const d = document.createElement("div"); d.innerHTML = x.html; d.style.cursor = "pointer";
+        const mk = new ml.Marker({ element: d }).setLngLat([x.ly.getLatLng().lng, x.ly.getLatLng().lat]).addTo(map);
+        d.addEventListener("click", ev => { ev.stopPropagation(); x.ly.fire("click", { latlng: x.ly.getLatLng(), uc3b: true }); });
+        isaretler.push(mk);
+      });
+      etiketGuncelle();
+    }
+    function etiketGuncelle(){
+      etiketler.splice(0).forEach(m => m.remove());
+      if(!son || map.getZoom() < 12.5) return;
+      const b = map.getBounds();
+      let n = 0;
+      for(const e of son.etiket){
+        if(n >= 120) break;
+        if(!b.contains(e.ll)) continue;
+        const d = document.createElement("div"); d.className = "uc-etiket"; d.textContent = e.t;
+        etiketler.push(new ml.Marker({ element: d, anchor: "bottom", offset: [0, -8] }).setLngLat(e.ll).addTo(map));
+        n++;
+      }
+    }
+    map.on("moveend", () => { etiketGuncelle(); if(secenek.onHareket) secenek.onHareket(kamera()); });
     const sinirla = ll => { const b = new ml.LngLatBounds(); ll.forEach(p => b.extend([p[1], p[0]])); return b; };
-    if(secenek.basla && secenek.basla.length) map.fitBounds(sinirla(secenek.basla), { padding: 50, pitch: 60, bearing: -15, duration: 0, maxZoom: 16 });
-    // dokunma: çizgiye dokununca iş seçimi, basılı tutunca menü
+    // Leaflet ↔ MapLibre: yakınlık 1 eksik (512 piksellik karo), yön ters işaretli
+    const kamera = () => { const c = map.getCenter(); return { center: [c.lat, c.lng], zoom: map.getZoom() + 1, bearing: -map.getBearing() }; };
+    if(secenek.kamera) map.jumpTo({ center: [secenek.kamera.center[1], secenek.kamera.center[0]], zoom: Math.max(1, secenek.kamera.zoom - 1), bearing: -(secenek.kamera.bearing || 0), pitch: 60 });
+    else if(secenek.basla && secenek.basla.length) map.fitBounds(sinirla(secenek.basla), { padding: 50, pitch: 60, bearing: -15, duration: 0, maxZoom: 16 });
+    // dokunma: drone rotası/noktası → kart; iş hattı (Tüm İşler) → o işe git
     map.on("click", e => {
-      if(!secenek.onIs) return;
-      const f = map.queryRenderedFeatures([[e.point.x - 10, e.point.y - 10], [e.point.x + 10, e.point.y + 10]], { layers: ["cizgi"] }).find(x => x.properties.isId);
-      if(f) secenek.onIs(f.properties.isId, { lat: e.lngLat.lat, lng: e.lngLat.lng });
+      const kutu = [[e.point.x - 12, e.point.y - 12], [e.point.x + 12, e.point.y + 12]];
+      const ll = { lat: e.lngLat.lat, lng: e.lngLat.lng };
+      const u = map.queryRenderedFeatures(kutu, { layers: ["serit", "nokta", "cizgi"] }).find(x => x.properties.ucusId >= 0);
+      if(u && secenek.onUcus){ secenek.onUcus(u.properties.ucusId, ll); return; }
+      const f = map.queryRenderedFeatures(kutu, { layers: ["cizgi"] }).find(x => x.properties.isId);
+      if(f && secenek.onIs){ secenek.onIs(f.properties.isId, ll); return; }
+      if(secenek.onBos) secenek.onBos();
     });
     let tut = null, bas = null;
     const iptal = () => { clearTimeout(tut); tut = null; };
@@ -2250,17 +2341,35 @@ const UC3B = (() => {
     el.addEventListener("touchstart", e => { if(e.touches.length === 1) basla(e.touches[0].clientX, e.touches[0].clientY); else iptal(); }, { passive: true });
     el.addEventListener("touchmove", e => { if(bas && e.touches[0] && Math.hypot(e.touches[0].clientX - bas[0], e.touches[0].clientY - bas[1]) > 8) iptal(); }, { passive: true });
     el.addEventListener("touchend", iptal); el.addEventListener("touchcancel", iptal);
-    el.addEventListener("contextmenu", e => { e.preventDefault(); const r = el.getBoundingClientRect(); const pt = [e.clientX - r.left, e.clientY - r.top]; const ll = map.unproject(pt); if(secenek.onBasili) secenek.onBasili({ lat: ll.lat, lng: ll.lng }, pt); });
-    let popup = null, konumIsaret = null;
+    el.addEventListener("contextmenu", e => { e.preventDefault(); if(!secenek.onBasili) return; const r = el.getBoundingClientRect(); const pt = [e.clientX - r.left, e.clientY - r.top]; const ll = map.unproject(pt); secenek.onBasili({ lat: ll.lat, lng: ll.lng }, pt); });
+    let popup = null, konumIsaret = null, guncelZaman = null;
+    // arazi kapanırsa (karo hatası) yarım kalan uçuş yeniden yapılır
+    function gitIc(ll, ani){ if(!ll || !ll.length) return; hedef = { ll, t: Date.now() }; map.fitBounds(sinirla(ll), { padding: 50, pitch: Math.max(map.getPitch(), 45), bearing: map.getBearing(), duration: ani ? 0 : 2000, maxZoom: 16, essential: true }); }
     return {
-      map, yuklendi,
-      guncelle(){ yuklendi.then(() => { const v = topla(lm); ["cizgi", "nokta", "serit", "perde"].forEach(k => map.getSource(k) && map.getSource(k).setData(v[k])); }); },
-      git(ll, ani){ if(!ll || !ll.length) return; map.fitBounds(sinirla(ll), { padding: 50, pitch: 60, bearing: map.getBearing(), duration: ani ? 0 : 2200, maxZoom: 16, essential: true }); },
-      kuzey(){ map.easeTo({ bearing: 0, duration: 600 }); },
+      map, yuklendi, kamera,
+      // art arda gelen güncellemeler tek seferde yapılır (akıcılık)
+      guncelle(){ clearTimeout(guncelZaman); guncelZaman = setTimeout(() => yuklendi.then(() => { son = topla(lm); ["cizgi", "nokta", "serit", "perde"].forEach(k => map.getSource(k) && map.getSource(k).setData(son[k])); htmlKur(); }), 120); },
+      git(ll, ani){ gitIc(ll, ani); },
+      // K↑: kuzey yukarı ve tepeden bakış
+      kuzey(){ map.easeTo({ bearing: 0, pitch: 0, duration: 700 }); },
+      // eğim düğmesi: eğik ↔ tepeden
+      egim(){ map.easeTo({ pitch: map.getPitch() > 20 ? 0 : 60, duration: 700 }); return map.getPitch() <= 20; },
+      vurgu(id){
+        secUcus = id == null ? -1 : id;
+        yuklendi.then(() => {
+          if(secUcus < 0){ map.setPaintProperty("serit", "fill-extrusion-color", ["get", "renk"]); map.setPaintProperty("serit", "fill-extrusion-opacity", .95); map.setPaintProperty("perde", "fill-extrusion-opacity", .16); map.setPaintProperty("cizgi", "line-opacity", ["get", "op"]); map.setPaintProperty("nokta", "circle-opacity", 1); return; }
+          const s = (a, b) => ["case", ["==", ["get", "ucusId"], secUcus], a, b];
+          map.setPaintProperty("serit", "fill-extrusion-opacity", 1);
+          map.setPaintProperty("serit", "fill-extrusion-color", s("#c2410c", ["get", "renk"]));
+          map.setPaintProperty("perde", "fill-extrusion-opacity", .1);
+          map.setPaintProperty("cizgi", "line-opacity", ["case", ["==", ["get", "yan"], 1], s(1, .2), ["get", "op"]]);
+          map.setPaintProperty("nokta", "circle-opacity", ["case", ["==", ["get", "yan"], 1], s(1, .25), 1]);
+        });
+      },
       konum(lat, lng){ if(!konumIsaret){ const d = document.createElement("div"); d.style.cssText = "width:16px;height:16px;border-radius:50%;background:#2563eb;border:3px solid #fff;box-shadow:0 0 0 3px rgba(37,99,235,.35)"; konumIsaret = new ml.Marker({ element: d }); } konumIsaret.setLngLat([lng, lat]).addTo(map); map.flyTo({ center: [lng, lat], zoom: Math.max(map.getZoom(), 15), duration: 1800 }); },
       popup(ll, html){ if(popup) popup.remove(); popup = new ml.Popup({ closeButton: false, className: "uc-pop", offset: 10, maxWidth: "260px" }).setLngLat([ll.lng, ll.lat]).setHTML(html).addTo(map); return popup; },
       popupKapat(){ if(popup){ popup.remove(); popup = null; } },
-      yokEt(){ iptal(); try{ map.remove(); }catch(e){} }
+      yokEt(){ iptal(); clearInterval(yanZaman); clearTimeout(guncelZaman); try{ map.remove(); }catch(e){} }
     };
   }
   return { ac, hazir };
@@ -2446,16 +2555,25 @@ async function hat3bAc(){
   if(olc) olcBitir();
   kap.hidden = false; kap.style.top = (document.querySelector(".hb2")?.offsetHeight || 100) + "px"; document.querySelector(".hatv .katman")?.style.setProperty("display", "none");
   document.getElementById("hatv")?.classList.add("uc");
+  hatHarita.closePopup();
+  // 2B'de bakılan yer (merkez, yakınlık, döndürme) korunur
+  const c = hatHarita.getCenter();
+  const kamera = ucKam || { center: [c.lat, c.lng], zoom: hatHarita.getZoom(), bearing: hatHarita.getBearing ? hatHarita.getBearing() : 0 };
+  const isDegisti = !!ucKam; ucKam = null;
   try{
     kap.innerHTML = '<div class="hat3bic"></div>';
-    uc = await UC3B.ac(kap.firstChild, hatHarita, { kok: "", basla: hatTum ? tumSinir() : hatSinir,
+    uc = await UC3B.ac(kap.firstChild, hatHarita, { kok: "", kamera,
       onBasili: (ll) => basiliMenu(ll.lat, ll.lng, true),
-      onIs: (id, ll) => { if(hatTum) tumSec(id, ll); } });
-    if(ucKam){ const k = ucKam, u = uc; ucKam = null; u.yuklendi.then(() => { if(uc !== u) return; u.map.jumpTo(k); setTimeout(() => uc === u && u.git(hatTum ? tumSinir() : hatSinir), 60); }); }
-  }catch(e){ bildir(e.message); hat2bAc(); }
+      onIs: (id) => { if(hatTum && id !== hatIs.id) hatGoster(id, true); },
+      onUcus: (i, ll) => droneKart(i, ll),
+      onBos: () => droneVurguSil(),
+      // 2B haritası 3B'yi arkadan izler: 2B'ye dönünce aynı yer, drone balonları da bu yakınlığa göre
+      onHareket: k => { if(!hatHarita) return; hatHarita.setView(k.center, k.zoom, { animate: false }); if(hatHarita.setBearing) hatHarita.setBearing(k.bearing); if(kat && kat.drone){ droneNoktalar(); if(uc) uc.guncelle(); } } });
+    if(isDegisti){ const u = uc; u.yuklendi.then(() => setTimeout(() => uc === u && u.git(hatSinir), 60)); }
+  }catch(e){ bildir(e.message); hatMod = "2b"; hatYenidenBaslik(); hat2bAc(); }
 }
 function hat2bAc(){
-  if(uc){ uc.yokEt(); uc = null; }
+  if(uc){ const k = uc.kamera(); uc.yokEt(); uc = null; if(hatHarita){ hatHarita.setView(k.center, k.zoom, { animate: false }); if(hatHarita.setBearing) hatHarita.setBearing(k.bearing); } }
   const kap = document.getElementById("hat3b"); if(kap){ kap.hidden = true; kap.innerHTML = ""; }
   document.querySelector(".hatv .katman")?.style.removeProperty("display");
   document.getElementById("hatv")?.classList.remove("uc");
@@ -2467,18 +2585,11 @@ function tumIslerCiz(){
   if(tumGrup){ m.removeLayer(tumGrup); tumGrup = null; }
   if(!hatTum) return;
   tumGrup = L.layerGroup().addTo(m);
-  ISLER.forEach(x => { if(!x.hat || x === hatIs) return; x.hat.cizgi.forEach(c => { if(c.p.length < 2) return; L.polyline(c.p, { color: c.r, weight: c.i ? 2 : 5, opacity: .6, isId: x.id }).on("click", e => { L.DomEvent.stopPropagation(e); tumSec(x.id, e.latlng); }).addTo(tumGrup); }); });
+  ISLER.forEach(x => { if(!x.hat || x === hatIs) return; x.hat.cizgi.forEach(c => { if(c.p.length < 2) return; L.polyline(c.p, { color: c.r, weight: c.i ? 2 : 5, opacity: .6, isId: x.id }).on("click", e => { L.DomEvent.stopPropagation(e); tumSec(x.id); }).addTo(tumGrup); }); });
   tumSecili = hatIs.id;
 }
-function tumSec(id, ll){
-  const j = byId(id); if(!j) return;
-  tumSecili = id;
-  if(tumGrup) tumGrup.eachLayer(p => p.setStyle({ opacity: p.options.isId === id ? 1 : .35, weight: p.options.isId === id ? 8 : (p.options.weight > 3 ? 4 : 2) }));
-  const html = `<div class="kmm"><div class="h"><i>${esc(j.ad)}</i><small>${esc(j.il.join(" · "))}${j.firma ? " · " + esc(j.firma) : ""}</small></div><button data-hgit="${esc(id)}">${IK("kmz")}Bu işin KMZ'sine git</button></div>`;
-  if(uc){ uc.guncelle(); uc.popup(ll, html); }
-  else if(hatHarita) L.popup({ closeButton: false, className: "kmpop", offset: [0, -4] }).setLatLng(ll).setContent(html).openOn(hatHarita);
-  hatYenidenBaslik();
-}
+// Tüm İşler: bir hatta dokununca doğrudan o işe gidilir (pencere yok)
+function tumSec(id){ if(byId(id) && (!hatIs || id !== hatIs.id)) hatGoster(id, true); }
 // Hatta (2B ya da 3B) basılı tutunca: KM + Buraya yol tarifi + koordinat
 function basiliMenu(lat, lng, uc3){
   const j = hatIs; if(!j) return;
@@ -2508,6 +2619,7 @@ document.addEventListener("click", e => {
   if(e.target.closest("[data-hara]")){ const h = document.getElementById("hara"); h.classList.toggle("acik"); if(h.classList.contains("acik")) setTimeout(() => document.getElementById("hara2")?.focus(), 50); else { document.getElementById("hara2").value = ""; document.getElementById("honer2").innerHTML = ""; } return; }
   const g = e.target.closest("[data-hgit]");
   if(g){ const id = g.dataset.hgit; const tum = hatTum; if(uc) uc.popupKapat(); if(hatHarita) hatHarita.closePopup(); hatGoster(id, true).then(() => { if(tum){ hatTum = true; } }); return; }
+  if(e.target.closest("[data-egim]")){ if(uc){ const tepe = uc.egim(); bildir(tepe ? "Eğik görünüm" : "Tepeden görünüm"); } return; }
   if(e.target.closest("[data-kuzey]")){ if(uc) uc.kuzey(); else if(hatHarita && hatHarita.setBearing) hatHarita.setBearing(0); return; }
 });
 // 3B'de: hatta dön, konumum ve ölçüm
