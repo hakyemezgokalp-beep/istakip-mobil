@@ -1928,53 +1928,55 @@ async function pdfPaylas(){
   bildir("PDF indirildi");
 }
 
-// ----- PDF sayfa düzeni -----
-const PDF = { sx: 14, k: 14, ust: 24, alt: 16, o: 1, a: 1, iki: false, olcum: false, turuncu: [234, 88, 12], koyu: [17, 24, 39], gri: [100, 116, 139], cizgi: [226, 232, 240] };
+// ----- PDF sayfa düzeni (tasarım 5: zebra satırlar) -----
+// Üstte yalnız iş adı (yüklenici parantez içinde); altında 16:9 harita
+// (sayfa genişliğinde, ortalı); haritanın altında solda İhale Bilgileri,
+// sağda KM Bilgileri. Altta kurum · birim | Kontrol Şefi, sağda tarih · sayfa.
+const PDF = { x0: 12, x1: 198, k: 12, ust: 9, alt: 13, o: 1, a: 1, olcum: false, zebra: 0, turuncu: [234, 88, 12], koyu: [17, 24, 39], gri: [100, 116, 139], cizgi: [226, 232, 240] };
 const BUYUK = s => String(s || "").toLocaleUpperCase("tr-TR");
-// Her sayfaya üst başlık ve alt bilgi (sayfa numarası)
+function pdfTam(doc){ PDF.x0 = PDF.k; PDF.x1 = doc.internal.pageSize.getWidth() - PDF.k; }
+// Her sayfaya alt bilgi: kurum · birim | Kontrol Şefi — sağda tarih · sayfa
 function pdfCerceve(doc){
   const n = doc.getNumberOfPages(), t = new Date();
   const tarihS = `${p2(t.getDate())}.${p2(t.getMonth() + 1)}.${t.getFullYear()}`;
   for(let i = 1; i <= n; i++){
     doc.setPage(i);
     const W = doc.internal.pageSize.getWidth(), H = doc.internal.pageSize.getHeight();
-    doc.setFillColor(...PDF.turuncu); doc.rect(0, 0, W, 2.2, "F");
-    doc.setFont("DV", "normal"); doc.setFontSize(8.5); doc.setTextColor(...PDF.gri);
-    doc.text(tarihS, W - PDF.k, 12, { align: "right" });
-    doc.setDrawColor(...PDF.cizgi); doc.setLineWidth(0.3); doc.line(PDF.k, 19, W - PDF.k, 19);
-    doc.line(PDF.k, H - 11, W - PDF.k, H - 11);
-    // Alt satır: kurum · birim | Kontrol Şefi (o sayfadaki işin)
-    doc.setFontSize(7.5);
+    doc.setDrawColor(...PDF.cizgi); doc.setLineWidth(0.3); doc.line(PDF.k, H - 10, W - PDF.k, H - 10);
+    doc.setFontSize(7.2);
     let x = PDF.k;
-    doc.setFont("DV", "bold"); doc.setTextColor(...PDF.koyu); doc.text("KARAYOLLARI 7. BÖLGE MÜDÜRLÜĞÜ", x, H - 6.5); x += doc.getTextWidth("KARAYOLLARI 7. BÖLGE MÜDÜRLÜĞÜ");
-    doc.setFont("DV", "normal"); doc.setTextColor(...PDF.gri); doc.text(" · Strateji Geliştirme Başmühendisliği", x, H - 6.5); x += doc.getTextWidth(" · Strateji Geliştirme Başmühendisliği");
+    doc.setFont("DV", "bold"); doc.setTextColor(...PDF.koyu); doc.text("KARAYOLLARI 7. BÖLGE MÜDÜRLÜĞÜ", x, H - 6); x += doc.getTextWidth("KARAYOLLARI 7. BÖLGE MÜDÜRLÜĞÜ");
+    doc.setFont("DV", "normal"); doc.setTextColor(...PDF.gri); doc.text(" · Strateji Geliştirme Başmühendisliği", x, H - 6); x += doc.getTextWidth(" · Strateji Geliştirme Başmühendisliği");
     let sef; for(let q = i; q >= 1 && sef === undefined; q--) sef = (doc._sef || {})[q];
-    if(sef){ doc.setTextColor(203, 213, 225); doc.text("|", x + 2, H - 6.5); x += 5; doc.setTextColor(...PDF.gri); doc.text("Kontrol Şefi: ", x, H - 6.5); x += doc.getTextWidth("Kontrol Şefi: "); doc.setFont("DV", "bold"); doc.setTextColor(55, 65, 81); doc.text(sef, x, H - 6.5); }
+    if(sef){ doc.setTextColor(203, 213, 225); doc.text("|", x + 2, H - 6); x += 5; doc.setTextColor(...PDF.gri); doc.text("Kontrol Şefi: ", x, H - 6); x += doc.getTextWidth("Kontrol Şefi: "); doc.setFont("DV", "bold"); doc.setTextColor(55, 65, 81); doc.text(sef, x, H - 6); }
     doc.setFont("DV", "normal"); doc.setTextColor(...PDF.gri);
-    doc.text(`Sayfa ${i} / ${n}`, W - PDF.k, H - 6.5, { align: "right" });
+    doc.text(`${tarihS} · Sayfa ${i} / ${n}`, W - PDF.k, H - 6, { align: "right" });
   }
 }
+// Bölüm başlığı: turuncu zemin, beyaz yazı
 function pdfBolumBaslik(doc, y, ad){
-  const W = doc.internal.pageSize.getWidth();
-  doc.setFont("DV", "bold"); doc.setFontSize(9.5 * PDF.o); doc.setTextColor(...PDF.turuncu);
-  doc.text(BUYUK(ad), PDF.sx, y);
-  doc.setDrawColor(253, 186, 116); doc.setLineWidth(0.4); doc.line(PDF.sx, y + 1.8 * PDF.a, W - PDF.k, y + 1.8 * PDF.a);
-  return y + 7 * PDF.a;
+  const h = 6 * PDF.a;
+  doc.setFillColor(...PDF.turuncu); doc.roundedRect(PDF.x0, y, PDF.x1 - PDF.x0, h, 0.8, 0.8, "F");
+  doc.setFont("DV", "bold"); doc.setFontSize(8.2 * PDF.o); doc.setTextColor(255, 255, 255);
+  doc.text(BUYUK(ad), PDF.x0 + 2, y + h * 0.68);
+  PDF.zebra = 0;
+  return y + h + 1.2 * PDF.a;
 }
-// Sayfaya sığmıyorsa yeni dikey sayfa
+// Sayfaya sığmıyorsa yeni dikey sayfa (devamı tam genişlikte)
 function pdfYer(doc, y, h){
   if(PDF.olcum) return y;   // ölçüm turunda sayfa bölünmez, yalnız yükseklik hesaplanır
   const H = doc.internal.pageSize.getHeight();
   if(y + h <= H - PDF.alt) return y;
   doc.addPage("a4", "portrait");
-  PDF.sx = PDF.k;   // yeni sayfada harita sütunu yok, tam genişlik
+  pdfTam(doc);
   return PDF.ust;
 }
-// İşin sabit kutusu (her işte bir kez): iş adı, yüklenici, kontrol şefi, il, tarihler
-// İşin başlığı (her işte bir kez): sade — iş adı, altında tek satırda
-// Yüklenici · Kontrol Şefi · İl, altında ince çizgi
+// Zebra satır zemini (tek sıralar açık turuncu)
+function pdfZebra(doc, y, h){
+  if(PDF.zebra++ % 2 === 0){ doc.setFillColor(255, 247, 237); doc.rect(PDF.x0, y, PDF.x1 - PDF.x0, h, "F"); }
+}
+// İşin başlığı (her işte bir kez): kalın iş adı, yanında parantez içinde yüklenici
 function pdfKutu(doc, j, y){
-  // İş adı kalın, yanında parantez içinde yüklenici (ince, gri); altında çizgi
   const W = doc.internal.pageSize.getWidth(), gen = W - 2 * PDF.k;
   const yk = j.firma ? ` (${j.firma})` : "";
   doc.setFont("DV", "bold"); doc.setFontSize(14);
@@ -1984,38 +1986,43 @@ function pdfKutu(doc, j, y){
   if(yk){
     doc.setFont("DV", "bold"); doc.setFontSize(14);
     const sonG = doc.getTextWidth(adS[adS.length - 1]);
-    doc.setFont("DV", "normal"); doc.setFontSize(12);
+    doc.setFont("DV", "normal"); doc.setFontSize(11);
     const ykG = doc.getTextWidth(yk);
     if(PDF.k + sonG + ykG <= W - PDF.k){ doc.setTextColor(...PDF.gri); doc.text(yk, PDF.k + sonG, yy); }
-    else { yy += 5.5; doc.setTextColor(...PDF.gri); doc.text(doc.splitTextToSize(yk.trim(), gen)[0], PDF.k, yy); }
+    else { yy += 5; doc.setTextColor(...PDF.gri); doc.text(doc.splitTextToSize(yk.trim(), gen)[0], PDF.k, yy); }
   }
-  yy += 3.5;
-  doc.setDrawColor(...PDF.cizgi); doc.setLineWidth(0.3); doc.line(PDF.k, yy, W - PDF.k, yy);
-  doc.setDrawColor(...PDF.turuncu); doc.setLineWidth(0.6); doc.line(PDF.k, yy, PDF.k + 18, yy);
-  return yy + 8;
+  return yy + 3.5;
 }
-function pdfTablo(doc, y, basliklar, satirlar, opt){
-  const W = doc.internal.pageSize.getWidth();
-  const sh = 7 * PDF.a, by = sh * 0.69;
+function pdfTablo(doc, y, basliklar, satirlar){
+  const sh = 6 * PDF.a, by = sh * 0.68;
   y = pdfYer(doc, y, sh * (satirlar.length + 1));
-  const X = PDF.sx, gen = W - PDF.k - X;
-  const ilkG = opt && opt.ilk ? opt.ilk : Math.min(62, gen * 0.42);
+  const X = PDF.x0, gen = PDF.x1 - X;
+  const ilkG = Math.min(48, gen * 0.4);
   const sw = basliklar.length ? (gen - ilkG) / basliklar.length : 0;
-  doc.setFillColor(255, 247, 237); doc.rect(X, y, gen, sh, "F");
-  doc.setFont("DV", "bold"); doc.setFontSize(8 * PDF.o); doc.setTextColor(154, 52, 18);
-  basliklar.forEach((b, i) => doc.text(b, X + ilkG + sw * (i + 1) - 2, y + by, { align: "right" }));
+  doc.setFillColor(255, 237, 213); doc.rect(X, y, gen, sh, "F");
+  doc.setFont("DV", "bold"); doc.setFontSize(Math.min(7.2, sw * 0.55) * PDF.o); doc.setTextColor(154, 52, 18);
+  basliklar.forEach((b, i) => doc.text(b, X + ilkG + sw * (i + 1) - 1.5, y + by, { align: "right" }));
   y += sh;
+  PDF.zebra = 1;
   satirlar.forEach(([e, deg, vurgu]) => {
-    if(vurgu){ doc.setFillColor(248, 250, 252); doc.rect(X, y, gen, sh, "F"); }
-    doc.setFont("DV", vurgu ? "bold" : "normal"); doc.setFontSize(8.5 * PDF.o); doc.setTextColor(...(vurgu ? [154, 52, 18] : PDF.gri));
-    doc.text(e, X + 2, y + by);
-    doc.setFont("DV", "bold");
+    if(vurgu){ doc.setFillColor(254, 215, 170); doc.rect(X, y, gen, sh, "F"); PDF.zebra++; } else pdfZebra(doc, y, sh);
+    doc.setFont("DV", vurgu ? "bold" : "normal"); doc.setFontSize(7.4 * PDF.o); doc.setTextColor(...(vurgu ? [154, 52, 18] : PDF.gri));
+    doc.text(e, X + 1.5, y + by);
+    doc.setFont("DV", "bold"); doc.setFontSize(Math.min(7.4, sw * 0.5) * PDF.o);
     if(!vurgu) doc.setTextColor(...PDF.koyu);
-    deg.forEach((v, i) => doc.text(v, X + ilkG + sw * (i + 1) - 2, y + by, { align: "right" }));
-    doc.setDrawColor(...PDF.cizgi); doc.setLineWidth(0.2); doc.line(X, y + sh, X + gen, y + sh);
+    deg.forEach((v, i) => doc.text(v, X + ilkG + sw * (i + 1) - 1.5, y + by, { align: "right" }));
     y += sh;
   });
-  return y + 6 * PDF.a;
+  return y + 2.5 * PDF.a;
+}
+function pdfSatir(doc, y, e, v, vurgu){
+  const sh = 6 * PDF.a, by = sh * 0.68;
+  y = pdfYer(doc, y, sh);
+  const X = PDF.x0;
+  if(vurgu){ doc.setFillColor(254, 215, 170); doc.rect(X, y, PDF.x1 - X, sh, "F"); } else pdfZebra(doc, y, sh);
+  doc.setFont("DV", vurgu ? "bold" : "normal"); doc.setFontSize(7.4 * PDF.o); doc.setTextColor(...(vurgu ? [154, 52, 18] : PDF.gri)); doc.text(e, X + 1.5, y + by);
+  doc.setFont("DV", "bold"); doc.setFontSize(7.6 * PDF.o); doc.setTextColor(...(vurgu ? [154, 52, 18] : PDF.koyu)); doc.text(v, PDF.x1 - 1.5, y + by, { align: "right" });
+  return y + sh;
 }
 // KM Bilgileri: İhale Uzunluğu ve <yıl> Öncesi tek (iş toplamı); sonrası
 // (Hedef, Yapılan, Kalan) standart standart; en altta Toplam Kalan.
@@ -2036,24 +2043,14 @@ function kmOzet(j){
   const yap = j.cats.reduce((t, c) => t + (Number(c.b) || 0), 0);
   return { u, o, kalan: u === null ? null : Math.max(0, u - (o || 0) - yap) };
 }
-function pdfSatir(doc, y, e, v, vurgu){
-  const W = doc.internal.pageSize.getWidth(), sh = 7 * PDF.a, by = sh * 0.69;
-  y = pdfYer(doc, y, sh);
-  const X = PDF.sx;
-  if(vurgu){ doc.setFillColor(248, 250, 252); doc.rect(X, y, W - PDF.k - X, sh, "F"); }
-  doc.setFont("DV", vurgu ? "bold" : "normal"); doc.setFontSize(8.5 * PDF.o); doc.setTextColor(...(vurgu ? [154, 52, 18] : PDF.gri)); doc.text(e, X + 2, y + by);
-  doc.setFont("DV", "bold"); doc.setTextColor(...(vurgu ? [154, 52, 18] : PDF.koyu)); doc.text(v, W - PDF.k - 2, y + by, { align: "right" });
-  doc.setDrawColor(...PDF.cizgi); doc.setLineWidth(0.2); doc.line(X, y + sh, W - PDF.k, y + sh);
-  return y + sh;
-}
 function pdfBilgi(doc, j, y){
   const a = PDF.a;
-  y = pdfYer(doc, y, 30 * a);
+  y = pdfYer(doc, y, 24 * a);
   y = pdfBolumBaslik(doc, y, "KM Bilgileri");
   const km = v => v === null || v === undefined ? "–" : f2(v) + " km";
   const oz = kmOzet(j);
   if(!j.cats.length && oz.u === null){
-    doc.setFont("DV", "normal"); doc.setFontSize(9 * PDF.o); doc.setTextColor(...PDF.gri); doc.text("Bu iş için km bilgisi girilmemiş.", PDF.sx, y + 2); return y + 10 * a;
+    doc.setFont("DV", "normal"); doc.setFontSize(9 * PDF.o); doc.setTextColor(...PDF.gri); doc.text("Bu iş için km bilgisi girilmemiş.", PDF.x0 + 1.5, y + 4); return y + 8 * a;
   }
   if(oz.u !== null) y = pdfSatir(doc, y, "İhale Uzunluğu", km(oz.u));
   // <yıl> Öncesi Yapılan standart standart tabloda (yeni veri); eski veride tek satır toplam
@@ -2062,49 +2059,39 @@ function pdfBilgi(doc, j, y){
   if(oz.o !== null && !onceTabloda) y = pdfSatir(doc, y, `${D.yil} Öncesi Yapılan`, km(oz.o));
   const K = onceTabloda ? kol : j.cats;
   if(K.length){
-    y = pdfTablo(doc, y + 3 * a, K.map(c => c.ad), (onceTabloda ? [[`${D.yil} Öncesi Yapılan`, K.map(c => km(c.o || 0))]] : []).concat([
+    y = pdfTablo(doc, y + 2 * a, K.map(c => c.ad), (onceTabloda ? [[`${D.yil} Öncesi Yapılan`, K.map(c => km(c.o || 0))]] : []).concat([
       [`${D.yil} Hedef`, K.map(c => c.h > 0 ? km(c.h) : "–")],
       [`${yilEki(D.yil)} Yapılan`, K.map(c => km(c.b))],
       [`${D.yil} Kalan`, K.map(c => c.h > 0 ? km(Math.max(0, c.h - c.b)) : "–"), true]
-    ])) - 6 * a;
+    ]));
   }
-  if(oz.u !== null) y = pdfSatir(doc, y + 3 * a, "Toplam Kalan", km(oz.kalan), true);
-  return y + 6 * a;
+  if(oz.u !== null) y = pdfSatir(doc, y, "Toplam Kalan", km(oz.kalan), true);
+  return y + 3 * a;
 }
 // İhale Bilgileri: solda işin KMZ'si (uydu altlıklı, yazısız kare), sağda
 // tek liste: Proje Bedeli, İhale Bedeli, ardından Excel satırları — hepsi
 // aynı biçimde. Çok illi işte yalnız toplam yazılır.
 // İhale Bilgileri listesi (PDF.sx'ten başlar; harita varsa onun sağında)
 function pdfParasal(doc, j, y){
-  const W = doc.internal.pageSize.getWidth(), o = PDF.o, a = PDF.a;
+  const o = PDF.o, a = PDF.a;
   const tl = n => n !== null && n !== undefined ? f2(n) + " ₺" : "–";
-  y = pdfYer(doc, y, 34 * a);
+  y = pdfYer(doc, y, 24 * a);
   y = pdfBolumBaslik(doc, y, "İhale Bilgileri");
-  const liste = pdfIhaleListe(j, tl);
-  // İki sütun: liste ikiye bölünür, sütunlar yan yana
-  const tumG = W - PDF.k - PDF.sx, ara = 5;
-  const sutunlar = PDF.iki && liste.length > 3 ? [liste.slice(0, Math.ceil(liste.length / 2)), liste.slice(Math.ceil(liste.length / 2))] : [liste];
-  const sG = sutunlar.length > 1 ? (tumG - ara) / 2 : tumG;
-  const y0 = y; let yMax = y;
-  sutunlar.forEach((l, si) => {
-    const x = PDF.sx + si * (sG + ara);
-    let yy = y0;
-    l.forEach(([b, v]) => {
-      doc.setFont("DV", "normal"); doc.setFontSize(8.5 * o);
-      const ikiS = sutunlar.length > 1, sol = doc.splitTextToSize(String(b), sG * (ikiS ? 0.62 : 0.56));
-      doc.setFont("DV", "bold"); doc.setFontSize(9 * o);
-      const sag = doc.splitTextToSize(String(v), sG * (ikiS ? 0.36 : 0.42));
-      const h = Math.max(sol.length, sag.length) * 4.2 * o + 3.2 * a;
-      if(sutunlar.length === 1) yy = pdfYer(doc, yy, h);
-      const by = 1.6 * a + 2.7 * o;
-      doc.setFont("DV", "normal"); doc.setFontSize(8.5 * o); doc.setTextColor(...PDF.gri); doc.text(sol, x + 2, yy + by);
-      doc.setFont("DV", "bold"); doc.setFontSize(9 * o); doc.setTextColor(...PDF.koyu); doc.text(sag, x + sG - 2, yy + by, { align: "right" });
-      doc.setDrawColor(...PDF.cizgi); doc.setLineWidth(0.2); doc.line(x, yy + h, x + sG, yy + h);
-      yy += h;
-    });
-    yMax = Math.max(yMax, yy);
+  pdfIhaleListe(j, tl).forEach(([b, v]) => {
+    const sG = PDF.x1 - PDF.x0;
+    doc.setFont("DV", "normal"); doc.setFontSize(7.4 * o);
+    const sol = doc.splitTextToSize(String(b), sG * 0.58);
+    doc.setFont("DV", "bold"); doc.setFontSize(7.6 * o);
+    const sag = doc.splitTextToSize(String(v), sG * 0.4);
+    const h = Math.max(sol.length, sag.length) * 3.4 * o + 2.6 * a;
+    y = pdfYer(doc, y, h);
+    pdfZebra(doc, y, h);
+    const by = 1.3 * a + 2.5 * o;
+    doc.setFont("DV", "normal"); doc.setFontSize(7.4 * o); doc.setTextColor(...PDF.gri); doc.text(sol, PDF.x0 + 1.5, y + by);
+    doc.setFont("DV", "bold"); doc.setFontSize(7.6 * o); doc.setTextColor(...PDF.koyu); doc.text(sag, PDF.x1 - 1.5, y + by, { align: "right" });
+    y += h;
   });
-  return yMax + 8 * a;
+  return y + 3 * a;
 }
 // Excel'de seçilen sütunlar Excel sırasıyla; İhale/Proje Bedeli de seçildiyse
 // kendi yerinde (₺ ile). Seçilmemişse listede yer almaz.
@@ -2126,46 +2113,75 @@ async function haritaResmiAl(j){
   await agirHazir();
   return (D.hResim || {})[j.id] || null;
 }
-async function pdfHarita(doc, j, x, y, S){
-  // İşe atanmış harita resmi varsa KMZ yerine o (genişliğe sığdırılır)
+// 16:9 harita (w genişlik, h = w·9/16). Programda atanmış harita resmi
+// varsa: resmin içine sığan en büyük 16:9 alan, kırmızı yol hattı ortada
+// kalacak şekilde kesilir. Yoksa KMZ: uydu altlığı + hat kendi renkleriyle,
+// hattın tamamı görünecek şekilde. Üzerinde yazı yok; ince siyah çerçeve.
+function kirmiziMerkez(im){
+  // küçültülmüş kopyada saf kırmızı pikseller (turuncu sayılmaz)
+  const s = Math.min(1, 700 / Math.max(im.width, im.height));
+  const c = document.createElement("canvas"); c.width = Math.max(1, Math.round(im.width * s)); c.height = Math.max(1, Math.round(im.height * s));
+  const g = c.getContext("2d"); g.drawImage(im, 0, 0, c.width, c.height);
+  let d; try{ d = g.getImageData(0, 0, c.width, c.height).data; }catch(e){ return null; }
+  let x1 = 1e9, y1 = 1e9, x2 = -1, y2 = -1;
+  for(let y = 0; y < c.height; y++) for(let x = 0; x < c.width; x++){
+    const p = (y * c.width + x) * 4, r = d[p], gg = d[p + 1], b = d[p + 2];
+    if(r > 170 && gg < 90 && b < 90 && r - gg > 110){ if(x < x1) x1 = x; if(x > x2) x2 = x; if(y < y1) y1 = y; if(y > y2) y2 = y; }
+  }
+  if(x2 < 0) return null;
+  return [(x1 + x2) / 2 / s, (y1 + y2) / 2 / s];
+}
+async function pdfHarita(doc, j, x, y, w){
+  const h = w * 9 / 16, CW = 1600, CH = 900;
+  const c = document.createElement("canvas"); c.width = CW; c.height = CH;
+  const g = c.getContext("2d"); g.fillStyle = "#cfd6de"; g.fillRect(0, 0, CW, CH);
+  let tamam = false;
   const resim = await haritaResmiAl(j);
   if(resim){
     const im = await new Promise(ok => { const i = new Image(); i.onload = () => ok(i); i.onerror = () => ok(null); i.src = resim; });
-    if(im){ const h = Math.min(S * 1.6, S * im.height / im.width); const w = h * im.width / im.height; doc.addImage(resim, "JPEG", x, y, w, h); doc.setDrawColor(0, 0, 0); doc.setLineWidth(0.5); doc.rect(x, y, w, h, "S"); return h; }
+    if(im){
+      const W = im.width, H = im.height, m = kirmiziMerkez(im) || [W / 2, H / 2];
+      const kw = Math.min(W, H * 16 / 9), kh = kw * 9 / 16;
+      const kx = Math.min(Math.max(m[0] - kw / 2, 0), W - kw), ky = Math.min(Math.max(m[1] - kh / 2, 0), H - kh);
+      g.fillStyle = "#fff"; g.fillRect(0, 0, CW, CH);
+      g.drawImage(im, kx, ky, kw, kh, 0, 0, CW, CH);
+      tamam = true;
+    }
   }
-  const PX = 760, TS = 256;
-  const cz = j.hat.cizgi.filter(c => c.p && c.p.length > 1);
-  const mx = o => (o + 180) / 360, my = a => { const r = a * Math.PI / 180; return (1 - Math.log(Math.tan(r) + 1 / Math.cos(r)) / Math.PI) / 2; };
-  let x1 = 1, x2 = 0, y1 = 1, y2 = 0;
-  cz.forEach(c => c.p.forEach(([a, o]) => { const u = mx(o), v = my(a); x1 = Math.min(x1, u); x2 = Math.max(x2, u); y1 = Math.min(y1, v); y2 = Math.max(y2, v); }));
-  const kenar = Math.max(x2 - x1, y2 - y1, 1e-6) * 1.14, cx = (x1 + x2) / 2, cy = (y1 + y2) / 2;
-  const z = Math.max(1, Math.min(17, Math.floor(Math.log2(PX / (kenar * TS)))));
-  const N = Math.pow(2, z) * TS, k = PX / (kenar * N);
-  const ox = (cx - kenar / 2) * N, oy = (cy - kenar / 2) * N;
-  const c = document.createElement("canvas"); c.width = c.height = PX;
-  const g = c.getContext("2d"); g.fillStyle = "#cfd6de"; g.fillRect(0, 0, PX, PX);
-  const tx1 = Math.floor(ox / TS), tx2 = Math.floor((ox + kenar * N) / TS), ty1 = Math.floor(oy / TS), ty2 = Math.floor((oy + kenar * N) / TS);
-  const isler = [];
-  for(let tx = tx1; tx <= tx2; tx++) for(let ty = ty1; ty <= ty2; ty++) isler.push(new Promise(ok => {
-    const im = new Image(); im.crossOrigin = "anonymous";
-    const t = setTimeout(() => ok(), 8000);
-    im.onload = () => { clearTimeout(t); try{ g.drawImage(im, (tx * TS - ox) * k, (ty * TS - oy) * k, TS * k + 0.5, TS * k + 0.5); }catch(e){} ok(); };
-    im.onerror = () => { clearTimeout(t); ok(); };
-    im.src = `${PDF_UYDU}${z}/${ty}/${tx}`;
-  }));
-  if(navigator.onLine !== false) await Promise.all(isler);
-  g.lineCap = g.lineJoin = "round";
-  const lw = Math.max(3, PX / 190);
-  cz.forEach(cc => {
-    g.beginPath();
-    cc.p.forEach(([a, o], i) => { const px = (mx(o) * N - ox) * k, py = (my(a) * N - oy) * k; i ? g.lineTo(px, py) : g.moveTo(px, py); });
-    g.strokeStyle = cc.r || "#ea580c"; g.lineWidth = lw; g.stroke();
-  });
-  let veri; try{ veri = c.toDataURL("image/jpeg", 0.82); }catch(e){ veri = null; }
-  doc.setFillColor(207, 214, 222); doc.rect(x, y, S, S, "F");
-  if(veri) doc.addImage(veri, "JPEG", x, y, S, S);
-  doc.setDrawColor(0, 0, 0); doc.setLineWidth(0.5); doc.rect(x, y, S, S, "S");
-  return S;
+  if(!tamam && j.hat && j.hat.cizgi){
+    const TS = 256;
+    const cz = j.hat.cizgi.filter(cc => cc.p && cc.p.length > 1);
+    const mx = o => (o + 180) / 360, my = a => { const r = a * Math.PI / 180; return (1 - Math.log(Math.tan(r) + 1 / Math.cos(r)) / Math.PI) / 2; };
+    let x1 = 1, x2 = 0, y1 = 1, y2 = 0;
+    cz.forEach(cc => cc.p.forEach(([a, o]) => { const u = mx(o), v = my(a); x1 = Math.min(x1, u); x2 = Math.max(x2, u); y1 = Math.min(y1, v); y2 = Math.max(y2, v); }));
+    // hattın tamamı + pay; 16:9 oranına genişletilir
+    const kx = Math.max(x2 - x1, (y2 - y1) * 16 / 9, 1e-6) * 1.12, ky = kx * 9 / 16, cx = (x1 + x2) / 2, cy = (y1 + y2) / 2;
+    const z = Math.max(1, Math.min(17, Math.floor(Math.log2(CW / (kx * TS)))));
+    const N = Math.pow(2, z) * TS, k = CW / (kx * N);
+    const ox = (cx - kx / 2) * N, oy = (cy - ky / 2) * N;
+    const tx1 = Math.floor(ox / TS), tx2 = Math.floor((ox + kx * N) / TS), ty1 = Math.floor(oy / TS), ty2 = Math.floor((oy + ky * N) / TS);
+    const isler = [];
+    for(let tx = tx1; tx <= tx2; tx++) for(let ty = ty1; ty <= ty2; ty++) isler.push(new Promise(ok => {
+      const im = new Image(); im.crossOrigin = "anonymous";
+      const t = setTimeout(() => ok(), 8000);
+      im.onload = () => { clearTimeout(t); try{ g.drawImage(im, (tx * TS - ox) * k, (ty * TS - oy) * k, TS * k + 0.5, TS * k + 0.5); }catch(e){} ok(); };
+      im.onerror = () => { clearTimeout(t); ok(); };
+      im.src = `${PDF_UYDU}${z}/${ty}/${tx}`;
+    }));
+    if(navigator.onLine !== false) await Promise.all(isler);
+    g.lineCap = g.lineJoin = "round";
+    const lw = Math.max(3, CW / 260);
+    cz.forEach(cc => {
+      g.beginPath();
+      cc.p.forEach(([a, o], i) => { const px = (mx(o) * N - ox) * k, py = (my(a) * N - oy) * k; i ? g.lineTo(px, py) : g.moveTo(px, py); });
+      g.strokeStyle = cc.r || "#ea580c"; g.lineWidth = lw; g.stroke();
+    });
+  }
+  let veri; try{ veri = c.toDataURL("image/jpeg", 0.85); }catch(e){ veri = null; }
+  doc.setFillColor(207, 214, 222); doc.rect(x, y, w, h, "F");
+  if(veri) doc.addImage(veri, "JPEG", x, y, w, h);
+  doc.setDrawColor(0, 0, 0); doc.setLineWidth(0.5); doc.rect(x, y, w, h, "S");
+  return h;
 }
 // İlk (boş) sayfa kullanılır; sonrakiler eklenir
 function yeniSayfa(doc, yatay){
@@ -2181,33 +2197,36 @@ async function pdfIs(doc, j, bol){
   let kutuYazildi = false;
   if(dikey){
     yeniSayfa(doc, false);
+    pdfTam(doc);
+    (doc._sef = doc._sef || {})[doc.getNumberOfPages()] = j.sef || "";
     let y = pdfKutu(doc, j, PDF.ust);
     kutuYazildi = true;
-    // İşin haritası solda; İhale Bilgileri ve KM Bilgileri haritanın sağında
-    const harV = bol.par && parVar(j) && (!!j.hr || !!(j.hat && j.hat.cizgi && j.hat.cizgi.some(c => c.p && c.p.length > 1)));
-    const HS = 66, ust = y - 4.5;
-    let HY = HS;
-    (doc._sef = doc._sef || {})[doc.getNumberOfPages()] = j.sef || "";
-    if(harV){ HY = await pdfHarita(doc, j, PDF.k, ust, HS); PDF.sx = PDF.k + HS + 7; }
-    const sayfa = doc.getNumberOfPages();
-    // İhale Bilgileri ve KM Bilgileri ilk sayfaya sığsın: önce aralıklar,
-    // sonra yazı (en az ~7,5 punto) küçültülür; yetmezse İhale listesi iki
-    // sütuna bölünür; o da yetmezse normal boyutla sonraki sayfaya geçilir.
-    const sxIlk = PDF.sx, Hs = doc.internal.pageSize.getHeight() - PDF.alt;
-    const ciz = (d, yy) => { PDF.sx = sxIlk; if(bol.par && parVar(j)) yy = pdfParasal(d, j, yy); if(bol.bilgi) yy = pdfBilgi(d, j, yy); return yy; };
-    const sahte = new Proxy(doc, { get(t, p){ if(["text", "rect", "line", "addImage", "setFillColor", "setDrawColor", "setTextColor", "setLineWidth", "addPage"].includes(p)) return () => {}; const v = t[p]; return typeof v === "function" ? v.bind(t) : v; } });
-    const adimlar = [[1, 1, false], [1, .88, false], [.95, .8, false], [.92, .74, false], [.88, .68, false], [.95, .8, true], [.88, .68, true]];
-    let sec = [1, 1, false];
-    for(const [o, a, iki] of adimlar){
-      Object.assign(PDF, { o, a, iki, olcum: true });
-      const son = ciz(sahte, y) - 6 * a;
-      if(son <= Hs){ sec = [o, a, iki]; break; }
+    const W = doc.internal.pageSize.getWidth(), gen = W - 2 * PDF.k, Hs = doc.internal.pageSize.getHeight() - PDF.alt;
+    const par = bol.par && parVar(j), bil = bol.bilgi;
+    const harV = par && (!!j.hr || !!(j.hat && j.hat.cizgi && j.hat.cizgi.some(c => c.p && c.p.length > 1)));
+    // Sütunlar: solda İhale Bilgileri, sağda KM Bilgileri (biri yoksa tam genişlik)
+    const ara = 7, solG = par && bil ? (gen - ara) * 0.535 : gen;
+    const ciz = (d, yy) => {
+      let yK = yy, yI = yy;
+      if(bil){ PDF.x0 = par ? PDF.k + solG + ara : PDF.k; PDF.x1 = W - PDF.k; yK = pdfBilgi(d, j, yy); }
+      if(par){ const ilk = d.getNumberOfPages ? d.getNumberOfPages() : 0; PDF.x0 = PDF.k; PDF.x1 = PDF.k + solG; yI = pdfParasal(d, j, yy); }
+      pdfTam(doc);
+      return Math.max(yK, yI);
+    };
+    // İlk sayfaya sığdırma: aralıklar, yazı ve gerekirse harita küçültülür
+    const sahte = new Proxy(doc, { get(t, p){ if(["text", "rect", "roundedRect", "line", "addImage", "setFillColor", "setDrawColor", "setTextColor", "setLineWidth", "addPage"].includes(p)) return () => {}; const v = t[p]; return typeof v === "function" ? v.bind(t) : v; } });
+    const adimlar = [[1, 1, 1], [1, .9, 1], [.96, .82, 1], [.96, .82, .88], [.92, .76, .8], [.88, .7, .72]];
+    let sec = adimlar[adimlar.length - 1];
+    for(const ad of adimlar){
+      Object.assign(PDF, { o: ad[0], a: ad[1], olcum: true });
+      const mh = harV ? gen * ad[2] * 9 / 16 + 4 : 0;
+      if(ciz(sahte, y + mh) <= Hs){ sec = ad; break; }
     }
-    Object.assign(PDF, { o: sec[0], a: sec[1], iki: sec[2], olcum: false });
+    Object.assign(PDF, { o: sec[0], a: sec[1], olcum: false });
+    if(harV){ const mw = gen * sec[2]; y += await pdfHarita(doc, j, PDF.k + (gen - mw) / 2, y, mw) + 4; }
     y = ciz(doc, y);
-    Object.assign(PDF, { o: 1, a: 1, iki: false });
-    if(harV && doc.getNumberOfPages() === sayfa) y = Math.max(y, ust + HY + 6);
-    PDF.sx = PDF.k;
+    Object.assign(PDF, { o: 1, a: 1 });
+    pdfTam(doc);
   }
   if(bol.iti && itiVar(j)){
     const kodlar = (j.iti || []).filter(k => D.iti.projeler[k]);
