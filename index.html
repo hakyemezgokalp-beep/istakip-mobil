@@ -1822,17 +1822,17 @@ ${d.blob ? `<button class="go" data-pdfpaylas>${IK("paylas")}Paylaş / Gönder</
 document.addEventListener("click", e => {
   if(!pdfDurum || !document.getElementById("pdfbb")) return;
   const d = pdfDurum;
-  const t = e.target.closest("[data-pdftek]"); if(t){ d.tek = t.dataset.pdftek === "1"; d.blob = null; pdfCiz(); return; }
-  if(e.target.closest("[data-pdftum]")){ const q = fold(d.ara), l = ISLER.filter(x => !q || fold([x.ad, x.firma, x.il.join(" ")].join(" ")).includes(q)); const hepsi = l.every(x => d.sec.has(x.id)); l.forEach(x => hepsi ? d.sec.delete(x.id) : d.sec.add(x.id)); d.blob = null; pdfCiz(); return; }
+  const t = e.target.closest("[data-pdftek]"); if(t){ d.tek = t.dataset.pdftek === "1"; d.blob = null; d.dosya = null; pdfCiz(); return; }
+  if(e.target.closest("[data-pdftum]")){ const q = fold(d.ara), l = ISLER.filter(x => !q || fold([x.ad, x.firma, x.il.join(" ")].join(" ")).includes(q)); const hepsi = l.every(x => d.sec.has(x.id)); l.forEach(x => hepsi ? d.sec.delete(x.id) : d.sec.add(x.id)); d.blob = null; d.dosya = null; pdfCiz(); return; }
   if(e.target.closest("[data-pdfyap]")){ pdfYap(); return; }
   if(e.target.closest("[data-pdfpaylas]")){ pdfPaylas(); return; }
-  if(e.target.closest("[data-pdfonizle]")){ if(d.blob) window.open(URL.createObjectURL(d.blob), "_blank"); return; }
+  if(e.target.closest("[data-pdfonizle]")){ if(d.blob){ const u = URL.createObjectURL(new Blob([d.blob], { type: "application/pdf" })); window.open(u, "_blank"); setTimeout(() => URL.revokeObjectURL(u), 60000); } return; }
 });
 document.addEventListener("change", e => {
   if(!pdfDurum) return;
   const d = pdfDurum;
-  const i = e.target.closest("[data-pdfis]"); if(i){ i.checked ? d.sec.add(i.dataset.pdfis) : d.sec.delete(i.dataset.pdfis); d.blob = null; const y = document.getElementById("pdfis")?.scrollTop || 0; pdfCiz(); const n = document.getElementById("pdfis"); if(n) n.scrollTop = y; return; }
-  const b = e.target.closest("[data-pdfbol]"); if(b){ d.bol[b.dataset.pdfbol] = b.checked; d.blob = null; pdfCiz(); }
+  const i = e.target.closest("[data-pdfis]"); if(i){ i.checked ? d.sec.add(i.dataset.pdfis) : d.sec.delete(i.dataset.pdfis); d.blob = null; d.dosya = null; const y = document.getElementById("pdfis")?.scrollTop || 0; pdfCiz(); const n = document.getElementById("pdfis"); if(n) n.scrollTop = y; return; }
+  const b = e.target.closest("[data-pdfbol]"); if(b){ d.bol[b.dataset.pdfbol] = b.checked; d.blob = null; d.dosya = null; pdfCiz(); }
 });
 document.addEventListener("input", e => {
   if(e.target.id === "pdfara" && pdfDurum){ pdfDurum.ara = e.target.value; const p = e.target.selectionStart; pdfCiz(); const n = document.getElementById("pdfara"); if(n){ n.focus(); n.setSelectionRange(p, p); } }
@@ -1906,7 +1906,12 @@ async function pdfYap(){
     const t = new Date(), tarihS = `${p2(t.getDate())}.${p2(t.getMonth() + 1)}.${t.getFullYear()}`;
     let ad = isler.length === 1 ? isler[0].ad : `${isler[0].ad} ve ${isler.length - 1} iş daha`;
     d.ad = dosyaGuvenli(`${ad} (${tarihS})`) + ".pdf";
-    d.blob = doc.output("blob");
+    // Paylaşılacak dosya ayrı baytlardan, önceden hazırlanır: önizleme için
+    // açılan blob: adresine bağlı olmasın (iPhone aksi hâlde WhatsApp'a
+    // dosyanın yanında "blob:https://…" linkini de gönderiyor).
+    const bytes = doc.output("arraybuffer");
+    d.blob = new Blob([bytes.slice(0)], { type: "application/pdf" });
+    d.dosya = new File([bytes.slice(0)], d.ad, { type: "application/pdf" });
     pdfCiz();
     pdfDurumYaz(`PDF hazır (${Math.max(1, Math.round(d.blob.size / 1024))} KB). Göndermek için Paylaş'a dokunun.`);
   }catch(err){
@@ -1916,12 +1921,14 @@ async function pdfYap(){
 }
 async function pdfPaylas(){
   const d = pdfDurum; if(!d || !d.blob) return;
-  const f = new File([d.blob], d.ad, { type: "application/pdf" });
+  const f = d.dosya || new File([d.blob], d.ad, { type: "application/pdf" });
   try{
     if(navigator.canShare && navigator.canShare({ files: [f] })){ await navigator.share({ files: [f] }); return; }   // yalnız dosya: başlık/link gönderilmez
   }catch(e){ if(e && e.name === "AbortError") return; }
   // paylaşım desteklenmiyorsa indir
-  const a = document.createElement("a"); a.href = URL.createObjectURL(d.blob); a.download = d.ad; document.body.appendChild(a); a.click(); a.remove();
+  const u = URL.createObjectURL(new Blob([d.blob], { type: "application/pdf" }));
+  const a = document.createElement("a"); a.href = u; a.download = d.ad; document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(u), 60000);
   bildir("PDF indirildi");
 }
 
