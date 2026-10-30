@@ -768,7 +768,7 @@ function veriTarih(){
 
 // ---------- Genel Durum (masaüstündeki Standartlar / İl Bazlı Durum) ----------
 // "Toplam KM'ye ekleme" seçili işler masaüstündeki gibi bu toplamlara girmez.
-const STD_SIRA = ["BY-BSK", "BY-BSK-ON", "BY-SK-BSK", "TY-BSK", "TY-SK", "TY-SK-BSK"];
+const STD_SIRA = ["BY-BSK", "BY-BSK-ON", "BY-SK", "BY-SK-BSK", "TY-BSK", "TY-SK", "TY-SK-BSK"];
 const IL_SIRA = ["Amasya", "Samsun", "Ordu", "Sinop", "Tokat", "Çorum"];
 const IKON_IS = '<svg viewBox="0 0 24 24" fill="none"><rect x="5" y="4" width="14" height="17" rx="2" stroke="#ea580c" stroke-width="1.8"/><rect x="9" y="2.5" width="6" height="3" rx="1" fill="#ea580c"/><line x1="8" y1="10" x2="16" y2="10" stroke="#ea580c" stroke-width="1.6" stroke-linecap="round"/><line x1="8" y1="13.5" x2="16" y2="13.5" stroke="#ea580c" stroke-width="1.6" stroke-linecap="round"/><line x1="8" y1="17" x2="13" y2="17" stroke="#ea580c" stroke-width="1.6" stroke-linecap="round"/></svg>';
 const IKON_HEDEF = '<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8" stroke="#16a34a" stroke-width="2"/><circle cx="12" cy="12" r="4" stroke="#16a34a" stroke-width="2"/><circle cx="12" cy="12" r="1" fill="#16a34a"/></svg>';
@@ -941,11 +941,13 @@ function detaySayfa(j, from){
   const yilKalan = r => (r.h || 0) > 0 ? f2(Math.max(0, r.h - (r.y || 0))) + " km" : "–";
   const parHtml = "";   // İhale/Sözleşme Tarihi iş kartında gösterilmez (İhale Bilgileri'nde Excel'den)
   // KM Bilgileri (açılır): PDF'teki KM Bilgileri ile aynı satırlar
-  const catBlok = (label, fn, cls) => `<div class="kv uz${cls || ""}"><span>${label}</span><b>${j.cats.map(c => `<span class="uzs">${cokStd ? `<em>${esc(c.ad)}</em>` : ""}<i>${fn(c)}</i></span>`).join("")}</b></div>`;
-  const oz = kmOzet(j), tek = (label, v, cls) => `<div class="kv uz${cls || ""}"><span>${label}</span><b><span class="uzs"><i>${v}</i></span></b></div>`;
+  const oz = kmOzet(j);
+  const kol = (oz.u !== null && kmKolonlar(j)) || j.cats, kolCok = kol.length > 1;
+  const catBlok = (label, fn, cls) => `<div class="kv uz${cls || ""}"><span>${label}</span><b>${kol.map(c => `<span class="uzs">${kolCok ? `<em>${esc(c.ad)}</em>` : ""}<i>${fn(c)}</i></span>`).join("")}</b></div>`;
+  const tek = (label, v, cls) => `<div class="kv uz${cls || ""}"><span>${label}</span><b><span class="uzs"><i>${v}</i></span></b></div>`;
   const kmBilgi = (oz.u !== null || j.cats.length || j.kmler.length) ? durumAc()
     + (oz.u !== null ? tek("İhale Uzunluğu", f2(oz.u) + " km") : "")
-    + (oz.o !== null ? tek(`${D.yil} Öncesi Yapılan`, f2(oz.o) + " km") : "")
+    + (oz.o !== null ? (kol !== j.cats && kol.length ? catBlok(`${D.yil} Öncesi Yapılan`, c => f2(c.o || 0) + " km") : tek(`${D.yil} Öncesi Yapılan`, f2(oz.o) + " km")) : "")
     + catBlok(`${D.yil} Hedef`, c => c.h > 0 ? f2(c.h) + " km" : "–") + catBlok(`${yilEki(D.yil)} Yapılan${arBtn}`, c => f2(c.b) + " km") + arListe
     + catBlok(`${D.yil} Kalan`, c => c.h > 0 ? f2(Math.max(0, c.h - c.b)) + " km" : "–", " kln")
     + (oz.u !== null ? tek("Toplam Kalan", f2(oz.kalan) + " km", " kln") : "") + `</div>` : "";
@@ -982,8 +984,8 @@ function yilUygula(y){
   D.yil = y;
   ISLER.forEach(j => {
     const v = j.yillik && j.yillik[y];
-    if(v){ j.cats = v.cats || []; j.kmler = v.kmler || []; j.biten = v.biten || ""; j.uz = v.uz || []; }
-    else if(j.yillik){ j.cats = []; j.kmler = []; j.biten = ""; j.uz = []; }
+    if(v){ j.cats = v.cats || []; j.kmler = v.kmler || []; j.biten = v.biten || ""; j.uz = v.uz || []; j.onc = v.onc; }
+    else if(j.yillik){ j.cats = []; j.kmler = []; j.biten = ""; j.uz = []; j.onc = undefined; }
   });
 }
 function yilPenceresi(){
@@ -2018,6 +2020,14 @@ function pdfTablo(doc, y, basliklar, satirlar, opt){
 // KM Bilgileri: İhale Uzunluğu ve <yıl> Öncesi tek (iş toplamı); sonrası
 // (Hedef, Yapılan, Kalan) standart standart; en altta Toplam Kalan.
 // Fiziksel gerçekleşme yalnız çubuklarda, burada yok.
+// KM Bilgileri sütunları: bu yılın standartları + öncesinde biten olan
+// standartlar (o: <yıl> Öncesi Yapılan). Eski veride (onc yok) null döner.
+function kmKolonlar(j){
+  if(!Array.isArray(j.onc)) return null;
+  const k = j.cats.map(c => ({ ad: c.ad, h: c.h, b: c.b, o: 0 }));
+  j.onc.forEach(x => { const c = k.find(y => y.ad === x.ad); if(c) c.o = x.o; else k.push({ ad: x.ad, h: 0, b: 0, o: x.o }); });
+  return k.sort((a, b) => (STD_SIRA.indexOf(a.ad) + 1 || 99) - (STD_SIRA.indexOf(b.ad) + 1 || 99));
+}
 function kmOzet(j){
   const uz = j.uz || [];
   const top = k => uz.reduce((t, r) => t + (Number(r[k]) || 0), 0);
@@ -2046,13 +2056,17 @@ function pdfBilgi(doc, j, y){
     doc.setFont("DV", "normal"); doc.setFontSize(9 * PDF.o); doc.setTextColor(...PDF.gri); doc.text("Bu iş için km bilgisi girilmemiş.", PDF.sx, y + 2); return y + 10 * a;
   }
   if(oz.u !== null) y = pdfSatir(doc, y, "İhale Uzunluğu", km(oz.u));
-  if(oz.o !== null) y = pdfSatir(doc, y, `${D.yil} Öncesi Yapılan`, km(oz.o));
-  if(j.cats.length){
-    y = pdfTablo(doc, y + 3 * a, j.cats.map(c => c.ad), [
-      [`${D.yil} Hedef`, j.cats.map(c => c.h > 0 ? km(c.h) : "–")],
-      [`${yilEki(D.yil)} Yapılan`, j.cats.map(c => km(c.b))],
-      [`${D.yil} Kalan`, j.cats.map(c => c.h > 0 ? km(Math.max(0, c.h - c.b)) : "–"), true]
-    ]) - 6 * a;
+  // <yıl> Öncesi Yapılan standart standart tabloda (yeni veri); eski veride tek satır toplam
+  const kol = oz.u !== null ? kmKolonlar(j) : null;
+  const onceTabloda = !!(kol && kol.length && oz.o !== null);
+  if(oz.o !== null && !onceTabloda) y = pdfSatir(doc, y, `${D.yil} Öncesi Yapılan`, km(oz.o));
+  const K = onceTabloda ? kol : j.cats;
+  if(K.length){
+    y = pdfTablo(doc, y + 3 * a, K.map(c => c.ad), (onceTabloda ? [[`${D.yil} Öncesi Yapılan`, K.map(c => km(c.o || 0))]] : []).concat([
+      [`${D.yil} Hedef`, K.map(c => c.h > 0 ? km(c.h) : "–")],
+      [`${yilEki(D.yil)} Yapılan`, K.map(c => km(c.b))],
+      [`${D.yil} Kalan`, K.map(c => c.h > 0 ? km(Math.max(0, c.h - c.b)) : "–"), true]
+    ])) - 6 * a;
   }
   if(oz.u !== null) y = pdfSatir(doc, y + 3 * a, "Toplam Kalan", km(oz.kalan), true);
   return y + 6 * a;
