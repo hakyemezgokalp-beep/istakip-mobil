@@ -1,6 +1,6 @@
 // İşTakip Mobil — çevrimdışı önbellek. Uygulama dosyaları değişince SURUM'u artırın.
-const SURUM = "istakip-mobil-v6";
-const DOSYALAR = ["./", "index.html", "manifest.json", "leaflet.js", "leaflet.css", "icon-180.png", "icon-192.png", "icon-512.png", "jspdf.min.js", "DejaVuSans-tr.ttf", "DejaVuSans-Bold-tr.ttf"];
+const SURUM = "istakip-mobil-v13";
+const DOSYALAR = ["./", "index.html", "manifest.json", "leaflet.js", "leaflet.css", "icon-180.png", "icon-192.png", "icon-512.png", "jspdf.min.js", "DejaVuSans-tr.ttf", "DejaVuSans-Bold-tr.ttf", "maplibre-gl.js", "maplibre-gl.css", "leaflet-rotate.js"];
 self.addEventListener("install", e => { e.waitUntil(caches.open(SURUM).then(c => c.addAll(DOSYALAR))); self.skipWaiting(); });
 self.addEventListener("activate", e => { e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== SURUM).map(k => caches.delete(k))))); self.clients.claim(); });
 // Yalnızca uygulamanın kendi dosyaları: önce internetten (güncel sürüm gelsin), olmazsa önbellekten.
