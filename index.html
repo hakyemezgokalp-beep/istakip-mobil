@@ -396,6 +396,7 @@ main.dolu > .pad{ display:flex; flex-direction:column; }
 .seg2 button{ border:none; background:none; padding:8px 4px; border-radius:9px; font-size:12.5px; font-weight:700; color:#64748b; }
 .seg2 button.on{ background:#fff; color:#111827; box-shadow:0 1px 3px rgba(0,0,0,.1); }
 .go{ display:flex; justify-content:center; align-items:center; gap:8px; width:100%; margin-top:12px; background:#ea580c; color:#fff; border:none; border-radius:13px; padding:13px; font-weight:800; font-size:14.5px; }
+.ytnot{ font-size:11.5px; color:#64748b; margin-top:6px; line-height:1.4; }
 .ytalt{ display:flex; justify-content:space-between; margin-top:9px; font-size:11.5px; color:#64748b; gap:8px; }
 .ytalt button{ border:none; background:none; color:#1d4ed8; font-weight:700; font-size:11.5px; padding:0; }
 .btn.yt{ background:#eef4ff; color:#1d4ed8; border:1.5px solid #c7d7fb; }
@@ -1816,7 +1817,7 @@ ${d.tek ? "" : `<div class="pdfara"><input id="pdfara" type="search" placeholder
 <div class="muted" style="margin:6px 2px 12px">${d.sec.size} iş seçili</div>`}
 <div class="bgrp" style="margin-top:${d.tek ? 4 : 0}px">BÖLÜMLER</div>
 <div class="pdfbol">${bol("par", "İhale Bilgileri", parOk ? "Harita, Proje / İhale Bedeli ve Excel bilgileri" : "Seçili işlerde ihale bilgisi yok", parOk)}${bol("bilgi", "KM Bilgileri", "İhale uzunluğu, yapılan ve kalan km'ler", true)}${bol("iti", "İtinerer", itiOk ? "Her itinerer ayrı yatay sayfada" : "Seçili işlerde itinerer yok", itiOk)}</div>
-${d.blob ? `<button class="go" data-pdfpaylas>${IK("paylas")}Paylaş / Gönder</button><div class="ytalt"><span>${esc(d.ad)}</span><button data-pdfonizle>Önizle</button></div>` : `<button class="go" data-pdfyap>${IK("pdf")}PDF Oluştur</button>`}
+${d.blob ? `<button class="go" data-pdfpaylas>${IK("paylas")}Paylaş / Gönder</button><div class="ytalt"><span>${esc(d.ad)}</span></div>` : `<button class="go" data-pdfyap>${IK("pdf")}PDF Oluştur</button>`}
 <div class="pdfdur" id="pdfdur"></div>`;
 }
 document.addEventListener("click", e => {
@@ -1922,10 +1923,18 @@ async function pdfYap(){
 async function pdfPaylas(){
   const d = pdfDurum; if(!d || !d.blob) return;
   const f = d.dosya || new File([d.blob], d.ad, { type: "application/pdf" });
-  try{
-    if(navigator.canShare && navigator.canShare({ files: [f] })){ await navigator.share({ files: [f] }); return; }   // yalnız dosya: başlık/link gönderilmez
-  }catch(e){ if(e && e.name === "AbortError") return; }
-  // paylaşım desteklenmiyorsa indir
+  // Paylaşım menüsü yalnız dosyayla açılır (başlık/link yok). Tarayıcıda
+  // açılan PDF'ten paylaşılırsa iPhone dosyayı "Unknown.pdf" ve yanına
+  // "blob:…" linkiyle gönderir; bu yüzden indirmeye yalnız paylaşım hiç
+  // yoksa düşülür, hata olursa ne olduğu yazılır.
+  if(navigator.share){
+    try{ await navigator.share({ files: [f] }); return; }
+    catch(e){
+      if(e && e.name === "AbortError") return;
+      pdfDurumYaz("Paylaşım menüsü açılamadı (" + ((e && (e.name + ": " + e.message)) || "bilinmeyen hata") + "). Tekrar Paylaş / Gönder'e dokunun.");
+      return;
+    }
+  }
   const u = URL.createObjectURL(new Blob([d.blob], { type: "application/pdf" }));
   const a = document.createElement("a"); a.href = u; a.download = d.ad; document.body.appendChild(a); a.click(); a.remove();
   setTimeout(() => URL.revokeObjectURL(u), 60000);
